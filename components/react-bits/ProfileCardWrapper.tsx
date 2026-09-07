@@ -4,7 +4,7 @@ import ProfileCard from './ProfileCard';
 
 export default function ProfileCardWrapper() {
   return (
-    <div className="flex [--pc-max-h:340px] sm:[--pc-max-h:420px] md:[--pc-max-h:540px]">
+    <div className="flex justify-center [--pc-h:340px] [--pc-w:244px] sm:[--pc-h:420px] sm:[--pc-w:301px] md:[--pc-h:540px] md:[--pc-w:388px]">  
       <ProfileCard
         name="Achmat Fajri"
         title="Full Stack Developer"
