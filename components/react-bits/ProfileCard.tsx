@@ -467,6 +467,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             maxWidth: '100%',
             aspectRatio: '0.718',
             borderRadius: cardRadius,
+            outline: '3px solid red',
             backgroundBlendMode: 'color-dodge, normal, normal, normal',
             boxShadow:
               'rgba(0, 0, 0, 0.8) calc((var(--pointer-from-left) * 10px) - 3px) calc((var(--pointer-from-top) * 20px) - 6px) 20px -5px',
