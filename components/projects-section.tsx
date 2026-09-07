@@ -1,12 +1,15 @@
 "use client";
 
-import { SectionHeading } from "@/components/section-heading";
-import { ProjectCard } from "@/components/project-card";
+import { useEffect, useState } from "react";
+
 import { useProjects } from "@/hooks/use-projects";
 import type { Project } from "@/lib/api";
 
-// Dipakai kalau API belum jalan / database masih kosong, supaya section tidak kosong total.
-// TODO: hapus setelah ada proyek asli di database.
+import CardSwap, { Card } from "./react-bits/CardSwap";
+import { ProjectList } from "./ProjectList";
+import Image from "next/image";
+import ShapeGrid from "@/components/react-bits/ShapeGrid";
+
 const fallbackProjects: Project[] = [
   {
     id: "fallback-1",
@@ -35,36 +38,167 @@ const fallbackProjects: Project[] = [
 ];
 
 export function ProjectsSection() {
-  const { data, isLoading, isError } = useProjects();
-  const projects = data && data.length > 0 ? data : fallbackProjects;
+  const {
+    data,
+    isLoading,
+    isError,
+  } = useProjects();
+
+  const [selectedProject, setSelectedProject] = useState(0);
+
+  const projects =
+    data && data.length > 0
+      ? data
+      : fallbackProjects;
+
+  useEffect(() => {
+    if (projects.length === 0) {
+      setSelectedProject(0);
+      return;
+    }
+
+    setSelectedProject((current) =>
+      Math.min(current, projects.length - 1)
+    );
+  }, [projects.length]);
+
+  const safeSelectedProject =
+    projects.length > 0
+      ? Math.min(
+          selectedProject,
+          projects.length - 1
+        )
+      : 0;
 
   return (
-    <section id="projects" className="border-t border-border bg-card/40 py-24">
-      <div className="container">
-        <SectionHeading index="02" eyebrow="Projects" title="Selected work" />
+    <section
+      id="projects"
+      className="relative min-h-screen w-full overflow-hidden bg-[#0E0C14]"
+    >
+      {/* ================================= */}
+      {/* BACKGROUND — SHAPE GRID */}
+      {/* ================================= */}
+{/* 
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <ShapeGrid
+          speed={0.5}
+          squareSize={40}
+          direction="diagonal"
+          borderColor="#2F293A"
+          hoverFillColor="#222"
+          shape="square"
+          hoverTrailAmount={0}
+        />
+      </div> */}
 
-        {isLoading && (
-          <p className="mb-6 font-mono text-sm text-muted-foreground">
-            Memuat proyek dari API...
-          </p>
-        )}
-        {isError && (
-          <p className="mb-6 font-mono text-sm text-muted-foreground">
-            Belum bisa menghubungi API (pastikan portfolio-api sedang jalan) — menampilkan data sementara.
-          </p>
-        )}
+      {/* Optional overlay supaya background tidak terlalu terang */}
+      <div className="pointer-events-none absolute inset-0 z-[1]" />
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              title={project.title}
-              description={project.description}
-              tech={project.techStack}
-              demoHref={project.demoUrl ?? undefined}
-              repoHref={project.repoUrl ?? undefined}
+      {/* ================================= */}
+      {/* CONTENT */}
+      {/* ================================= */}
+
+      <div className="relative z-10 container py-16">
+        <div className="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+
+          {/* =============================== */}
+          {/* LEFT — PROJECT LIST */}
+          {/* =============================== */}
+
+          <div>
+           <div className="mb-14 max-w-2xl">
+            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">
+              Things I've{" "}
+              <span className="text-[#A855F7]">built.</span>
+            </h2>
+
+            <p className="mt-2 md:mt-5 max-w-lg text-xs md:text-sm leading-relaxed text-white/40">
+              A selection of things I've built, worked on,
+              and continue to improve.
+            </p>
+          </div>
+
+            {isLoading && (
+              <p className="mb-6 font-mono text-sm text-muted-foreground">
+                Memuat proyek dari API...
+              </p>
+            )}
+
+            {isError && (
+              <p className="mb-6 font-mono text-sm text-muted-foreground">
+                Belum bisa menghubungi API —
+                menampilkan data sementara.
+              </p>
+            )}
+
+            <ProjectList
+              projects={projects}
+              selectedProject={safeSelectedProject}
+              onSelect={setSelectedProject}
             />
-          ))}
+          </div>
+
+          {/* =============================== */}
+          {/* RIGHT — PROJECT PREVIEW */}
+          {/* =============================== */}
+
+          <div className="relative min-h-[600px]">
+
+            {projects.length > 0 && (
+              <CardSwap
+                activeIndex={safeSelectedProject}
+                onActiveIndexChange={setSelectedProject}
+                width={500}
+                height={400}
+                cardDistance={40}
+                verticalDistance={50}
+                skewAmount={6}
+                easing="elastic"
+              >
+                {projects.map((project, index) => (
+                  <Card
+                    key={project.id}
+                    className="overflow-hidden border-white/10 bg-[#120F17]"
+                  >
+                    {project.imageUrl ? (
+                      <div className="relative h-full w-full overflow-hidden rounded-xl">
+
+                        <Image
+                          src={project.imageUrl}
+                          alt={`${project.title} preview`}
+                          fill
+                          priority={
+                            index === safeSelectedProject
+                          }
+                          sizes="500px"
+                          className="object-cover object-top"
+                        />
+
+                        {/* Gradient */}
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
+                        {/* Project label */}
+                        <div className="absolute bottom-4 left-4">
+                          <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white/60 backdrop-blur-md">
+                            {project.title}
+                          </span>
+                        </div>
+
+                      </div>
+                    ) : (
+                      <div className="flex h-full items-center justify-center">
+                        <span className="font-mono text-xs text-white/20">
+                          No preview available
+                        </span>
+                      </div>
+                    )}
+                  </Card>
+                ))}
+              </CardSwap>
+            )}
+
+          </div>
+
         </div>
       </div>
     </section>

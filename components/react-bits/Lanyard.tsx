@@ -53,6 +53,7 @@ interface LanyardProps {
   imageFit?: 'cover' | 'contain';
   lanyardImage?: string | null;
   lanyardWidth?: number;
+  lookAt?: [number, number, number]; 
 }
 
 interface BandProps {
@@ -67,7 +68,8 @@ interface BandProps {
 }
 
 export default function Lanyard({
-  position = [0, 0, 30],
+   lookAt = [0, 0, 0],
+  position = [2, 0, 30],
   gravity = [0, -40, 0],
   fov = 20,
   transparent = true,
@@ -91,7 +93,10 @@ export default function Lanyard({
         camera={{ position: position, fov: fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
         gl={{ alpha: transparent }}
-        onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
+onCreated={({ gl, camera }) => {
+  gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1);
+  camera.lookAt(lookAt[0], lookAt[1], lookAt[2]);
+}}
       >
         <ambientLight intensity={Math.PI} />
         <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
@@ -235,10 +240,10 @@ function Band({
   const [dragged, drag] = useState<THREE.Vector3 | false>(false);
   const [hovered, hover] = useState(false);
 
-  
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
+
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1.4]);
+useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1.4]);
+useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1.4]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
     [0, 1.5, 0]
@@ -275,7 +280,9 @@ function Band({
       curve.points[1].copy((j2.current as RigidBodyWithLerp).lerped!);
       curve.points[2].copy((j1.current as RigidBodyWithLerp).lerped!);
       curve.points[3].copy(fixed.current.translation());
-      (band.current.geometry as MeshLineGeometry).setPoints(curve.getPoints(isMobile ? 16 : 32));
+     (band.current.geometry as InstanceType<typeof MeshLineGeometry>).setPoints(
+        curve.getPoints(isMobile ? 16 : 32)
+      );
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z }, true);
@@ -287,22 +294,32 @@ function Band({
 
   return (
     <>
-      <group position={[0, 4, 0]}>
-        <RigidBody ref={fixed} {...segmentProps} type="fixed" />
-        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
-          <BallCollider args={[0.1]} />
-        </RigidBody>
-        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
-          <BallCollider args={[0.1]} />
-        </RigidBody>
-        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
-          <BallCollider args={[0.1]} />
-        </RigidBody>
-        <RigidBody position={[2, 0, 0]} ref={card} {...segmentProps} type={dragged ? 'kinematicPosition' : 'dynamic'}>
+    <group position={[-8, 6.2, 0]} scale={1.5}>
+<RigidBody ref={fixed} {...segmentProps} type="fixed" />
+
+  <RigidBody position={[0.7, 0, 0]} ref={j1} {...segmentProps}>
+    <BallCollider args={[0.1]} />
+  </RigidBody>
+
+  <RigidBody position={[1.4, 0, 0]} ref={j2} {...segmentProps}>
+    <BallCollider args={[0.1]} />
+  </RigidBody>
+
+  <RigidBody position={[2.1, 0, 0]} ref={j3} {...segmentProps}>
+    <BallCollider args={[0.1]} />
+  </RigidBody>
+
+  <RigidBody
+    position={[2.8, 0, 0]}
+    ref={card}
+    {...segmentProps}
+    type={dragged ? 'kinematicPosition' : 'dynamic'}
+  >
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
-          <group
-            scale={2.25}
-            position={[0, -1.2, -0.05]}
+        <group
+  scale={2.25}
+  position={[0, -1.7, -0.04]}
+
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
             onPointerUp={e => ((e.target as Element).releasePointerCapture(e.pointerId), drag(false))}

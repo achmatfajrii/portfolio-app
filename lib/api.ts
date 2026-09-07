@@ -7,6 +7,9 @@ export interface Project {
   techStack: string[];
   demoUrl?: string | null;
   repoUrl?: string | null;
+  imageUrl?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export async function fetchProjects(): Promise<Project[]> {
