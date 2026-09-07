@@ -14,7 +14,8 @@ export default function ProfileCardWrapper() {
         avatarUrl="/assets/profile/achmatfajri.png"
         showUserInfo
         enableTilt={true}
-        enableMobileTilt
+        enableMobileTilt={true}
+        mobileTiltSensitivity={5}
         onContactClick={() => console.log('Contact clicked')}
         behindGlowColor="#A855F7"
         iconUrl="/assets/profile/codingpattern.png"
