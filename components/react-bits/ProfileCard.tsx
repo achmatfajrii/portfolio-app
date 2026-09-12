@@ -89,6 +89,8 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   const leaveRafRef = useRef<number | null>(null);
 
   const [avatarError, setAvatarError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
 
   const tiltEngine = useMemo<TiltEngine | null>(() => {
     if (!enableTilt) return null;
@@ -318,6 +320,14 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
     tiltEngine.toCenter();
     tiltEngine.beginInitial(ANIMATION_CONFIG.INITIAL_DURATION);
 
+    const checkMobile = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  checkMobile();
+
+    window.addEventListener('resize', checkMobile);
+
     return () => {
       shell.removeEventListener('pointerenter', pointerEnterHandler);
       shell.removeEventListener('pointermove', pointerMoveHandler);
@@ -328,7 +338,9 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
       if (leaveRafRef.current) cancelAnimationFrame(leaveRafRef.current);
       tiltEngine.cancel();
       shell.classList.remove('entering');
+      window.removeEventListener('resize', checkMobile);
     };
+    
   }, [
     enableTilt,
     enableMobileTilt,
@@ -512,9 +524,12 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             <div
               className="overflow-visible"
               style={{
+  mixBlendMode: isMobile ? 'normal' : 'luminosity',
+  transform: isMobile ? 'none' : 'translateZ(2px)',
   gridArea: '1 / -1',
   borderRadius: cardRadius,
   pointerEvents: 'none',
+  backfaceVisibility: isMobile ? 'visible' : 'hidden',
   position: 'relative',
   zIndex: 2
 }}
@@ -525,11 +540,18 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   alt={`${name || 'User'} avatar`}
   loading="eager"
   style={{
-    transform: 'translateX(-50%)',
     width: '100%',
     borderRadius: cardRadius,
     display: 'block',
-    opacity: 1
+    opacity: 1,
+
+    transform: isMobile
+      ? 'translateX(-50%)'
+      : 'translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px)) translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02)) scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01))',
+
+    transformOrigin: '50% 100%',
+
+    backfaceVisibility: isMobile ? 'visible' : 'hidden'
   }}
 />
 
@@ -545,20 +567,21 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
 )}
               {showUserInfo && (
                 <div
-                  className="absolute flex md:p-6 md:p-4 z-[2] flex items-center justify-between backdrop-blur-[30px] border border-white/10 pointer-events-auto"
-                  style={
-                    {
-                      '--ui-inset': '20px',
-                      '--ui-radius-bias': '6px',
-                      bottom: 'var(--ui-inset)',
-                      left: 'var(--ui-inset)',
-                      right: 'var(--ui-inset)',
-                      background: 'rgba(255, 255, 255, 0.1)',
-                      borderRadius: 'calc(max(0px, var(--card-radius) - var(--ui-inset) + var(--ui-radius-bias)))',
-                      // padding: '12px 14px'
-                    } as React.CSSProperties
-                  }
-                >
+  className={`absolute flex z-[2] items-center justify-between border border-white/10 pointer-events-auto ${
+    isMobile ? '' : 'backdrop-blur-[30px]'
+  }`}
+  style={{
+    '--ui-inset': '20px',
+    '--ui-radius-bias': '6px',
+    bottom: 'var(--ui-inset)',
+    left: 'var(--ui-inset)',
+    right: 'var(--ui-inset)',
+    background: 'rgba(255, 255, 255, 0.1)',
+    borderRadius:
+      'calc(max(0px, var(--card-radius) - var(--ui-inset) + var(--ui-radius-bias)))',
+    minHeight: '60px'
+  } as React.CSSProperties}
+>
                   <div className="items-center gap-3 hidden md:flex">
                     <div
                       className="rounded-full overflow-hidden border border-white/10 flex-shrink-0"
@@ -582,15 +605,20 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                       <div className="text-xs md:text-sm text-white/70 leading-none">{status}</div>
                     </div>
                   </div>
-                  <button
-                    className="mx-auto md:mx-0 border border-white/10 rounded-lg px-16 md:px-4 py-3 text-xs font-semibold text-white/90 cursor-pointer backdrop-blur-[10px] transition-all duration-200 ease-out hover:border-white/40 hover:-translate-y-px"
-                    onClick={handleContactClick}
-                    style={{ pointerEvents: 'auto', display: 'block', gridArea: 'auto', borderRadius: '8px' }}
-                    type="button"
-                    aria-label={`Contact ${name || 'user'}`}
-                  >
-                    {contactText}
-                  </button>
+                 <button
+  className="mx-auto md:mx-0 border border-white/10 rounded-lg px-16 md:px-4 py-3 text-xs font-semibold text-white/90 cursor-pointer transition-all duration-200 ease-out hover:border-white/40 hover:-translate-y-px"
+  onClick={handleContactClick}
+  style={{
+    pointerEvents: 'auto',
+    display: 'block',
+    gridArea: 'auto',
+    borderRadius: '8px'
+  }}
+  type="button"
+  aria-label={`Contact ${name || 'user'}`}
+>
+  {contactText}
+</button>
                 </div>
               )}
             </div>
