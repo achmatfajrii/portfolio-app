@@ -512,30 +512,26 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             <div
               className="overflow-visible"
               style={{
-                mixBlendMode: 'luminosity',
-                transform: 'translateZ(2px)',
-                gridArea: '1 / -1',
-                borderRadius: cardRadius,
-                pointerEvents: 'none',
-                backfaceVisibility: 'hidden'
-              }}
+  gridArea: '1 / -1',
+  borderRadius: cardRadius,
+  pointerEvents: 'none',
+  position: 'relative',
+  zIndex: 2
+}}
             >
               <img
-                className="w-full absolute left-1/2 bottom-[-1px] will-change-transform transition-transform duration-[120ms] ease-out"
-                src={avatarUrl}
-                alt={`${name || 'User'} avatar`}
-                loading="lazy"
-                style={{
-                  transformOrigin: '50% 100%',
-                  transform:
-                    'translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px)) translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02)) scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01))',
-                  borderRadius: cardRadius,
-                  backfaceVisibility: 'hidden'
-                }}
-                onError={() => {
-    setAvatarError(true);
+  className="w-full absolute left-1/2 bottom-[-1px]"
+  src={avatarUrl}
+  alt={`${name || 'User'} avatar`}
+  loading="eager"
+  style={{
+    transform: 'translateX(-50%)',
+    width: '100%',
+    borderRadius: cardRadius,
+    display: 'block',
+    opacity: 1
   }}
-              />
+/>
 
               {avatarError && (
   <div
