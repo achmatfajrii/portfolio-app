@@ -74,7 +74,7 @@ export function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative min-h-screen w-full overflow-hidden bg-[#0E0C14]"
+      className="relative md:min-h-screen w-full pb-16 overflow-hidden bg-[#0E0C14]"
     >
 
       <div className="pointer-events-none absolute inset-0 z-[1]" />

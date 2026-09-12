@@ -196,6 +196,69 @@ const positions: Record<string, Position> = {
   GitHub: { x: 91, y: 76 },
 };
 
+const mobilePositions: Record<string, { x: number; y: number }> = {
+  React: { x: 50, y: 9 },
+  "Next.js": { x: 72, y: 13 },
+  TypeScript: { x: 88, y: 29 },
+  JavaScript: { x: 91, y: 51 },
+  "Tailwind CSS": { x: 79, y: 73 },
+  "Node.js": { x: 63, y: 89 },
+  "Express.js": { x: 38, y: 89 },
+  Prisma: { x: 20, y: 74 },
+  PostgreSQL: { x: 9, y: 53 },
+  MySQL: { x: 12, y: 31 },
+  "Vue.js": { x: 28, y: 15 },
+  Python: { x: 43, y: 8 },
+  Git: { x: 61, y: 9 },
+  GitHub: { x: 84, y: 68 },
+};
+
+const getMobilePosition = (name: string) => {
+  return mobilePositions[name] || { x: 50, y: 50 };
+};
+
+const getMobileFocus = (
+  category: "All" | Category
+) => {
+  if (category === "All") {
+    return {
+      x: 50,
+      y: 50,
+      scale: 0.72,
+    };
+  }
+
+  const categorySkills = skills.filter(
+    (skill) => skill.category === category
+  );
+
+  if (categorySkills.length === 0) {
+    return {
+      x: 50,
+      y: 50,
+      scale: 0.72,
+    };
+  }
+
+  const positions = categorySkills.map((skill) =>
+    getMobilePosition(skill.name)
+  );
+
+  const centerX =
+    positions.reduce((sum, position) => sum + position.x, 0) /
+    positions.length;
+
+  const centerY =
+    positions.reduce((sum, position) => sum + position.y, 0) /
+    positions.length;
+
+  return {
+    x: centerX,
+    y: centerY,
+    scale: 1.25,
+  };
+};
+
 /**
  * Connection antar teknologi.
  */
@@ -277,6 +340,17 @@ export function SkillsSection() {
     visibleSkills.map((skill) => skill.name)
   );
 
+  const mobileFocus = getMobileFocus(activeCategory);
+
+const mobileTranslateX =
+  activeCategory === "All"
+    ? 0
+    : (50 - mobileFocus.x) * 6.5;
+
+const mobileTranslateY =
+  activeCategory === "All"
+    ? 0
+    : (50 - mobileFocus.y) * 6.5;
   /**
    * Apakah sebuah connection berhubungan
    * dengan skill yang sedang aktif?
@@ -355,7 +429,7 @@ export function SkillsSection() {
         <div className="absolute bottom-0 right-0 h-[350px] w-[350px] rounded-full bg-cyan-500/[0.025] blur-[120px]" />
       </div>
 
-      <div className="container relative z-10 mx-auto flex min-h-screen w-full flex-col justify-center  py-24">
+      <div className="container relative z-10 mx-auto flex min-h-screen w-full flex-col justify-center md:py-24">
         {/* ======================================== */}
         {/* HEADER */}
         {/* ======================================== */}
@@ -387,7 +461,7 @@ export function SkillsSection() {
         {/* CATEGORY FILTER */}
         {/* ======================================== */}
 
-        <div className="mb-7 flex flex-wrap gap-2">
+        <div className="mb-7 flex flex-wrap gap-2 relative z-10">
           {categories.map((category) => {
             const isActive =
               activeCategory === category;
@@ -399,7 +473,7 @@ export function SkillsSection() {
                 onClick={() =>
                   setActiveCategory(category)
                 }
-                className={`rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
+                className={`rounded-full border px-2 md:px-4 py-2 font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
                   isActive
                     ? "border-purple-400/40 bg-purple-400/10 text-purple-300"
                     : "border-white/10 bg-white/[0.015] text-white/30 hover:border-white/20 hover:text-white/60"
@@ -493,75 +567,46 @@ export function SkillsSection() {
               </filter>
             </defs>
 
-            {connections.map(([from, to]) => {
-              const start = getPosition(from);
-              const end = getPosition(to);
+          {connections.map(([from, to]) => {
+  const fromPosition = getMobilePosition(from);
+  const toPosition = getMobilePosition(to);
 
-              const visible =
-                visibleSkillNames.has(from) &&
-                visibleSkillNames.has(to);
+  const active = isConnectionActive(from, to);
 
-              if (!visible) {
-                return null;
-              }
+  const related =
+    selectedSkill &&
+    (from === selectedSkill || to === selectedSkill);
 
-              const active = isConnectionActive(
-                from,
-                to
-              );
-
-              const related =
-                selectedSkill &&
-                (from === selectedSkill ||
-                  to === selectedSkill);
-
-              return (
-                <g
-                  key={`${from}-${to}`}
-                  className="transition-opacity duration-500"
-                  opacity={
-                    selectedSkill
-                      ? related
-                        ? 1
-                        : 0.08
-                      : 0.55
-                  }
-                >
-                  {/* Base line */}
-                  <line
-                    x1={start.x}
-                    y1={start.y}
-                    x2={end.x}
-                    y2={end.y}
-                    stroke={
-                      active
-                        ? "rgba(168,85,247,0.45)"
-                        : "rgba(255,255,255,0.055)"
-                    }
-                    strokeWidth={
-                      active ? 0.55 : 0.25
-                    }
-                    vectorEffect="non-scaling-stroke"
-                  />
-
-                  {/* Animated line */}
-                  {active && (
-                    <line
-                      x1={start.x}
-                      y1={start.y}
-                      x2={end.x}
-                      y2={end.y}
-                      stroke="url(#skillConnection)"
-                      strokeWidth="0.8"
-                      strokeDasharray="3 7"
-                      vectorEffect="non-scaling-stroke"
-                      filter="url(#connectionGlow)"
-                      className="animate-[skillDash_3s_linear_infinite]"
-                    />
-                  )}
-                </g>
-              );
-            })}
+  return (
+    <line
+      key={`mobile-${from}-${to}`}
+      x1={fromPosition.x}
+      y1={fromPosition.y}
+      x2={toPosition.x}
+      y2={toPosition.y}
+      stroke={
+        active
+          ? "url(#mobileSkillConnection)"
+          : "rgba(255,255,255,0.045)"
+      }
+      strokeWidth={active ? 0.7 : 0.25}
+      strokeDasharray={active ? "2 4" : "none"}
+      opacity={
+        selectedSkill
+          ? related
+            ? 1
+            : 0.18
+          : 0.7
+      }
+      className={
+        active
+          ? "animate-[skillDash_3s_linear_infinite]"
+          : ""
+      }
+      vectorEffect="non-scaling-stroke"
+    />
+  );
+})}
           </svg>
 
           {/* ====================================== */}
@@ -757,87 +802,298 @@ export function SkillsSection() {
           )}
         </div>
 
-        {/* ======================================== */}
-        {/* MOBILE */}
-        {/* ======================================== */}
+{/* =========================
+    MOBILE ORBIT ECOSYSTEM
+    ========================= */}
+<div className="relative top-[-80px] right-[30%] w-screen md:hidden">
+  <div className="relative mx-auto h-[500px] w-[520px] overflow-visible">
+<div
+      className="absolute inset-0 transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]"
+      style={{
+        transform: `
+          translate(${mobileTranslateX}px, ${mobileTranslateY}px)
+          scale(${mobileFocus.scale})
+        `,
+      }}
+    >
+    {/* Background grid */}
+    <div
+      className="pointer-events-none absolute inset-0 opacity-20 "
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
+        backgroundSize: "32px 32px"
+      }}
+    />
 
-        <div className="grid gap-3 grid-cols-4 md:hidden">
-          {visibleSkills.map((skill) => {
-            const Icon = skill.icon;
+    {/* Ambient glow */}
+    <div className="pointer-events-none absolute left-1/2 top-1/2 h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/[0.045] blur-[90px]" />
 
-            const isSelected =
-              selectedSkill === skill.name;
+    {/* Outer orbit */}
+    <div className="pointer-events-none absolute left-1/2 top-1/2 h-[440px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-purple-400/[0.08]" />
 
-            return (
-              <button
-                key={skill.name}
-                type="button"
-                onClick={() =>
-                  handleSkillClick(skill.name)
-                }
-                className={`relative flex min-h-[92px] flex-col items-center justify-center rounded-2xl border p-2 transition-all duration-300 ${
-                  isSelected
-                    ? "border-purple-400/40 bg-purple-400/[0.08]"
-                    : "border-white/[0.08] bg-white/[0.015]"
-                }`}
-              >
-                <Icon
-                  size={24}
-                  style={{
-                    color: isSelected
-                      ? skill.color
-                      : "rgba(255,255,255,0.45)",
-                  }}
-                  className="transition-all duration-300"
-                />
+    {/* Inner orbit */}
+    <div className="pointer-events-none absolute left-1/2 top-1/2 h-[280px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.04]" />
 
-                <span className="mt-2 text-xs text-white/60">
-                  {skill.name}
-                </span>
+    {/* Rotating orbit glow */}
+    <div
+      className="pointer-events-none absolute left-1/2 top-1/2 h-[440px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+      style={{
+        background:
+          "conic-gradient(from 0deg, transparent 0deg, rgba(168,85,247,0.18) 45deg, transparent 90deg, transparent 180deg, rgba(168,85,247,0.08) 225deg, transparent 270deg)",
+        maskImage:
+          "radial-gradient(circle, transparent 49%, black 50%, black 50.5%, transparent 51%)",
+        WebkitMaskImage:
+          "radial-gradient(circle, transparent 49%, black 50%, black 50.5%, transparent 51%)",
+        animation: "skillOrbitSpin 18s linear infinite"
+      }}
+    />
 
-                {/* <span className="mt-1 font-mono text-[8px] uppercase tracking-wider text-white/20">
-                  {skill.category}
-                </span> */}
+    {/* SVG connections */}
+    <svg
+      className="pointer-events-none absolute inset-0 h-full w-full"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+    >
+      <defs>
+        <linearGradient
+          id="mobileSkillConnection"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+        >
+          <stop
+            offset="0%"
+            stopColor="#A855F7"
+            stopOpacity="0"
+          />
 
-                {isSelected && (
-                  <span
-                    className="absolute right-3 top-3 h-1.5 w-1.5 rounded-full"
-                    style={{
-                      backgroundColor:
-                        skill.color,
-                      boxShadow: `0 0 10px ${skill.color}`,
-                    }}
-                  />
-                )}
-              </button>
-            );
-          })}
+          <stop
+            offset="50%"
+            stopColor="#A855F7"
+            stopOpacity="0.65"
+          />
+
+          <stop
+            offset="100%"
+            stopColor="#A855F7"
+            stopOpacity="0"
+          />
+        </linearGradient>
+      </defs>
+
+      {connections.map(([from, to]) => {
+        const fromPosition = getMobilePosition(from);
+        const toPosition = getMobilePosition(to);
+
+        const active = isConnectionActive(from, to);
+
+        const related =
+          selectedSkill &&
+          (from === selectedSkill ||
+            to === selectedSkill);
+
+        return (
+         <line
+  key={`mobile-${from}-${to}`}
+  x1={fromPosition.x}
+  y1={fromPosition.y}
+  x2={toPosition.x}
+  y2={toPosition.y}
+  stroke={
+    active
+      ? "url(#mobileSkillConnection)"
+      : "rgba(255,255,255,0.045)"
+  }
+  strokeWidth={active ? 0.7 : 0.25}
+  strokeDasharray={active ? "2 4" : "none"}
+  opacity={
+    selectedSkill
+      ? related
+        ? 1
+        : 0.18
+      : 0.7
+  }
+  className={
+    active
+      ? "animate-[skillDash_3s_linear_infinite]"
+      : ""
+  }
+  vectorEffect="non-scaling-stroke"
+/>
+        );
+      })}
+    </svg>
+
+    {/* Central STACK */}
+    <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+      <div className="relative">
+
+        {/* Glow */}
+        <div className="absolute -inset-10 rounded-full bg-purple-500/[0.08] blur-3xl" />
+
+        {/* Pulse ring */}
+        <div className="absolute -inset-5 animate-pulse rounded-full border border-purple-400/[0.12]" />
+
+        {/* Center */}
+        <div className="relative flex h-[118px] w-[118px] flex-col items-center justify-center rounded-[30px] border border-purple-400/20 bg-[#0C0A10]/95 shadow-[0_0_55px_rgba(168,85,247,0.12)] backdrop-blur-xl">
+
+          <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-purple-300/60">
+            My
+          </span>
+
+          <span className="mt-1 text-xl font-semibold tracking-tight text-white">
+            STACK
+          </span>
+
+          <span className="mt-2 font-mono text-[7px] uppercase tracking-[0.25em] text-white/20">
+            Fullstack
+          </span>
         </div>
+      </div>
+    </div>
 
-        {/* Mobile description */}
-        <div className="mt-5 md:hidden">
-          {activeSkillData && (
-            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.015] p-5">
-              <div className="flex items-center gap-2">
-                <span
-                  className="h-2 w-2 rounded-full"
-                  style={{
-                    backgroundColor:
-                      activeSkillData.color,
-                  }}
-                />
+    {/* Skill Nodes */}
+   {visibleSkills.map((skill) => {
+      const Icon = skill.icon;
 
-                <span className="font-mono text-xs text-white/70">
-                  {activeSkillData.name}
-                </span>
-              </div>
+      const position = getMobilePosition(skill.name);
 
-              <p className="mt-3 text-xs leading-6 text-white/35">
-                {activeSkillData.description}
-              </p>
-            </div>
-          )}
-        </div>
+      const isSelected =
+        selectedSkill === skill.name;
+
+      const isConnected =
+        isNodeConnected(skill.name);
+
+      return (
+        <button
+          key={skill.name}
+          type="button"
+          onClick={() =>
+            handleSkillClick(skill.name)
+          }
+          className={`absolute z-30 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${
+            selectedSkill && !isConnected
+              ? "opacity-25"
+              : "opacity-100"
+          }`}
+          style={{
+  left: `${position.x}%`,
+  top: `${position.y}%`
+}}
+        >
+          {/* Node glow */}
+          <span
+            className={`absolute -inset-5 rounded-full blur-xl transition-all duration-500 ${
+              isSelected
+                ? "opacity-100"
+                : "opacity-0"
+            }`}
+            style={{
+              backgroundColor: skill.color
+            }}
+          />
+
+          {/* Node */}
+          <span
+            className={`relative flex h-[58px] w-[58px] items-center justify-center rounded-2xl border transition-all duration-500 ${
+              isSelected
+                ? "scale-125 border-purple-400/50 bg-purple-400/[0.1]"
+                : "border-white/[0.09] bg-[#0C0A10]/90"
+            }`}
+            style={{
+              boxShadow: isSelected
+                ? `0 0 28px ${skill.color}30`
+                : "none"
+            }}
+          >
+            <Icon
+              size={24}
+              style={{
+                color: isSelected
+                  ? skill.color
+                  : "rgba(255,255,255,0.5)"
+              }}
+            />
+
+            {/* Active indicator */}
+            {isSelected && (
+              <span
+                className="absolute -right-1 -top-1 h-2 w-2 rounded-full"
+                style={{
+                  backgroundColor: skill.color,
+                  boxShadow: `0 0 10px ${skill.color}`
+                }}
+              />
+            )}
+          </span>
+
+          {/* Label */}
+          <span
+            className={`absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap font-mono text-[7px] uppercase tracking-wider transition-all duration-300 ${
+              isSelected
+                ? "text-white/80"
+                : "text-white/25"
+            }`}
+          >
+            {skill.name}
+          </span>
+        </button>
+      );
+    })}
+
+    {/* Top hint */}
+    {!selectedSkill && (
+      <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2">
+        <span className="font-mono text-[7px] uppercase tracking-[0.25em] text-white/20">
+          Tap a technology
+        </span>
+      </div>
+    )}
+
+    {/* Counter */}
+    <div className="pointer-events-none absolute bottom-4 right-4">
+      <span className="font-mono text-[7px] uppercase tracking-widest text-white/20">
+        {String(visibleSkills.length).padStart(2, "0")}{" "}
+        technologies
+      </span>
+    </div>
+  </div>
+</div>
+</div>
+
+{/* Mobile description */}
+<div className="mt-5 md:hidden">
+  {activeSkillData && (
+    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.015] p-5">
+      <div className="flex items-center gap-2">
+        <span
+          className="h-2 w-2 rounded-full"
+          style={{
+            backgroundColor:
+              activeSkillData.color,
+            boxShadow:
+              `0 0 10px ${activeSkillData.color}`
+          }}
+        />
+
+        <span className="font-mono text-xs text-white/70">
+          {activeSkillData.name}
+        </span>
+
+        <span className="ml-auto font-mono text-[8px] uppercase tracking-widest text-white/20">
+          {activeSkillData.level}
+        </span>
+      </div>
+
+      <p className="mt-3 text-xs leading-6 text-white/35">
+        {activeSkillData.description}
+      </p>
+    </div>
+  )}
+</div>
+        
       </div>
 
       {/* ======================================== */}
@@ -850,6 +1106,12 @@ export function SkillsSection() {
             stroke-dashoffset: -20;
           }
         }
+
+          @keyframes skillOrbitSpin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
       `}</style>
     </section>
   );
