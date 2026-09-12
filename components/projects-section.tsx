@@ -1,3 +1,4 @@
+// ProjectsSection.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -75,23 +76,7 @@ export function ProjectsSection() {
       id="projects"
       className="relative min-h-screen w-full overflow-hidden bg-[#0E0C14]"
     >
-      {/* ================================= */}
-      {/* BACKGROUND — SHAPE GRID */}
-      {/* ================================= */}
-{/* 
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <ShapeGrid
-          speed={0.5}
-          squareSize={40}
-          direction="diagonal"
-          borderColor="#2F293A"
-          hoverFillColor="#222"
-          shape="square"
-          hoverTrailAmount={0}
-        />
-      </div> */}
 
-      {/* Optional overlay supaya background tidak terlalu terang */}
       <div className="pointer-events-none absolute inset-0 z-[1]" />
 
       {/* ================================= */}
@@ -99,14 +84,13 @@ export function ProjectsSection() {
       {/* ================================= */}
 
       <div className="relative z-10 container py-16">
-        <div className="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="grid items-center gap-6 lg:gap-12 lg:grid-cols-[0.85fr_1.15fr]">
 
           {/* =============================== */}
-          {/* LEFT — PROJECT LIST */}
+          {/* HEADING — HANYA mobile/tablet, tampil paling atas */}
           {/* =============================== */}
 
-          <div>
-           <div className="mb-14 max-w-2xl">
+          <div className="order-1 max-w-2xl lg:hidden">
             <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">
               Things I've{" "}
               <span className="text-[#A855F7]">built.</span>
@@ -117,6 +101,25 @@ export function ProjectsSection() {
               and continue to improve.
             </p>
           </div>
+
+          {/* =============================== */}
+          {/* PROJECT LIST — mobile: order-3 (paling bawah), desktop: order-1 (kiri) */}
+          {/* =============================== */}
+
+          <div className="order-3 lg:order-1">
+
+            {/* Heading — HANYA desktop (versi mobile sudah di blok terpisah di atas) */}
+            <div className="hidden lg:block mb-14 max-w-2xl">
+              <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">
+                Things I've{" "}
+                <span className="text-[#A855F7]">built.</span>
+              </h2>
+
+              <p className="mt-2 md:mt-5 max-w-lg text-xs md:text-sm leading-relaxed text-white/40">
+                A selection of things I've built, worked on,
+                and continue to improve.
+              </p>
+            </div>
 
             {isLoading && (
               <p className="mb-6 font-mono text-sm text-muted-foreground">
@@ -139,10 +142,10 @@ export function ProjectsSection() {
           </div>
 
           {/* =============================== */}
-          {/* RIGHT — PROJECT PREVIEW */}
+          {/* PROJECT PREVIEW — mobile: order-2 (tengah), desktop: order-2 (kanan) */}
           {/* =============================== */}
 
-          <div className="relative min-h-[600px]">
+          <div className="relative order-2 min-h-[320px] sm:min-h-[380px] lg:min-h-[600px]">
 
             {projects.length > 0 && (
               <CardSwap

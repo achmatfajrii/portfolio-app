@@ -88,6 +88,8 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   const enterTimerRef = useRef<number | null>(null);
   const leaveRafRef = useRef<number | null>(null);
 
+  const [avatarError, setAvatarError] = useState(false);
+
   const tiltEngine = useMemo<TiltEngine | null>(() => {
     if (!enableTilt) return null;
 
@@ -530,11 +532,21 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                   borderRadius: cardRadius,
                   backfaceVisibility: 'hidden'
                 }}
-                onError={e => {
-                  const t = e.target as HTMLImageElement;
-                  t.style.display = 'none';
-                }}
+                onError={() => {
+    setAvatarError(true);
+  }}
               />
+
+              {avatarError && (
+  <div
+    className="absolute left-1/2 bottom-[100px] -translate-x-1/2 z-[9999] whitespace-nowrap rounded-lg px-3 py-2 text-sm text-red-400"
+    style={{
+      background: 'rgba(0, 0, 0, 0.8)'
+    }}
+  >
+    ❌ Avatar gagal dimuat
+  </div>
+)}
               {showUserInfo && (
                 <div
                   className="absolute flex md:p-6 md:p-4 z-[2] flex items-center justify-between backdrop-blur-[30px] border border-white/10 pointer-events-auto"
