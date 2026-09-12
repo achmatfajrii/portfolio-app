@@ -582,7 +582,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
     minHeight: '60px'
   } as React.CSSProperties}
 >
-                  <div className="items-center gap-3 hidden md:flex">
+                  <div className="items-center gap-3 hidden md:flex md:p-4">
                     <div
                       className="rounded-full overflow-hidden border border-white/10 flex-shrink-0"
                       style={{ width: '48px', height: '48px' }}
@@ -605,20 +605,15 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                       <div className="text-xs md:text-sm text-white/70 leading-none">{status}</div>
                     </div>
                   </div>
-                 <button
-  className="mx-auto md:mx-0 border border-white/10 rounded-lg px-16 md:px-4 py-3 text-xs font-semibold text-white/90 cursor-pointer transition-all duration-200 ease-out hover:border-white/40 hover:-translate-y-px"
-  onClick={handleContactClick}
-  style={{
-    pointerEvents: 'auto',
-    display: 'block',
-    gridArea: 'auto',
-    borderRadius: '8px'
-  }}
-  type="button"
-  aria-label={`Contact ${name || 'user'}`}
->
-  {contactText}
-</button>
+                  <button
+                    className="mx-auto md:mx-0 rounded-lg px-16 md:px-4 md:mr-4 py-3 text-xs font-semibold text-white/90 cursor-pointer backdrop-blur-[10px] transition-all duration-200 ease-out hover:border-white/40 hover:-translate-y-px"
+                    onClick={handleContactClick}
+                    style={{ pointerEvents: 'auto', display: 'block', gridArea: 'auto', borderRadius: '8px' }}
+                    type="button"
+                    aria-label={`Contact ${name || 'user'}`}
+                  >
+                    {contactText}
+                  </button>
                 </div>
               )}
             </div>

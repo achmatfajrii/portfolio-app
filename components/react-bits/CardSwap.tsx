@@ -666,8 +666,8 @@ const CardSwap: React.FC<CardSwapProps> = ({
     <div
       className="
         absolute
-        bottom-0
-        right-0
+        bottom-28 md:bottom-0
+        right-28 md:right-0
         translate-x-[5%]
         translate-y-[10%]
         origin-bottom-right

@@ -166,7 +166,7 @@ export function ProjectList({
             </div>
           )}
 
-          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-white/45">
+          <p className="hidden md:block mt-2 line-clamp-2 text-sm leading-relaxed text-white/45">
             {currentProject.description}
           </p>
 

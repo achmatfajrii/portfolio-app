@@ -83,7 +83,7 @@ export function ProjectsSection() {
       {/* CONTENT */}
       {/* ================================= */}
 
-      <div className="relative z-10 container py-16">
+      <div className="relative z-10 container py-8">
         <div className="grid items-center gap-6 lg:gap-12 lg:grid-cols-[0.85fr_1.15fr]">
 
           {/* =============================== */}
@@ -121,18 +121,18 @@ export function ProjectsSection() {
               </p>
             </div>
 
-            {isLoading && (
+            {/* {isLoading && (
               <p className="mb-6 font-mono text-sm text-muted-foreground">
                 Memuat proyek dari API...
               </p>
-            )}
+            )} */}
 
-            {isError && (
+            {/* {isError && (
               <p className="mb-6 font-mono text-sm text-muted-foreground">
                 Belum bisa menghubungi API —
                 menampilkan data sementara.
               </p>
-            )}
+            )} */}
 
             <ProjectList
               projects={projects}
@@ -145,7 +145,7 @@ export function ProjectsSection() {
           {/* PROJECT PREVIEW — mobile: order-2 (tengah), desktop: order-2 (kanan) */}
           {/* =============================== */}
 
-          <div className="relative order-2 min-h-[320px] sm:min-h-[380px] lg:min-h-[600px]">
+          <div className="relative order-2 min-h-[320px] sm:min-h-[380px] lg:min-h-[600px] ">
 
             {projects.length > 0 && (
               <CardSwap
