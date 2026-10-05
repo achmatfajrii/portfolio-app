@@ -1,74 +1,65 @@
-// ProjectsSection.tsx
 "use client";
 
-import { useEffect, useState } from "react";
-
-import { useProjects } from "@/hooks/use-projects";
-import type { Project } from "@/lib/api";
+import { useState } from "react";
+import Image from "next/image";
 
 import CardSwap, { Card } from "./react-bits/CardSwap";
 import { ProjectList } from "./ProjectList";
-import Image from "next/image";
-import ShapeGrid from "@/components/react-bits/ShapeGrid";
 
-const fallbackProjects: Project[] = [
+type Project = {
+  id: string;
+  title: string;
+  description: string;
+  techStack: string[];
+  repoUrl: string;
+  imageUrl?: string;
+};
+
+const projects: Project[] = [
   {
-    id: "fallback-1",
-    title: "Project One",
+    id: "1",
+    title: "Konekseed",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proyek ini menyelesaikan masalah lorem ipsum dengan pendekatan lorem ipsum dolor sit amet.",
-    techStack: ["React", "Node.js", "SQL"],
+      "Social networking platform that brings people with entrepreneurial spirit that looking for business partners.",
+    techStack: ["Next.js", "Tailwind CSS", "Git", "WebSocket"],
     repoUrl: "https://github.com/achmatfajrii",
+    imageUrl: "/assets/project/konekseed.jpg",
   },
   {
-    id: "fallback-2",
-    title: "Project Two",
+    id: "2",
+    title: "Vouchify",
     description:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
-    techStack: ["Vue", "Node.js", "Docker"],
-    repoUrl: "https://github.com/achmatfajrii",
+      "Vouchify is an e-commerce platform that specializes in the sale of digital game vouchers. The main objective of this project is to provide users with easy and secure access to purchasing digital game vouchers from various popular gaming platforms.",
+    techStack: ["Three.js", "Javascript", "HTML5", "Tailwind CSS"],
+    repoUrl: "https://achmatfajrii.github.io/VouchifyApp/",
+    imageUrl: "/assets/project/vouchify.png",
   },
-  {
-    id: "fallback-3",
-    title: "Project Three",
+   {
+    id: "3",
+    title: "ERM",
     description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat.",
-    techStack: ["React", "SQL", "Git"],
-    repoUrl: "https://github.com/achmatfajrii",
+      "Vouchify is an e-commerce platform that specializes in the sale of digital game vouchers. The main objective of this project is to provide users with easy and secure access to purchasing digital game vouchers from various popular gaming platforms.",
+    techStack: ["Three.js", "Javascript", "HTML5", "Tailwind CSS"],
+    repoUrl: "https://achmatfajrii.github.io/VouchifyApp/",
+    imageUrl: "/assets/project/erm.jpeg",
   },
+  // {
+  //   id: "project-3",
+  //   title: "HSSE Safe Track",
+  //   description:
+  //     "HSSE dashboard for monitoring safety records, manhours, incidents, and safety performance indicators.",
+  //   techStack: ["Vue.js", "Node.js", "PostgreSQL"],
+  //   repoUrl: "https://github.com/achmatfajrii",
+  //   imageUrl: "/assets/project/hsse-safe-track.png",
+  // },
 ];
 
 export function ProjectsSection() {
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useProjects();
-
   const [selectedProject, setSelectedProject] = useState(0);
-
-  const projects =
-    data && data.length > 0
-      ? data
-      : fallbackProjects;
-
-  useEffect(() => {
-    if (projects.length === 0) {
-      setSelectedProject(0);
-      return;
-    }
-
-    setSelectedProject((current) =>
-      Math.min(current, projects.length - 1)
-    );
-  }, [projects.length]);
 
   const safeSelectedProject =
     projects.length > 0
-      ? Math.min(
-          selectedProject,
-          projects.length - 1
-        )
+      ? Math.min(selectedProject, projects.length - 1)
       : 0;
 
   return (
@@ -76,20 +67,12 @@ export function ProjectsSection() {
       id="projects"
       className="relative md:min-h-screen w-full pb-16 overflow-hidden bg-[#0E0C14]"
     >
-
       <div className="pointer-events-none absolute inset-0 z-[1]" />
-
-      {/* ================================= */}
-      {/* CONTENT */}
-      {/* ================================= */}
 
       <div className="relative z-10 container py-8">
         <div className="grid items-center gap-6 lg:gap-12 lg:grid-cols-[0.85fr_1.15fr]">
 
-          {/* =============================== */}
-          {/* HEADING — HANYA mobile/tablet, tampil paling atas */}
-          {/* =============================== */}
-
+          {/* HEADING — mobile/tablet */}
           <div className="order-1 max-w-2xl lg:hidden">
             <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">
               Things I've{" "}
@@ -102,13 +85,10 @@ export function ProjectsSection() {
             </p>
           </div>
 
-          {/* =============================== */}
-          {/* PROJECT LIST — mobile: order-3 (paling bawah), desktop: order-1 (kiri) */}
-          {/* =============================== */}
-
+          {/* PROJECT LIST */}
           <div className="order-3 lg:order-1">
 
-            {/* Heading — HANYA desktop (versi mobile sudah di blok terpisah di atas) */}
+            {/* Heading — desktop */}
             <div className="hidden lg:block mb-14 max-w-2xl">
               <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">
                 Things I've{" "}
@@ -121,19 +101,6 @@ export function ProjectsSection() {
               </p>
             </div>
 
-            {/* {isLoading && (
-              <p className="mb-6 font-mono text-sm text-muted-foreground">
-                Memuat proyek dari API...
-              </p>
-            )} */}
-
-            {/* {isError && (
-              <p className="mb-6 font-mono text-sm text-muted-foreground">
-                Belum bisa menghubungi API —
-                menampilkan data sementara.
-              </p>
-            )} */}
-
             <ProjectList
               projects={projects}
               selectedProject={safeSelectedProject}
@@ -141,12 +108,8 @@ export function ProjectsSection() {
             />
           </div>
 
-          {/* =============================== */}
-          {/* PROJECT PREVIEW — mobile: order-2 (tengah), desktop: order-2 (kanan) */}
-          {/* =============================== */}
-
-          <div className="relative order-2 min-h-[320px] sm:min-h-[380px] lg:min-h-[600px] ">
-
+          {/* PROJECT PREVIEW */}
+          <div className="relative order-2 min-h-[320px] sm:min-h-[380px] lg:min-h-[600px]">
             {projects.length > 0 && (
               <CardSwap
                 activeIndex={safeSelectedProject}
@@ -160,46 +123,68 @@ export function ProjectsSection() {
               >
                 {projects.map((project, index) => (
                   <Card
-                    key={project.id}
-                    className="overflow-hidden border-white/10 bg-[#120F17]"
-                  >
-                    {project.imageUrl ? (
-                      <div className="relative h-full w-full overflow-hidden rounded-xl">
+  key={project.id}
+  className="overflow-hidden border-white/10 bg-[#120F17]"
+>
+  {project.imageUrl ? (
+    <div className="relative h-full w-full overflow-hidden rounded-xl bg-[#120F17]">
+    <div className="relative h-full w-full overflow-hidden rounded-xl bg-[#120F17]">
 
-                        <Image
-                          src={project.imageUrl}
-                          alt={`${project.title} preview`}
-                          fill
-                          priority={
-                            index === safeSelectedProject
-                          }
-                          sizes="500px"
-                          className="object-cover object-top"
-                        />
+  {/* Background */}
+  <Image
+    src={project.imageUrl}
+    alt=""
+    fill
+    quality={50}
+    className="scale-110 object-cover blur-2xl opacity-30"
+    aria-hidden
+  />
 
-                        {/* Gradient */}
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+  {/* Overlay */}
+  <div className="absolute inset-0 bg-black/20" />
 
-                        {/* Project label */}
-                        <div className="absolute bottom-4 left-4">
-                          <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white/60 backdrop-blur-md">
-                            {project.title}
-                          </span>
-                        </div>
+  {/* Main image */}
+  <Image
+    src={project.imageUrl}
+    alt={`${project.title} preview`}
+    fill
+    priority={index === safeSelectedProject}
+    sizes="500px"
+    quality={100}
+    className="object-contain object-center saturate-[1.05] contrast-[1.08]"
+  />
 
-                      </div>
-                    ) : (
-                      <div className="flex h-full items-center justify-center">
-                        <span className="font-mono text-xs text-white/20">
-                          No preview available
-                        </span>
-                      </div>
-                    )}
-                  </Card>
+  {/* Gradient */}
+  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
+  {/* Label */}
+  <div className="absolute bottom-4 left-4">
+    <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white/60 backdrop-blur-md">
+      {project.title}
+    </span>
+  </div>
+
+</div>
+
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
+      <div className="absolute bottom-4 left-4">
+        <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white/60 backdrop-blur-md">
+          {project.title}
+        </span>
+      </div>
+    </div>
+  ) : (
+    <div className="flex h-full w-full items-center justify-center rounded-xl bg-[#120F17]">
+      <span className="font-mono text-xs text-white/20">
+        No preview available
+      </span>
+    </div>
+  )}
+</Card>
                 ))}
               </CardSwap>
             )}
-
           </div>
 
         </div>
@@ -207,3 +192,4 @@ export function ProjectsSection() {
     </section>
   );
 }
+
