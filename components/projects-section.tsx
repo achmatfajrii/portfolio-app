@@ -23,7 +23,7 @@ const projects: Project[] = [
       "Social networking platform that brings people with entrepreneurial spirit that looking for business partners.",
     techStack: ["Next.js", "Tailwind CSS", "Git", "WebSocket"],
     repoUrl: "https://github.com/achmatfajrii",
-    imageUrl: "/assets/project/konekseed.jpg",
+    imageUrl: "/assets/project/konekseed.png",
   },
   {
     id: "2",
@@ -32,7 +32,7 @@ const projects: Project[] = [
       "Vouchify is an e-commerce platform that specializes in the sale of digital game vouchers. The main objective of this project is to provide users with easy and secure access to purchasing digital game vouchers from various popular gaming platforms.",
     techStack: ["Three.js", "Javascript", "HTML5", "Tailwind CSS"],
     repoUrl: "https://achmatfajrii.github.io/VouchifyApp/",
-    imageUrl: "/assets/project/vouchify.png",
+    imageUrl: "/assets/project/vouchify-home-card.png",
   },
    {
     id: "3",
@@ -41,7 +41,16 @@ const projects: Project[] = [
       "Vouchify is an e-commerce platform that specializes in the sale of digital game vouchers. The main objective of this project is to provide users with easy and secure access to purchasing digital game vouchers from various popular gaming platforms.",
     techStack: ["Three.js", "Javascript", "HTML5", "Tailwind CSS"],
     repoUrl: "https://achmatfajrii.github.io/VouchifyApp/",
-    imageUrl: "/assets/project/erm.jpeg",
+    imageUrl: "/assets/project/erm.png",
+  },
+  {
+    id: "4",
+    title: "AMD-Academy",
+    description:
+      "Vouchify is an e-commerce platform that specializes in the sale of digital game vouchers. The main objective of this project is to provide users with easy and secure access to purchasing digital game vouchers from various popular gaming platforms.",
+    techStack: ["Three.js", "Javascript", "HTML5", "Tailwind CSS"],
+    repoUrl: "https://achmatfajrii.github.io/VouchifyApp/",
+    imageUrl: "/assets/project/amd.png",
   },
   // {
   //   id: "project-3",
@@ -65,11 +74,12 @@ export function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative md:min-h-screen w-full pb-16 overflow-hidden bg-[#0E0C14]"
-    >
-      <div className="pointer-events-none absolute inset-0 z-[1]" />
+      className="relative md:min-h-screen w-full pb-16 overflow-hidden bg-[#0E0C14]">
+      
+     <div className="lg:max-w-7xl mx-auto">
+       <div className="pointer-events-none absolute inset-0 z-[1]" />
 
-      <div className="relative z-10 container py-8">
+      <div className="relative z-10 container">
         <div className="grid items-center gap-6 lg:gap-12 lg:grid-cols-[0.85fr_1.15fr]">
 
           {/* HEADING — mobile/tablet */}
@@ -189,6 +199,7 @@ export function ProjectsSection() {
 
         </div>
       </div>
+     </div>
     </section>
   );
 }

@@ -400,23 +400,24 @@ const mobileTranslateY =
       className="relative min-h-screen w-full overflow-hidden bg-[#0E0C14]"
     >
 
-<div
-  className="pointer-events-none absolute inset-0 z-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)]">
-  <Galaxy
-    mouseRepulsion={false}
-    mouseInteraction={false}
-    density={2.2}
-    glowIntensity={0.1}
-    saturation={0}
-    hueShift={90}
-    twinkleIntensity={0.1}
-    rotationSpeed={0.05}
-    repulsionStrength={2}
-    autoCenterRepulsion={0}
-    starSpeed={0.3}
-    speed={0.3}
-  />
-</div>
+      <div className="lg:max-w-7xl mx-auto">
+        <div
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)]">
+        <Galaxy
+          mouseRepulsion={false}
+          mouseInteraction={false}
+          density={2.2}
+          glowIntensity={0.1}
+          saturation={0}
+          hueShift={90}
+          twinkleIntensity={0.1}
+          rotationSpeed={0.05}
+          repulsionStrength={2}
+          autoCenterRepulsion={0}
+          starSpeed={0.3}
+          speed={0.3}
+        />
+      </div>
       {/* ======================================== */}
       {/* BACKGROUND */}
       {/* ======================================== */}
@@ -1113,6 +1114,7 @@ const mobileTranslateY =
     }
   }
       `}</style>
+      </div>
     </section>
   );
 }

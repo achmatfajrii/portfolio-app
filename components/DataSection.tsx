@@ -260,7 +260,8 @@ export function DataSection() {
       id="data-projects"
       className="relative w-full overflow-hidden border-t border-white/5 bg-transparent py-24"
     >
-      {/* ================================= */}
+      <div className="lg:max-w-7xl mx-auto">
+        {/* ================================= */}
       {/* BACKGROUND DECORATION */}
       {/* ================================= */}
 
@@ -575,6 +576,7 @@ export function DataSection() {
             Python · SQL · Data Analysis
           </span>
         </div>
+      </div>
       </div>
     </section>
   );

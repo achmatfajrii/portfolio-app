@@ -315,22 +315,22 @@ export default function Home() {
          tetap sambung seperti punya kamu setelah </section> ini. */}
 
       {/* About */}
-      <section id="about" className="bg-[#0E0C14] py-8 md:py-24">
-  <div className="container grid gap-10 md:grid-cols-[2fr_1fr]">
-    <div className="relative w-full min-w-0 flex flex-row items-center justify-center text-muted-foreground">
-      <AboutInteractive
-        selected={aboutSelected}
-        onSelect={setAboutSelected}
-        visual={visuals[aboutSelected]}
-      />
-    </div>
+      <section id="about" className="bg-[#0E0C14] py-8 md:pt-24">
+        <div className="container grid gap-10 md:grid-cols-[2fr_1fr]">
+          <div className="relative w-full min-w-0 flex flex-row items-center justify-center text-muted-foreground">
+            <AboutInteractive
+              selected={aboutSelected}
+              onSelect={setAboutSelected}
+              visual={visuals[aboutSelected]}
+            />
+          </div>
 
-    {/* Kolom visual bawaan cuma tampil di md ke atas, karena di mobile AboutInteractive sudah merender visualnya sendiri */}
-    <div className="hidden md:block space-y-4">
-      {visuals[aboutSelected]}
-    </div>
-  </div>
-</section>
+          {/* Kolom visual bawaan cuma tampil di md ke atas, karena di mobile AboutInteractive sudah merender visualnya sendiri */}
+          <div className="hidden md:block space-y-4">
+            {visuals[aboutSelected]}
+          </div>
+        </div>
+      </section>
 
        <ProjectsSection />
 
