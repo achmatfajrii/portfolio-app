@@ -12,7 +12,7 @@ export default function PageLoader() {
     const hideLoader = () => {
       timeoutId = setTimeout(() => {
         setLoading(false);
-      }, 800);
+      }, 3000);
     };
 
     if (document.readyState === "complete") {
