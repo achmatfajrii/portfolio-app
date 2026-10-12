@@ -322,66 +322,69 @@ export default function AboutInteractive({
        
        <div className="w-1/4 min-w-0 shrink-0">
   <BranchedMenu
-    items={[
-      {
-        label: "Getting Started",
-        children: [
-          {
-            value: "introduction",
-            label: "Introduction",
-            icon: UserIcon,
-          },
-          {
-            value: "background",
-            label: "Background",
-            icon: Briefcase01Icon,
-          },
-          {
-            value: "approach",
-            label: "Approach",
-            icon: Rocket01Icon,
-          },
-          {
-            value: "learning",
-            label: "Learning",
-            icon: BookOpen01Icon,
-          },
-          {
-            value: "looking-for",
-            label: "Looking For",
-            icon: Search01Icon,
-          },
-        ],
-      },
-    ]}
-    defaultOpen={[0]}
-    defaultActive="introduction"
-    onSelect={(value) => {
-      const indexByValue: Record<string, number> = {
-        introduction: 0,
-        background: 1,
-        approach: 2,
-        learning: 3,
-        "looking-for": 4,
-      };
+  items={[
+    {
+      label: "Getting Started",
+      children: [
+        {
+          value: "introduction",
+          label: "Introduction",
+          icon: UserIcon,
+        },
+        {
+          value: "background",
+          label: "Background",
+          icon: Briefcase01Icon,
+        },
+        {
+          value: "approach",
+          label: "Approach",
+          icon: Rocket01Icon,
+        },
+        {
+          value: "learning",
+          label: "Learning",
+          icon: BookOpen01Icon,
+        },
+        {
+          value: "looking-for",
+          label: "Looking For",
+          icon: Search01Icon,
+        },
+      ],
+    },
+  ]}
+  defaultOpen={0}
+  defaultActive="introduction"
+  onToggle={(index: number) => {
 
-      if (indexByValue[value] !== undefined) {
-        onSelect(indexByValue[value]);
-      }
-    }}
-    color="#c4c4c4"
-    accentColor="#C084FC"
-    lineColor="#51465f"
-    width={280}
-    rowHeight={48}
-    indent={38}
-    trunk={20}
-    radius={12}
-    lineWidth={1.5}
-    fontSize={16}
-    drawDuration={400}
-    foldDuration={300}
-  />
+  }}
+  onSelect={(value: string) => {
+    const indexByValue: Record<string, number> = {
+      introduction: 0,
+      background: 1,
+      approach: 2,
+      learning: 3,
+      "looking-for": 4,
+    };
+
+    if (indexByValue[value] !== undefined) {
+      onSelect(indexByValue[value]);
+    }
+  }}
+  color="#c4c4c4"
+  accentColor="#C084FC"
+  lineColor="#51465f"
+  width={280}
+  rowHeight={48}
+  indent={38}
+  trunk={20}
+  radius={12}
+  lineWidth={1.5}
+  fontSize={16}
+  drawDuration={400}
+  foldDuration={300}
+/>
 </div>
 
         <div className="flex w-3/4 min-w-0 pl-8 text-xl">
