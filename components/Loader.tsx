@@ -138,8 +138,8 @@ const StyledWrapper = styled.div`
     border-radius: 3px;
     background: linear-gradient(
       135deg,
-      rgba(110, 231, 255, 0.95),
-      rgba(176, 140, 255, 0.85)
+      #C084FC,
+      #B08CFF
     );
     vertical-align: middle;
     opacity: 0.65;
@@ -162,7 +162,7 @@ const StyledWrapper = styled.div`
     background: linear-gradient(
       90deg,
       rgba(110, 231, 255, 0),
-      rgba(110, 231, 255, 0.55),
+      rgb(192, 132, 252),
       rgba(176, 140, 255, 0.55),
       rgba(110, 231, 255, 0)
     );
