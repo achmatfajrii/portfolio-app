@@ -4,7 +4,14 @@ import { useState } from "react";
 import OptionWheel from "./react-bits/OptionWheel";
 import GradientText from './react-bits/GradientText';
 import TextType from './react-bits/TextType';
-
+import {
+  Rocket01Icon,
+  UserIcon,
+  Briefcase01Icon,
+  BookOpen01Icon,
+  Search01Icon,
+} from "@hugeicons/core-free-icons";
+import BranchedMenu from "./react-bits/BranchedMenu";
 import { Button } from "./ui/button";
 import {
   FaGithub,
@@ -70,16 +77,16 @@ const aboutSections = [
         label: "Introduction",
         content: (
             <div>
-              <div className="hidden md:block flex w-fit items-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-4 py-2 shadow-xl backdrop-blur-xl">
+              <div className="hidden md:flex w-fit items-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-4 py-2 shadow-xl backdrop-blur-xl">
                 <p className="text-xs md:text-sm font-semibold leading-tight">
                   Available for Work and Projects
                 </p>
 
-  <span className="relative flex h-2.5 w-2.5">
-    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
-  </span>
-</div>
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
+                </span>
+              </div>
                <div className="space-y-1">
                 <p className="pl-1 text-lg font-medium tracking-[0.15em] text-white/50 md:mt-8 sm:text-2xl sm:tracking-[0.2em]">
     Hi, I'm
@@ -223,7 +230,7 @@ const aboutSections = [
  {
   label: "Learning",
   content: (
-    <div className="flex w-full items-center">
+    <div className="flex w-full">
       <div className="w-full">
         <div className="mb-4 md:mb-6">
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.3em] text-[#A855F7]">
@@ -260,7 +267,7 @@ const aboutSections = [
   {
     label: "Looking For",
     content: (
-      <div className="w-full h-full flex items-center">
+      <div className="w-full h-full flex">
          <div>
         <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-[#A855F7]">
           What I'm Looking For
@@ -312,27 +319,71 @@ export default function AboutInteractive({
     <div className="w-full">
       {/* Desktop/tablet: layout lama, tidak berubah */}
       <div className="hidden md:flex min-h-[500px] w-full flex-row gap-2">
-        <div className="w-1/4 min-w-0 shrink-0">
-          <OptionWheel
-            className="m-0 w-full p-0"
-            items={aboutSections.map((s) => s.label)}
-            defaultSelected={selected}
-            textColor="#a6a6a6"
-            activeColor="#ffffff"
-            side="left"
-            fontSize={1.4}
-            spacing={2}
-            curve={2}
-            tilt={10}
-            blur={2}
-            fade={0.25}
-            smoothing={150}
-            inset={80}
-            loop={true}
-            draggable={false}
-            onChange={onSelect}
-          />
-        </div>
+       
+       <div className="w-1/4 min-w-0 shrink-0">
+  <BranchedMenu
+    items={[
+      {
+        label: "Getting Started",
+        children: [
+          {
+            value: "introduction",
+            label: "Introduction",
+            icon: UserIcon,
+          },
+          {
+            value: "background",
+            label: "Background",
+            icon: Briefcase01Icon,
+          },
+          {
+            value: "approach",
+            label: "Approach",
+            icon: Rocket01Icon,
+          },
+          {
+            value: "learning",
+            label: "Learning",
+            icon: BookOpen01Icon,
+          },
+          {
+            value: "looking-for",
+            label: "Looking For",
+            icon: Search01Icon,
+          },
+        ],
+      },
+    ]}
+    defaultOpen={[0]}
+    defaultActive="introduction"
+    onSelect={(value) => {
+      const indexByValue: Record<string, number> = {
+        introduction: 0,
+        background: 1,
+        approach: 2,
+        learning: 3,
+        "looking-for": 4,
+      };
+
+      if (indexByValue[value] !== undefined) {
+        onSelect(indexByValue[value]);
+      }
+    }}
+    color="#c4c4c4"
+    accentColor="#C084FC"
+    lineColor="#51465f"
+    width={280}
+    rowHeight={48}
+    indent={38}
+    trunk={20}
+    radius={12}
+    lineWidth={1.5}
+    fontSize={16}
+    drawDuration={400}
+    foldDuration={300}
+  />
+</div>
+
         <div className="flex w-3/4 min-w-0 pl-8 text-xl">
           {aboutSections[selected].content}
         </div>
