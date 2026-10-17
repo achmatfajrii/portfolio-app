@@ -1,9 +1,8 @@
 "use client";
-
-import { useState } from "react";
-import OptionWheel from "./react-bits/OptionWheel";
-import GradientText from './react-bits/GradientText';
-import TextType from './react-bits/TextType';
+import dynamic from "next/dynamic";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import GradientText from "./react-bits/GradientText";
+import TextType from "./react-bits/TextType";
 import {
   Rocket01Icon,
   UserIcon,
@@ -13,13 +12,10 @@ import {
 } from "@hugeicons/core-free-icons";
 import BranchedMenu from "./react-bits/BranchedMenu";
 import { Button } from "./ui/button";
-import {
-  FaGithub,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
+import { FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import type { BentoCardProps } from "./react-bits/MagicBento";
 
-import MagicBento, { BentoCardProps } from "./react-bits/MagicBento";
+const MagicBento = dynamic(() => import("./react-bits/MagicBento"));
 
 interface AboutInteractiveProps {
   selected: number;
@@ -178,7 +174,7 @@ const aboutSections = [
         text={[
           "My journey in IT started back in vocational high school, majoring in Computer Networking, followed by a Bachelor's degree in Informatics Engineering at Universitas Sebelas Maret, Surakarta. Throughout college, I worked on a variety of IT projects and completed an internship as a Fullstack Web Developer through the MBKM program in Malang. Before graduating, I began working professionally as a Frontend Developer in Jogja, then took on the same role at a hospital in Pasuruan. After completing a fullstack bootcamp, I joined a Pertamina subsidiary as a Fullstack Web Developer, where I still work today."
         ]}
-        typingSpeed={5}
+        typingSpeed={15}
         pauseDuration={5000}
         showCursor
         cursorCharacter="▎"
@@ -218,7 +214,7 @@ const aboutSections = [
           enableMagnetism={false}
           clickEffect
           spotlightRadius={350}
-          particleCount={8}
+          particleCount={4}
           glowColor="132, 0, 255"
           disableAnimations={false}
         />
@@ -315,105 +311,79 @@ export default function AboutInteractive({
   onSelect,
   visual,
 }: AboutInteractiveProps) {
+  const isMd = useMediaQuery("(min-width: 768px)");
+
   return (
-    <div className="w-full">
-      {/* Desktop/tablet: layout lama, tidak berubah */}
-      <div className="hidden md:flex min-h-[500px] w-full flex-row gap-2">
-       
-       <div className="w-1/4 min-w-0 shrink-0">
-  <BranchedMenu
-  items={[
-    {
-      label: "Getting Started",
-      children: [
-        {
-          value: "introduction",
-          label: "Introduction",
-          icon: UserIcon,
-        },
-        {
-          value: "background",
-          label: "Background",
-          icon: Briefcase01Icon,
-        },
-        {
-          value: "approach",
-          label: "Approach",
-          icon: Rocket01Icon,
-        },
-        {
-          value: "learning",
-          label: "Learning",
-          icon: BookOpen01Icon,
-        },
-        {
-          value: "looking-for",
-          label: "Looking For",
-          icon: Search01Icon,
-        },
-      ],
-    },
-  ]}
-  defaultOpen={0}
-  defaultActive="introduction"
-  onToggle={(index: number) => {
-
-  }}
-  onSelect={(value: string) => {
-    const indexByValue: Record<string, number> = {
-      introduction: 0,
-      background: 1,
-      approach: 2,
-      learning: 3,
-      "looking-for": 4,
-    };
-
-    if (indexByValue[value] !== undefined) {
-      onSelect(indexByValue[value]);
-    }
-  }}
-  color="#c4c4c4"
-  accentColor="#C084FC"
-  lineColor="#51465f"
-  width={280}
-  rowHeight={48}
-  indent={38}
-  trunk={20}
-  radius={12}
-  lineWidth={1.5}
-  fontSize={16}
-  drawDuration={400}
-  foldDuration={300}
-/>
-</div>
-
-        <div className="flex w-3/4 min-w-0 pl-8 text-xl">
-          {aboutSections[selected].content}
-        </div>
+    <div className="flex w-full flex-col gap-6 md:min-h-[500px] md:flex-row md:gap-2">
+      {/* Menu desktop: wrapper selalu ada agar layout stabil, menu hanya di-mount di md ke atas */}
+      <div className="hidden w-1/4 min-w-0 shrink-0 md:block">
+        {isMd && (
+          <BranchedMenu
+            items={[
+              {
+                label: "Getting Started",
+                children: [
+                  { value: "introduction", label: "Introduction", icon: UserIcon },
+                  { value: "background", label: "Background", icon: Briefcase01Icon },
+                  { value: "approach", label: "Approach", icon: Rocket01Icon },
+                  { value: "learning", label: "Learning", icon: BookOpen01Icon },
+                  { value: "looking-for", label: "Looking For", icon: Search01Icon },
+                ],
+              },
+            ]}
+            defaultOpen={0}
+            defaultActive="introduction"
+            onToggle={() => {}}
+            onSelect={(value: string) => {
+              const indexByValue: Record<string, number> = {
+                introduction: 0,
+                background: 1,
+                approach: 2,
+                learning: 3,
+                "looking-for": 4,
+              };
+              if (indexByValue[value] !== undefined) onSelect(indexByValue[value]);
+            }}
+            color="#c4c4c4"
+            accentColor="#C084FC"
+            lineColor="#51465f"
+            width={280}
+            rowHeight={48}
+            indent={38}
+            trunk={20}
+            radius={12}
+            lineWidth={1.5}
+            fontSize={16}
+            drawDuration={400}
+            foldDuration={300}
+          />
+        )}
       </div>
 
-      {/* Mobile: tab pill di atas, deskripsi, lalu visual */}
-      <div className="md:hidden space-y-6">
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {aboutSections.map((s, i) => (
-            <button
-              key={s.label}
-              onClick={() => onSelect(i)}
-              className={`text-xs shrink-0 rounded-full border px-4 py-2 text-sm transition-colors ${
-                selected === i
-                  ? "border-white bg-white text-black"
-                  : "border-white/20 text-white/50"
-              }`}
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="text-base">{aboutSections[selected].content}</div>
-
-        <div>{visual}</div>
+      {/* Tab pill: hanya mobile */}
+      <div className="flex gap-2 overflow-x-auto pb-1 md:hidden">
+        {aboutSections.map((s, i) => (
+          <button
+            key={s.label}
+            onClick={() => onSelect(i)}
+            className={`shrink-0 rounded-full border px-4 py-2 text-xs transition-colors ${
+              selected === i
+                ? "border-white bg-white text-black"
+                : "border-white/20 text-white/50"
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
       </div>
+
+      {/* Konten: SATU kali untuk semua ukuran layar */}
+      <div className="min-w-0 text-base md:flex md:w-3/4 md:pl-8 md:text-xl">
+        {aboutSections[selected].content}
+      </div>
+
+      {/* Visual mobile (di desktop prop ini null dari AboutSection) */}
+      {visual && <div className="md:hidden">{visual}</div>}
     </div>
   );
 }

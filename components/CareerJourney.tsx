@@ -375,7 +375,7 @@ ${compact ? "top-10 text-xs" : "top-14 text-sm"} whitespace-nowrap text-lg
               {/* Title */}
              <h3
   className={`
-    text-center font-bold tracking-tight text-white text-base md:text-4xl"}
+    text-center font-bold tracking-tight text-white text-base md:text-4xl
   `}
 >
                 {activeJourney.title}
@@ -401,7 +401,6 @@ ${compact ? "top-10 text-xs" : "top-14 text-sm"} whitespace-nowrap text-lg
     relative overflow-hidden rounded-3xl
     border border-white/10
     bg-white/[0.03]
-    backdrop-blur-xl
     text-xs
     ${compact ? "mt-5 p-4" : "mt-8 p-5 md:mt-10 md:p-8"}
   `}

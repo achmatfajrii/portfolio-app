@@ -17,7 +17,7 @@ const adjust = (v: number, fMin: number, fMax: number, tMin: number, tMax: numbe
   round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
 
 // Inject keyframes once
-const KEYFRAMES_ID = 'pc-keyframes';
+const KEYFRAMES_ID = 'pc-keyframes-v2';
 if (typeof document !== 'undefined' && !document.getElementById(KEYFRAMES_ID)) {
   const style = document.createElement('style');
   style.id = KEYFRAMES_ID;
@@ -26,6 +26,8 @@ if (typeof document !== 'undefined' && !document.getElementById(KEYFRAMES_ID)) {
       0% { background-position: 0 var(--background-y), 0 0, center; }
       100% { background-position: 0 var(--background-y), 90% 90%, center; }
     }
+    .pc-shine { animation: pc-holo-bg 18s linear infinite; animation-play-state: paused; }
+    .pc-shell.active .pc-shine { animation-play-state: running; }
   `;
   document.head.appendChild(style);
 }
@@ -153,9 +155,9 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
 
       const stillFar = Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05;
 
-      if (stillFar || document.hasFocus()) {
-        rafId = requestAnimationFrame(step);
-      } else {
+     if (stillFar) {
+         rafId = requestAnimationFrame(step);
+       } else {
         running = false;
         lastTs = 0;
         if (rafId) {
@@ -399,8 +401,6 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
     maskSize: '150%',
     maskPosition: 'top calc(200% - (var(--background-y) * 5)) left calc(100% - var(--background-x))',
     filter: 'brightness(0.66) contrast(1.33) saturate(0.33) opacity(0.5)',
-    animation: 'pc-holo-bg 18s linear infinite',
-    animationPlayState: 'running' as const,
     mixBlendMode: 'color-dodge' as const,
     transform: 'translate3d(0, 0, 1px)',
     overflow: 'hidden' as const,
@@ -472,7 +472,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
           }}
         />
       )}
-      <div ref={shellRef} className="relative z-[1] group">
+      <div ref={shellRef} className="relative z-[1] group pc-shell">
         <section
           className="grid relative overflow-hidden"
           style={{
@@ -515,7 +515,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             }}
           >
             {/* Shine layer */}
-            <div style={shineStyle} />
+            <div className="pc-shine" style={shineStyle} />
 
             {/* Glare layer */}
             <div style={glareStyle} />

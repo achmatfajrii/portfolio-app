@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProfileCardWrapper from '@/components/react-bits/ProfileCardWrapper';
 import AboutInteractive from '@/components/AboutInteractive';
 import BackgroundVisual from '@/components/BackgroundVisual';
@@ -7,16 +7,30 @@ import ApproachVisual from '@/components/ApproachVisual';
 import LearningVisual from '@/components/LearningVisual';
 import LookingForVisual from '@/components/LookingForVisual';
 
+const VISUALS = [
+  ProfileCardWrapper,
+  BackgroundVisual,
+  ApproachVisual,
+  LearningVisual,
+  LookingForVisual,
+];
+
+function useIsMdViewport() {
+  const [isMd, setIsMd] = useState<boolean | null>(null);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => setIsMd(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return isMd;
+}
+
 export function AboutSection() {
   const [aboutSelected, setAboutSelected] = useState(0);
-
-  const visuals = [
-    <ProfileCardWrapper key="profile" />,
-    <BackgroundVisual key="background" />,
-    <ApproachVisual key="approach" />,
-    <LearningVisual key="learning" />,
-    <LookingForVisual key="lookingfor" />,
-  ];
+  const isMd = useIsMdViewport();
+  const Visual = VISUALS[aboutSelected];
 
   return (
     <section id="about" className="bg-[#0E0C14] py-8 md:pt-24">
@@ -25,12 +39,15 @@ export function AboutSection() {
           <AboutInteractive
             selected={aboutSelected}
             onSelect={setAboutSelected}
-            visual={visuals[aboutSelected]}
+            visual={isMd === false ? <Visual /> : null}
           />
         </div>
 
-        {/* Kolom visual hanya md ke atas; di mobile AboutInteractive merender visualnya sendiri */}
-        <div className="hidden md:block space-y-4">{visuals[aboutSelected]}</div>
+        {isMd && (
+          <div className="space-y-4">
+            <Visual />
+          </div>
+        )}
       </div>
     </section>
   );
