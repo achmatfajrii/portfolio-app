@@ -5,6 +5,7 @@ import Image from "next/image";
 
 import CardSwap, { Card } from "./react-bits/CardSwap";
 import { ProjectList } from "./ProjectList";
+import { InView } from "./in-view";
 
 type Project = {
   id: string;
@@ -121,7 +122,7 @@ export function ProjectsSection() {
           {/* PROJECT PREVIEW */}
           <div className="relative order-2 min-h-[320px] sm:min-h-[380px] lg:min-h-[600px]">
             {projects.length > 0 && (
-              <CardSwap
+              <InView><CardSwap
                 activeIndex={safeSelectedProject}
                 onActiveIndexChange={setSelectedProject}
                 width={500}
@@ -145,7 +146,6 @@ export function ProjectsSection() {
     src={project.imageUrl}
     alt=""
     fill
-    quality={50}
     className="scale-110 object-cover blur-2xl opacity-30"
     aria-hidden
   />
@@ -160,7 +160,6 @@ export function ProjectsSection() {
     fill
     priority={index === safeSelectedProject}
     sizes="500px"
-    quality={100}
     className="object-contain object-center saturate-[1.05] contrast-[1.08]"
   />
 
@@ -194,6 +193,7 @@ export function ProjectsSection() {
 </Card>
                 ))}
               </CardSwap>
+              </InView>
             )}
           </div>
 

@@ -1,11 +1,13 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
+import { useInView } from '@/hooks/use-in-view';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, extend, useFrame, ThreeElement } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import type { RapierRigidBody, RigidBodyProps } from '@react-three/rapier';
+const { ref, inView } = useInView<HTMLDivElement>();
 
 
 // replace with your own imports, see the usage snippet for details
@@ -88,11 +90,12 @@ export default function Lanyard({
   }, []);
 
   return (
-    <div className="lanyard-wrapper">
+    <div ref={ref} className="lanyard-wrapper">
       <Canvas
+      frameloop={inView ? 'always' : 'never'}
         camera={{ position: position, fov: fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
-        gl={{ alpha: transparent }}
+        gl={{ alpha: transparent, antialias: false, powerPreference: 'high-performance' }}
 onCreated={({ gl, camera }) => {
   gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1);
   camera.lookAt(lookAt[0], lookAt[1], lookAt[2]);
