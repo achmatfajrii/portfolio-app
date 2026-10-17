@@ -7,8 +7,6 @@ import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import type { RapierRigidBody, RigidBodyProps } from '@react-three/rapier';
-const { ref, inView } = useInView<HTMLDivElement>();
-
 
 // replace with your own imports, see the usage snippet for details
 // assets in the Next.js `public/` folder should be referenced by their public URL
@@ -82,7 +80,8 @@ export default function Lanyard({
   lanyardWidth = 1
 }: LanyardProps) {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
-
+  const { ref, inView } = useInView<HTMLDivElement>();
+  
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
@@ -94,7 +93,7 @@ export default function Lanyard({
       <Canvas
       frameloop={inView ? 'always' : 'never'}
         camera={{ position: position, fov: fov }}
-        dpr={[1, isMobile ? 1.5 : 2]}
+        dpr={[1, 1.5]}
         gl={{ alpha: transparent, antialias: false, powerPreference: 'high-performance' }}
 onCreated={({ gl, camera }) => {
   gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1);
