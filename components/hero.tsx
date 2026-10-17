@@ -5,6 +5,12 @@ import { FloatingLabel } from '@/components/floating-label';
 import { InView } from '@/components/in-view';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Lanyard, DotField, WarpText } from '@/components/lazy';
+import { HeroTitleFallback } from './hero-title-fallback';
+import Image from 'next/image';
+
+if (typeof window !== 'undefined') {
+  void import('@/components/react-bits/WarpText');
+}
 
 function useResponsiveHeroFontSize() {
   const [fontSize, setFontSize] = useState(88);
@@ -149,7 +155,10 @@ export function Hero() {
               <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
 
               <div className="relative z-30 pointer-events-auto">
-                {isDesktop === false && <WarpText {...warpProps} fontSize={heroFontSize} />}
+                {isDesktop === false
+  ? <WarpText {...warpProps} fontSize={heroFontSize} />
+  : <HeroTitleFallback fontSize={heroFontSize} />}
+
               </div>
             </div>
 
@@ -165,14 +174,17 @@ export function Hero() {
               </span>
             </div>
 
-            {isDesktop === false && (
-              <img
-                src="/assets/carbon.png"
-                alt="Achmat Fajri code profile"
-                decoding="async"
-                className="w-full max-w-lg -rotate-1 rounded-lg shadow-2xl sm:max-w-sm"
-              />
-            )}
+        
+             <Image
+  src="/assets/carbon.png"
+  alt="Achmat Fajri code profile"
+  width={1840}  // dimensi asli file
+  height={1020} // dimensi asli file
+  loading="lazy"
+  sizes="(max-width: 640px) 100vw, 384px"
+  className="h-auto w-full max-w-lg -rotate-1 rounded-lg shadow-2xl sm:max-w-sm lg:hidden"
+/>
+            
           </div>
         </div>
 
@@ -184,20 +196,21 @@ export function Hero() {
           <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
 
           <div className="relative z-30 pointer-events-auto">
-            {isDesktop === true && (
-              <WarpText {...warpProps} fontSize={heroFontSize} style={{ height: '100%' }} />
-            )}
+            {isDesktop === true
+  ? <WarpText {...warpProps} fontSize={heroFontSize} style={{ height: '100%' }} />
+  : <HeroTitleFallback fontSize={heroFontSize} />}
           </div>
         </div>
 
-        {isDesktop === true && (
-          <img
-            src="/assets/carbon.png"
-            alt="Achmat Fajri code profile"
-            decoding="async"
-            className="pointer-events-none absolute top-[40vh] z-20 max-w-none -translate-y-1/2 -rotate-2 lg:w-[44vw] lg:right-[-10vw]"
-          />
-        )}
+         <Image
+  src="/assets/carbon.png"
+  alt="Achmat Fajri code profile"
+  width={1840}  // dimensi asli file
+  height={1020} // dimensi asli file
+  priority
+  sizes="44vw"
+  className="pointer-events-none absolute top-[40vh] z-20 hidden h-auto max-w-none -translate-y-1/2 -rotate-2 lg:block lg:w-[44vw] lg:right-[-10vw]"
+/>
       </section>
     </>
   );
