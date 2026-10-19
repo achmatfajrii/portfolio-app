@@ -8,7 +8,7 @@ const links = [
   { href: '#about', label: 'About' },
   { href: '#projects', label: 'Projects' },
   { href: '#skills', label: 'Skills' },
-  { href: '#data', label: 'Data' },
+  // { href: '#data', label: 'Data' },
   { href: '#contact', label: 'Contact' },
 ];
 
@@ -27,7 +27,7 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
           <Button className="rounded-full" variant="outline" size="sm">Resume</Button>
           <button
             type="button"

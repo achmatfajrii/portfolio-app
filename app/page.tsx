@@ -15,7 +15,7 @@ export default function Home() {
       <AboutSection />
       <ProjectsSection />
       <SkillsSection />
-      <DataSection />
+      {/* <DataSection /> */}
       <ContactSection />
       <Footer />
     </main>

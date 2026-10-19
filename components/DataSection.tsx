@@ -1,582 +1,497 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowUpRight,
   BarChart3,
   Database,
-  Github,
-  LineChart,
-  PieChart,
+  FileText,
+  Globe2,
+  Layers3,
+  Users,
 } from "lucide-react";
 
-import { useState } from "react";
-
-interface DataProject {
-  id: string;
-  number: string;
+type ProjectMeta = {
   title: string;
-  description: string;
-  category: string;
-  tools: string[];
-  metrics: {
-    label: string;
+  subtitle: string;
+  source: string;
+  sourceUrl: string;
+  dataset: string;
+  dataAsOf: string;
+  datasetLastUpdated: string;
+  license: string;
+};
+
+type AnalyticsData = {
+  project: ProjectMeta;
+  methodology: {
+    sourceRecordCount: number;
+    analysisRecordCount: number;
+    exactDuplicateRowsRemoved: number;
+    dateRange: { from: string; to: string };
+    recordsWithAmount: number;
+    recordsMissingAmount: number;
+    amountCoveragePct: number;
+    uniqueSupplierCountries: number;
+    interpretationNotes: string[];
+  };
+  kpis: {
+    awardRecords: number;
+    suppliers: number;
+    categories: number;
+    availableAmountSumUsd: number;
+    medianAvailableAmountUsd: number;
+    recordsWithAmount: number;
+    recordsMissingAmount: number;
+  };
+  insights: {
+    title: string;
     value: string;
+    detail: string;
+    metric: string;
+    category?: string;
+    country?: string;
   }[];
-  chart: number[];
-  accent: string;
-  github: string;
-}
+  categoriesBySpend: {
+    category: string;
+    recordCount: number;
+    amountRecordCount: number;
+    availableAmountUsd: number;
+    amountSharePct: number;
+  }[];
+  categoriesByRecordCount: {
+    category: string;
+    recordCount: number;
+    amountRecordCount: number;
+    availableAmountUsd: number;
+    amountSharePct: number;
+  }[];
+  topSuppliersByAvailableAmount: {
+    supplier: string;
+    recordCount: number;
+    amountRecordCount: number;
+    availableAmountUsd: number;
+    amountSharePct: number;
+  }[];
+  topSupplierRegistrationCountriesByAvailableAmount: {
+    country: string;
+    recordCount: number;
+    amountRecordCount: number;
+    availableAmountUsd: number;
+    amountSharePct: number;
+  }[];
+  annualTrendByCalendarYear: {
+    year: number;
+    recordCount: number;
+    amountRecordCount: number;
+    missingAmountCount: number;
+    availableAmountUsd: number;
+    medianAvailableAmountUsd: number;
+    partialYear: boolean;
+  }[];
+};
 
-const dataProjects: DataProject[] = [
-  {
-    id: "ecommerce-sales",
-    number: "01",
-    title: "E-commerce Sales Analysis",
-    description:
-      "Exploring sales performance, customer behavior, and revenue trends to uncover the biggest opportunities for growth and retention.",
-    category: "Business Analysis",
-    tools: ["Python", "Pandas", "SQL", "Matplotlib"],
-    metrics: [
-      {
-        label: "Orders",
-        value: "1.1K",
-      },
-      {
-        label: "Customers",
-        value: "400",
-      },
-      {
-        label: "Period",
-        value: "12M",
-      },
-    ],
-    chart: [28, 35, 32, 48, 42, 55, 51, 63, 58, 72, 86, 94],
-    accent: "#A855F7",
-    github: "https://github.com/achmatfajrii/ecommerce-sales-analysis",
-  },
+type CategoryMode = "amount" | "records";
 
-  {
-    id: "customer-analysis",
-    number: "02",
-    title: "Customer Behavior Analysis",
-    description:
-      "Analyzing customer segments, purchasing patterns, and retention behavior to understand what separates repeat customers from one-time buyers.",
-    category: "Customer Analytics",
-    tools: ["Python", "Pandas", "SQL"],
-    metrics: [
-      {
-        label: "Segments",
-        value: "4",
-      },
-      {
-        label: "Customers",
-        value: "400",
-      },
-      {
-        label: "Queries",
-        value: "8",
-      },
-    ],
-    chart: [72, 58, 65, 48, 55, 43, 49, 61, 67, 74, 81, 88],
-    accent: "#8B5CF6",
-    github: "https://github.com/achmatfajrii",
-  },
+const formatNumber = (value: number) =>
+  new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(value);
 
-  {
-    id: "product-performance",
-    number: "03",
-    title: "Product Performance",
-    description:
-      "Breaking down product and category performance to identify high-performing products, weak categories, and potential opportunities.",
-    category: "Product Analytics",
-    tools: ["SQL", "Python", "Matplotlib"],
-    metrics: [
-      {
-        label: "Products",
-        value: "60",
-      },
-      {
-        label: "Categories",
-        value: "5",
-      },
-      {
-        label: "Insights",
-        value: "12",
-      },
-    ],
-    chart: [42, 46, 38, 51, 64, 59, 68, 61, 75, 71, 83, 91],
-    accent: "#C084FC",
-    github: "https://github.com/achmatfajrii",
-  },
-];
+const formatCompactUsd = (value: number) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    notation: "compact",
+    maximumFractionDigits: 2,
+  }).format(value);
 
-function MiniChart({
-  values,
-  accent,
-}: {
-  values: number[];
-  accent: string;
-}) {
-  const max = Math.max(...values);
-  const min = Math.min(...values);
+const formatUsd = (value: number) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(value);
 
-  const points = values
-    .map((value, index) => {
-      const x =
-        (index / (values.length - 1)) * 100;
-
-      const normalized =
-        (value - min) / (max - min || 1);
-
-      const y = 85 - normalized * 65;
-
-      return `${x},${y}`;
-    })
-    .join(" ");
-
-  return (
-    <div className="relative h-32 w-full overflow-hidden">
-      {/* Grid */}
-      <div className="pointer-events-none absolute inset-0 opacity-20">
-        <div className="absolute left-0 right-0 top-1/4 border-t border-white/10" />
-        <div className="absolute left-0 right-0 top-1/2 border-t border-white/10" />
-        <div className="absolute left-0 right-0 top-3/4 border-t border-white/10" />
-
-        <div className="absolute bottom-0 left-1/4 top-0 border-l border-white/10" />
-        <div className="absolute bottom-0 left-1/2 top-0 border-l border-white/10" />
-        <div className="absolute bottom-0 left-3/4 top-0 border-l border-white/10" />
-      </div>
-
-      <svg
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        className="absolute inset-0 h-full w-full overflow-visible"
-      >
-        {/* Glow */}
-        <polyline
-          points={points}
-          fill="none"
-          stroke={accent}
-          strokeWidth="5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          opacity="0.08"
-          vectorEffect="non-scaling-stroke"
-          className="transition-all duration-700"
-        />
-
-        {/* Main line */}
-        <polyline
-          points={points}
-          fill="none"
-          stroke={accent}
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-          className="transition-all duration-700"
-        />
-
-        {/* Area */}
-        <polygon
-          points={`0,100 ${points} 100,100`}
-          fill={`url(#gradient-${accent.replace("#", "")})`}
-          opacity="0.08"
-        />
-
-        <defs>
-          <linearGradient
-            id={`gradient-${accent.replace("#", "")}`}
-            x1="0"
-            y1="0"
-            x2="0"
-            y2="1"
-          >
-            <stop
-              offset="0%"
-              stopColor={accent}
-            />
-            <stop
-              offset="100%"
-              stopColor={accent}
-              stopOpacity="0"
-            />
-          </linearGradient>
-        </defs>
-      </svg>
-
-      {/* Data points */}
-      <div className="absolute inset-0">
-        {values.map((value, index) => {
-          const x =
-            (index / (values.length - 1)) * 100;
-
-          const normalized =
-            (value - min) / (max - min || 1);
-
-          const y =
-            85 - normalized * 65;
-
-          return (
-            <span
-              key={index}
-              className="absolute h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-              style={{
-                left: `${x}%`,
-                top: `${y}%`,
-                backgroundColor: accent,
-                boxShadow: `0 0 10px ${accent}`,
-              }}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function ProjectIcon({
-  category,
-}: {
-  category: string;
-}) {
-  if (category === "Customer Analytics") {
-    return <PieChart size={18} />;
-  }
-
-  if (category === "Product Analytics") {
-    return <BarChart3 size={18} />;
-  }
-
-  return <LineChart size={18} />;
-}
+const formatDate = (value: string) =>
+  new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${value}T00:00:00Z`));
 
 export function DataSection() {
-  const [activeProject, setActiveProject] =
-    useState<string | null>(null);
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [loadError, setLoadError] = useState(false);
+  const [categoryMode, setCategoryMode] = useState<CategoryMode>("amount");
+
+  useEffect(() => {
+    let active = true;
+
+    fetch("/data/procurement-spend-analytics.json")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Unable to load procurement analytics data.");
+        }
+        return response.json() as Promise<AnalyticsData>;
+      })
+      .then((data) => {
+        if (active) setAnalytics(data);
+      })
+      .catch(() => {
+        if (active) setLoadError(true);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const categories = useMemo(() => {
+    if (!analytics) return [];
+    return categoryMode === "amount"
+      ? analytics.categoriesBySpend.slice(0, 5)
+      : analytics.categoriesByRecordCount.slice(0, 5);
+  }, [analytics, categoryMode]);
+
+  const maxCategoryValue = useMemo(() => {
+    if (!analytics || categories.length === 0) return 1;
+    return categoryMode === "amount"
+      ? Math.max(...categories.map((item) => item.availableAmountUsd), 1)
+      : Math.max(...categories.map((item) => item.recordCount), 1);
+  }, [analytics, categories, categoryMode]);
+
+  const maxAnnualAmount = useMemo(() => {
+    if (!analytics) return 1;
+    return Math.max(...analytics.annualTrendByCalendarYear.map((item) => item.availableAmountUsd), 1);
+  }, [analytics]);
 
   return (
     <section
       id="data-projects"
-      className="relative w-full overflow-hidden border-t border-white/5 bg-transparent py-24"
+      className="relative w-full overflow-hidden border-t border-white/5 bg-transparent py-20 md:py-28"
     >
-      <div className="lg:max-w-7xl mx-auto">
-        {/* ================================= */}
-      {/* BACKGROUND DECORATION */}
-      {/* ================================= */}
-
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[15%] top-[20%] h-72 w-72 rounded-full bg-purple-500/5 blur-[120px]" />
-
-        <div className="absolute bottom-[10%] right-[10%] h-80 w-80 rounded-full bg-violet-500/5 blur-[140px]" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div className="absolute left-[8%] top-[18%] h-64 w-64 rounded-full bg-purple-500/[0.04] blur-[110px]" />
+        <div className="absolute bottom-[8%] right-[7%] h-72 w-72 rounded-full bg-violet-500/[0.04] blur-[120px]" />
       </div>
 
-      {/* ================================= */}
-      {/* CONTENT */}
-      {/* ================================= */}
-
-      <div className="relative z-10 container">
-        {/* Header */}
-
-        <div className="mb-14 max-w-2xl">
+      <div className="container relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-10 max-w-3xl md:mb-12">
           <div className="mb-5 flex items-center gap-3">
-            <div className="h-px w-8 bg-purple-500/60" />
-
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-purple-400/70">
-              Data & Analytics
+            <span className="h-px w-8 bg-purple-400/70" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-purple-300/80">
+              Data &amp; Analytics / Featured Case Study
             </span>
           </div>
 
-          <h2 className="text-3xl font-semibold tracking-tight text-white md:text-5xl">
-            Turning data into
-            <span className="text-white/30">
-              {" "}
-              something meaningful.
-            </span>
+          <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
+            Procurement Spend <span className="text-white/35">Intelligence.</span>
           </h2>
-
-          <p className="mt-4 max-w-xl text-xs md:text-sm leading-5 md:leading-7 text-white/40">
-            A growing collection of data analysis
-            projects exploring business questions,
-            customer behavior, and patterns hidden
-            inside numbers.
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-white/50 md:text-base md:leading-7">
+            An exploratory analysis of World Bank Group corporate procurement contract award records, focused on award value, commodity categories, and supplier concentration.
           </p>
+
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            {["Python", "Data Cleaning", "Exploratory Analysis", "Next.js"].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-white/10 bg-white/[0.025] px-3 py-1.5 font-mono text-[10px] text-white/55"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* ================================= */}
-        {/* PROJECT GRID */}
-        {/* ================================= */}
-
-        <div className="grid gap-5 lg:grid-cols-2">
-          {dataProjects.map((project) => {
-            const isActive =
-              activeProject === project.id;
-
-            return (
-              <article
-                key={project.id}
-                onMouseEnter={() =>
-                  setActiveProject(project.id)
-                }
-                onMouseLeave={() =>
-                  setActiveProject(null)
-                }
-                className={`
-                  group relative overflow-hidden rounded-2xl
-                  border border-white/10
-                  bg-[#100D15]/70
-                  backdrop-blur-md
-                  transition-all duration-500
-                  hover:-translate-y-1
-                  hover:border-purple-400/30
-                  hover:shadow-[0_20px_80px_rgba(168,85,247,0.08)]
-                  ${
-                    project.number === "01"
-                      ? "lg:col-span-2"
-                      : ""
-                  }
-                `}
-              >
-                {/* Hover glow */}
-
-                <div
-                  className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-20"
-                  style={{
-                    backgroundColor:
-                      project.accent,
-                  }}
-                />
-
-                <div
-                  className={`
-                    relative z-10
-                    ${
-                      project.number === "01"
-                        ? "grid lg:grid-cols-[1fr_0.9fr]"
-                        : ""
-                    }
-                  `}
-                >
-                  {/* ================================= */}
-                  {/* INFORMATION */}
-                  {/* ================================= */}
-
-                  <div className="p-6 sm:p-8">
-                    {/* Top */}
-
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] transition-all duration-300 group-hover:border-purple-400/30"
-                          style={{
-                            color: project.accent,
-                          }}
-                        >
-                          <ProjectIcon
-                            category={
-                              project.category
-                            }
-                          />
-                        </div>
-
-                        <div>
-                          <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/25">
-                            {project.category}
-                          </p>
-
-                          <p
-                            className="mt-1 font-mono text-[10px]"
-                            style={{
-                              color:
-                                project.accent,
-                            }}
-                          >
-                            {project.number} /{" "}
-                            {String(
-                              dataProjects.length
-                            ).padStart(2, "0")}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* GitHub */}
-
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`Open ${project.title} on GitHub`}
-                        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/30 transition-all duration-300 hover:border-white/20 hover:bg-white/5 hover:text-white"
-                      >
-                        <Github
-                          size={15}
-                        />
-                      </a>
-                    </div>
-
-                    {/* Title */}
-
-                    <h3 className="mt-8 text-2xl font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-white">
-                      {project.title}
-                    </h3>
-
-                    <p className="mt-3 max-w-xl text-sm leading-6 text-white/40">
-                      {project.description}
+        {loadError ? (
+          <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-6 sm:p-8">
+            <div className="flex items-start gap-3">
+              <Database size={18} className="mt-0.5 shrink-0 text-purple-300" />
+              <div>
+                <h3 className="font-medium text-white">Analytics data could not be loaded</h3>
+                <p className="mt-2 text-sm leading-6 text-white/50">
+                  Check that the file exists at <code className="text-purple-200">public/data/procurement-spend-analytics.json</code> and that the filename matches exactly.
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : !analytics ? (
+          <div className="rounded-2xl border border-white/10 bg-[#100D15]/60 p-6 sm:p-8" aria-live="polite">
+            <div className="flex items-center gap-3 text-sm text-white/50">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-purple-400" />
+              Loading verified dataset summaries…
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {[0, 1, 2, 3].map((item) => (
+                <div key={item} className="h-24 animate-pulse rounded-xl border border-white/5 bg-white/[0.025]" />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4 md:space-y-5">
+            {/* Project overview and source details */}
+            <div className="grid gap-4 lg:grid-cols-[1.25fr_0.75fr]">
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#100D15]/80 p-5 sm:p-7">
+                <div className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-purple-500/[0.07] blur-3xl" />
+                <div className="relative flex items-start justify-between gap-4">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-purple-300/75">Executive overview</p>
+                    <p className="mt-2 text-sm leading-6 text-white/50">Total available award amount in the cleaned records.</p>
+                    <p className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                      {formatCompactUsd(analytics.kpis.availableAmountSumUsd)}
                     </p>
-
-                    {/* Tools */}
-
-                    <div className="mt-6 flex flex-wrap gap-2">
-                      {project.tools.map(
-                        (tool) => (
-                          <span
-                            key={tool}
-                            className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-[9px] text-white/35 transition-colors group-hover:border-white/15 group-hover:text-white/50"
-                          >
-                            {tool}
-                          </span>
-                        )
-                      )}
-                    </div>
-
-                    {/* Metrics */}
-
-                    <div className="mt-8 grid grid-cols-3 border-t border-white/5 pt-5">
-                      {project.metrics.map(
-                        (metric) => (
-                          <div
-                            key={metric.label}
-                            className="border-r border-white/5 last:border-r-0"
-                          >
-                            <p className="font-mono text-[9px] uppercase tracking-wider text-white/20">
-                              {metric.label}
-                            </p>
-
-                            <p className="mt-1 text-sm font-medium text-white/70">
-                              {metric.value}
-                            </p>
-                          </div>
-                        )
-                      )}
-                    </div>
+                    <p className="mt-2 text-xs leading-5 text-white/35">
+                      Sum of records with a reported amount; this is not the full procurement spend.
+                    </p>
                   </div>
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-purple-300/20 bg-purple-400/[0.08] text-purple-200">
+                    <BarChart3 size={20} />
+                  </div>
+                </div>
 
-                  {/* ================================= */}
-                  {/* CHART */}
-                  {/* ================================= */}
+                <div className="relative mt-6 grid grid-cols-2 gap-3 border-t border-white/[0.07] pt-5 sm:grid-cols-3">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.16em] text-white/35">Dataset records</p>
+                    <p className="mt-1.5 text-lg font-semibold tabular-nums text-white">{formatNumber(analytics.kpis.awardRecords)}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.16em] text-white/35">Records with amount</p>
+                    <p className="mt-1.5 text-lg font-semibold tabular-nums text-white">{formatNumber(analytics.kpis.recordsWithAmount)}</p>
+                  </div>
+                  <div className="col-span-2 sm:col-span-1">
+                    <p className="text-[10px] uppercase tracking-[0.16em] text-white/35">Median recorded award</p>
+                    <p className="mt-1.5 text-lg font-semibold tabular-nums text-white">{formatCompactUsd(analytics.kpis.medianAvailableAmountUsd)}</p>
+                  </div>
+                </div>
+              </div>
 
-                  <div
-                    className={`
-                      relative flex items-end
-                      border-t border-white/5
-                      p-6
-                      lg:border-l lg:border-t-0
-                      ${
-                        project.number ===
-                        "01"
-                          ? "min-h-[280px]"
-                          : "min-h-[220px]"
-                      }
-                    `}
-                  >
-                    {/* Chart label */}
+              <div className="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#100D15]/60 p-5 sm:p-7">
+                <div>
+                  <div className="flex items-center gap-2 text-purple-200/80">
+                    <FileText size={15} />
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em]">Dataset profile</p>
+                  </div>
+                  <h3 className="mt-3 text-lg font-medium text-white">{analytics.project.dataset}</h3>
+                  <p className="mt-2 text-sm leading-6 text-white/45">Source: {analytics.project.source}</p>
 
-                    <div className="absolute left-6 top-6">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="h-1.5 w-1.5 rounded-full"
-                          style={{
-                            backgroundColor:
-                              project.accent,
-                            boxShadow: `0 0 8px ${project.accent}`,
-                          }}
-                        />
-
-                        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/25">
-                          Trend
-                        </span>
-                      </div>
+                  <div className="mt-5 space-y-3 border-t border-white/[0.07] pt-4">
+                    <div className="flex items-start justify-between gap-3 text-xs">
+                      <span className="text-white/35">Award date range</span>
+                      <span className="text-right text-white/70">{formatDate(analytics.methodology.dateRange.from)} – {formatDate(analytics.methodology.dateRange.to)}</span>
                     </div>
-
-                    {/* Decorative number */}
-
-                    <div className="absolute right-6 top-5 font-mono text-[9px] text-white/10">
-                      2025
+                    <div className="flex items-start justify-between gap-3 text-xs">
+                      <span className="text-white/35">Unique suppliers</span>
+                      <span className="text-white/70">{formatNumber(analytics.kpis.suppliers)}</span>
                     </div>
-
-                    <div className="w-full pt-8">
-                      <div className="group">
-                        <MiniChart
-                          values={
-                            project.chart
-                          }
-                          accent={
-                            project.accent
-                          }
-                        />
-                      </div>
-
-                      <div className="mt-3 flex justify-between font-mono text-[8px] text-white/15">
-                        <span>JAN</span>
-                        <span>MAR</span>
-                        <span>JUN</span>
-                        <span>SEP</span>
-                        <span>DEC</span>
-                      </div>
+                    <div className="flex items-start justify-between gap-3 text-xs">
+                      <span className="text-white/35">Commodity categories</span>
+                      <span className="text-white/70">{formatNumber(analytics.kpis.categories)}</span>
+                    </div>
+                    <div className="flex items-start justify-between gap-3 text-xs">
+                      <span className="text-white/35">Data as of</span>
+                      <span className="text-white/70">{formatDate(analytics.project.dataAsOf)}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Bottom line */}
-
-                <div
-                  className="absolute bottom-0 left-0 h-px w-0 transition-all duration-700 group-hover:w-full"
-                  style={{
-                    backgroundColor:
-                      project.accent,
-                  }}
-                />
-
-                {/* View project */}
-
                 <a
-                  href={project.github}
+                  href={analytics.project.sourceUrl}
                   target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute bottom-6 right-6 hidden items-center gap-2 font-mono text-[9px] uppercase tracking-widest text-white/20 transition-colors hover:text-white sm:flex"
+                  rel="noreferrer noopener"
+                  className="mt-6 inline-flex w-fit items-center gap-2 text-xs font-medium text-purple-200/80 transition-colors hover:text-purple-100"
                 >
-                  View analysis
-                  <ArrowUpRight
-                    size={12}
-                    className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  />
+                  View official dataset <ArrowUpRight size={14} />
                 </a>
-              </article>
-            );
-          })}
-        </div>
+              </div>
+            </div>
 
-        {/* ================================= */}
-        {/* FOOTER NOTE */}
-        {/* ================================= */}
+            {/* KPI row */}
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {[
+                { label: "Award records", value: formatNumber(analytics.kpis.awardRecords), note: "After removing one exact duplicate", Icon: Database },
+                { label: "Unique suppliers", value: formatNumber(analytics.kpis.suppliers), note: "Supplier names in the dataset", Icon: Users },
+                { label: "Categories", value: formatNumber(analytics.kpis.categories), note: "Raw commodity category labels", Icon: Layers3 },
+                { label: "Supplier countries", value: formatNumber(analytics.methodology.uniqueSupplierCountries), note: "By supplier registration country", Icon: Globe2 },
+              ].map(({ label, value, note, Icon }) => (
+                <div key={label} className="rounded-xl border border-white/[0.08] bg-[#100D15]/55 p-4 sm:p-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-xs text-white/45">{label}</p>
+                    <Icon size={15} className="text-purple-300/70" />
+                  </div>
+                  <p className="mt-3 text-2xl font-semibold tracking-tight tabular-nums text-white">{value}</p>
+                  <p className="mt-1.5 text-[10px] leading-4 text-white/30">{note}</p>
+                </div>
+              ))}
+            </div>
 
-        <div className="mt-10 flex flex-col justify-between gap-4 border-t border-white/5 pt-5 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-3">
-            <Database
-              size={14}
-              className="text-purple-400/50"
-            />
+            {/* Category chart + annual trend */}
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-5 sm:p-6">
+                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">Category breakdown</p>
+                    <h3 className="mt-2 text-lg font-medium text-white">Where awards are concentrated</h3>
+                  </div>
+                  <div className="inline-flex w-fit rounded-lg border border-white/10 bg-black/20 p-1" role="group" aria-label="Category chart metric">
+                    <button
+                      type="button"
+                      onClick={() => setCategoryMode("amount")}
+                      aria-pressed={categoryMode === "amount"}
+                      className={`rounded-md px-3 py-1.5 text-[10px] transition-colors ${categoryMode === "amount" ? "bg-purple-400/15 text-purple-100" : "text-white/40 hover:text-white/70"}`}
+                    >
+                      By value
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCategoryMode("records")}
+                      aria-pressed={categoryMode === "records"}
+                      className={`rounded-md px-3 py-1.5 text-[10px] transition-colors ${categoryMode === "records" ? "bg-purple-400/15 text-purple-100" : "text-white/40 hover:text-white/70"}`}
+                    >
+                      By records
+                    </button>
+                  </div>
+                </div>
 
-            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
-              More analysis projects coming soon
-            </span>
+                <div className="mt-6 space-y-5">
+                  {categories.map((item) => {
+                    const value = categoryMode === "amount" ? item.availableAmountUsd : item.recordCount;
+                    const width = Math.max(2, (value / maxCategoryValue) * 100);
+                    const share = categoryMode === "amount"
+                      ? item.amountSharePct
+                      : (item.recordCount / analytics.kpis.awardRecords) * 100;
+
+                    return (
+                      <div key={`${categoryMode}-${item.category}`}>
+                        <div className="mb-2 flex items-end justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="truncate text-xs font-medium text-white/80">{item.category.trim()}</p>
+                            <p className="mt-1 text-[10px] text-white/35">{formatNumber(item.recordCount)} records</p>
+                          </div>
+                          <div className="shrink-0 text-right">
+                            <p className="text-xs font-medium tabular-nums text-white/80">{categoryMode === "amount" ? formatCompactUsd(item.availableAmountUsd) : formatNumber(item.recordCount)}</p>
+                            <p className="mt-1 text-[10px] tabular-nums text-white/35">{share.toFixed(1)}% {categoryMode === "amount" ? "of available amount" : "of records"}</p>
+                          </div>
+                        </div>
+                        <div
+                          className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]"
+                          role="progressbar"
+                          aria-label={`${item.category.trim()} ${categoryMode === "amount" ? "available amount" : "record count"}`}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-valuenow={Math.min(100, share)}
+                        >
+                          <div className="h-full rounded-full bg-gradient-to-r from-purple-500 to-violet-300 transition-[width] duration-300" style={{ width: `${width}%` }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="mt-5 text-[10px] leading-5 text-white/30">Category labels are shown as provided by the source; similar-looking raw labels are not automatically merged.</p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-5 sm:p-6">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">Calendar year overview</p>
+                  <h3 className="mt-2 text-lg font-medium text-white">Recorded award value over time</h3>
+                  <p className="mt-2 text-xs leading-5 text-white/40">Annual sum of non-missing award amounts, in USD.</p>
+                </div>
+
+                <div className="mt-6 overflow-x-auto pb-1">
+                  <div
+                    className="grid min-w-[600px] items-end gap-2"
+                    style={{ gridTemplateColumns: `repeat(${analytics.annualTrendByCalendarYear.length}, minmax(24px, 1fr))` }}
+                  >
+                    {analytics.annualTrendByCalendarYear.map((item) => {
+                      const height = Math.max(4, (item.availableAmountUsd / maxAnnualAmount) * 100);
+                      return (
+                        <div key={item.year} className="flex h-36 flex-col items-center justify-end gap-2" title={`${item.year}${item.partialYear ? " (partial year)" : ""}: ${formatUsd(item.availableAmountUsd)} available amount; ${formatNumber(item.recordCount)} records`}>
+                          <div className="flex h-28 w-full items-end justify-center">
+                            <div
+                              className={`w-full max-w-7 rounded-t-sm transition-colors ${item.partialYear ? "bg-purple-400/35" : "bg-purple-400/65 hover:bg-purple-300"}`}
+                              style={{ height: `${height}%` }}
+                            />
+                          </div>
+                          <span className={`text-[9px] tabular-nums ${item.partialYear ? "text-purple-200/70" : "text-white/35"}`}>{String(item.year).slice(2)}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-[10px] text-white/35">
+                  <span className="inline-flex items-center gap-2"><span className="h-2 w-2 rounded-sm bg-purple-400/65" /> Full calendar years</span>
+                  <span className="inline-flex items-center gap-2"><span className="h-2 w-2 rounded-sm bg-purple-400/35" /> Partial calendar years</span>
+                </div>
+                <p className="mt-4 border-t border-white/[0.07] pt-4 text-[10px] leading-5 text-white/35">
+                  Caution: reporting thresholds changed in Q3 FY25, so annual values across that change are not directly comparable. 2013 and 2026 are partial years.
+                </p>
+              </div>
+            </div>
+
+            {/* Supplier leaderboard and findings */}
+            <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+              <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-5 sm:p-6">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">Supplier leaderboard</p>
+                    <h3 className="mt-2 text-lg font-medium text-white">Largest available award amounts</h3>
+                  </div>
+                  <Users size={17} className="mt-1 text-purple-300/70" />
+                </div>
+                <div className="mt-5 divide-y divide-white/[0.06]">
+                  {analytics.topSuppliersByAvailableAmount.slice(0, 5).map((supplier, index) => (
+                    <div key={supplier.supplier} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-white/[0.08] font-mono text-[10px] text-white/40">{String(index + 1).padStart(2, "0")}</span>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-xs font-medium text-white/80">{supplier.supplier}</p>
+                        <p className="mt-1 text-[10px] text-white/35">{formatNumber(supplier.recordCount)} award records</p>
+                      </div>
+                      <p className="shrink-0 text-xs font-medium tabular-nums text-white/75">{formatCompactUsd(supplier.availableAmountUsd)}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-5 border-t border-white/[0.07] pt-4 text-[10px] leading-5 text-white/30">Ranked by the sum of available amounts associated with each supplier name. Missing amount values are excluded.</p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-5 sm:p-6">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">What stands out</p>
+                  <h3 className="mt-2 text-lg font-medium text-white">Signals from the dataset</h3>
+                </div>
+                <div className="mt-5 space-y-4">
+                  {analytics.insights.slice(0, 3).map((insight, index) => (
+                    <div key={insight.title} className="flex gap-3">
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-purple-400/[0.09] font-mono text-[9px] text-purple-200/80">0{index + 1}</span>
+                      <div>
+                        <p className="text-xs font-medium leading-5 text-white/80">{insight.title}</p>
+                        <p className="mt-1 text-xs leading-5 text-white/45">{insight.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-5 rounded-xl border border-amber-200/10 bg-amber-100/[0.035] p-3.5">
+                  <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-amber-100/70">Data limitation</p>
+                  <p className="mt-1.5 text-xs leading-5 text-white/45">{formatNumber(analytics.kpis.recordsMissingAmount)} records ({(analytics.kpis.recordsMissingAmount / analytics.kpis.awardRecords * 100).toFixed(1)}%) have no award amount. The source also notes that this dataset does not include every contract.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Attribution */}
+            <div className="flex flex-col gap-3 border-t border-white/[0.07] pt-5 sm:flex-row sm:items-center sm:justify-between">
+              <p className="max-w-3xl text-[10px] leading-5 text-white/30">
+                Source: World Bank Group, Corporate Procurement Contract Awards. Licensed under CC BY 4.0. Supplier country refers to registration in the source vendor database and may not indicate actual country of origin.
+              </p>
+              <a
+                href={analytics.project.sourceUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex shrink-0 items-center gap-2 text-xs text-white/50 transition-colors hover:text-purple-200"
+              >
+                Source &amp; methodology <ArrowUpRight size={13} />
+              </a>
+            </div>
           </div>
-
-          <span className="font-mono text-[9px] text-white/10">
-            Python · SQL · Data Analysis
-          </span>
-        </div>
-      </div>
+        )}
       </div>
     </section>
   );

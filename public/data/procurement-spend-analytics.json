@@ -1,0 +1,655 @@
+{
+  "project": {
+    "title": "Procurement Spend Intelligence",
+    "subtitle": "An exploratory analysis of World Bank Group corporate procurement contract award records.",
+    "source": "World Bank Group",
+    "sourceUrl": "https://financesone.worldbank.org/d/DS00028",
+    "dataset": "Corporate Procurement Contract Awards",
+    "dataAsOf": "2026-06-30",
+    "datasetLastUpdated": "2026-09-16",
+    "license": "Creative Commons Attribution 4.0 International"
+  },
+  "methodology": {
+    "sourceRecordCount": 4799,
+    "analysisRecordCount": 4798,
+    "exactDuplicateRowsRemoved": 1,
+    "dateRange": {
+      "from": "2013-07-15",
+      "to": "2026-06-30"
+    },
+    "recordsWithAmount": 4299,
+    "recordsMissingAmount": 499,
+    "amountCoveragePct": 89.6,
+    "availableAmountSumUsd": 2774081039.49,
+    "medianAvailableAmountUsd": 346840.0,
+    "meanAvailableAmountUsd": 645285.19,
+    "largestRecordedAmountUsd": 222000000.0,
+    "uniqueSuppliers": 3055,
+    "uniqueCommodityCategories": 46,
+    "uniqueSupplierCountries": 172,
+    "uniqueWbgOrganizations": 12,
+    "dataQuality": {
+      "missingSelectionNumber": 69,
+      "selectionNumberDashPlaceholder": 7,
+      "missingSupplierCountryCode": 1,
+      "missingFundSource": 49,
+      "missingVpuDescription": 2,
+      "exactDuplicateHandling": "One exact duplicate row was removed. Other repeated Selection Number values were retained because the same selection may relate to multiple award records.",
+      "categoryHandling": "Raw commodity category labels were preserved; similar-looking labels were not merged automatically."
+    },
+    "interpretationNotes": [
+      "availableAmountSumUsd sums only non-missing values in Contract Award Amount (USD); it is not a complete total of all World Bank Group procurement spend.",
+      "The dataset metadata says IDIQ contract values may be estimates and that the dataset does not list all contracts.",
+      "The dataset metadata says awards before Q3 FY25 reflect values of USD 250,000 or greater, while later data reflect values of USD 100,000 or greater. Calendar-year comparisons across this change are not directly comparable.",
+      "2013 and 2026 are partial calendar years in this dataset.",
+      "Supplier Country / Economy represents the supplier's registration in the WBG vendor database and may not be its actual country of origin."
+    ]
+  },
+  "kpis": {
+    "awardRecords": 4798,
+    "suppliers": 3055,
+    "categories": 46,
+    "availableAmountSumUsd": 2774081039.49,
+    "medianAvailableAmountUsd": 346840.0,
+    "recordsWithAmount": 4299,
+    "recordsMissingAmount": 499
+  },
+  "insights": [
+    {
+      "title": "Contract Consultants dominates recorded award volume",
+      "value": "2,536 award records",
+      "detail": "52.9% of the cleaned dataset records are labeled \"CONTRACT CONSULTANTS\".",
+      "metric": "recordCount",
+      "category": "CONTRACT CONSULTANTS"
+    },
+    {
+      "title": "Contract Consultants leads by available award amount",
+      "value": "$1.17B",
+      "detail": "42.0% of the sum of non-missing amounts is in this raw category.",
+      "metric": "availableAmountUsd",
+      "category": "CONTRACT CONSULTANTS"
+    },
+    {
+      "title": "Supplier registration country: USA",
+      "value": "$1.12B",
+      "detail": "40.4% of the sum of non-missing amounts is associated with suppliers registered in the USA.",
+      "metric": "availableAmountUsd",
+      "country": "USA"
+    },
+    {
+      "title": "Some award amounts are unavailable",
+      "value": "499 records",
+      "detail": "10.4% of cleaned records have no amount value, so the amount sum excludes them.",
+      "metric": "missingAmounts"
+    }
+  ],
+  "categoriesBySpend": [
+    {
+      "category": "CONTRACT CONSULTANTS",
+      "recordCount": 2536,
+      "amountRecordCount": 2383,
+      "availableAmountUsd": 1165378609.25,
+      "amountSharePct": 42.01
+    },
+    {
+      "category": "CONSULTING",
+      "recordCount": 1321,
+      "amountRecordCount": 1262,
+      "availableAmountUsd": 560270772.27,
+      "amountSharePct": 20.2
+    },
+    {
+      "category": "MEDICAL",
+      "recordCount": 28,
+      "amountRecordCount": 17,
+      "availableAmountUsd": 300124328.0,
+      "amountSharePct": 10.82
+    },
+    {
+      "category": "FOOD SERVICE",
+      "recordCount": 2,
+      "amountRecordCount": 2,
+      "availableAmountUsd": 216319491.44,
+      "amountSharePct": 7.8
+    },
+    {
+      "category": "SOFTWARE",
+      "recordCount": 146,
+      "amountRecordCount": 84,
+      "availableAmountUsd": 95362180.64,
+      "amountSharePct": 3.44
+    },
+    {
+      "category": "TELECOMMUNICATIONS",
+      "recordCount": 84,
+      "amountRecordCount": 66,
+      "availableAmountUsd": 69407189.83,
+      "amountSharePct": 2.5
+    },
+    {
+      "category": "MISCELLANEOUS SRVCS",
+      "recordCount": 51,
+      "amountRecordCount": 20,
+      "availableAmountUsd": 68974867.8,
+      "amountSharePct": 2.49
+    },
+    {
+      "category": "EXTRNL/CATERED EVENT",
+      "recordCount": 75,
+      "amountRecordCount": 68,
+      "availableAmountUsd": 49615758.05,
+      "amountSharePct": 1.79
+    },
+    {
+      "category": "CONTRACT CONSULTING",
+      "recordCount": 82,
+      "amountRecordCount": 82,
+      "availableAmountUsd": 48529466.35,
+      "amountSharePct": 1.75
+    },
+    {
+      "category": "AUDIO VISUAL",
+      "recordCount": 41,
+      "amountRecordCount": 37,
+      "availableAmountUsd": 45878034.54,
+      "amountSharePct": 1.65
+    }
+  ],
+  "categoriesByRecordCount": [
+    {
+      "category": "CONTRACT CONSULTANTS",
+      "recordCount": 2536,
+      "amountRecordCount": 2383,
+      "availableAmountUsd": 1165378609.25,
+      "amountSharePct": 42.01
+    },
+    {
+      "category": "CONSULTING",
+      "recordCount": 1321,
+      "amountRecordCount": 1262,
+      "availableAmountUsd": 560270772.27,
+      "amountSharePct": 20.2
+    },
+    {
+      "category": "SOFTWARE",
+      "recordCount": 146,
+      "amountRecordCount": 84,
+      "availableAmountUsd": 95362180.64,
+      "amountSharePct": 3.44
+    },
+    {
+      "category": "EXTERNAL/CATERED EVENT",
+      "recordCount": 85,
+      "amountRecordCount": 85,
+      "availableAmountUsd": 21524079.49,
+      "amountSharePct": 0.78
+    },
+    {
+      "category": "TELECOMMUNICATIONS",
+      "recordCount": 84,
+      "amountRecordCount": 66,
+      "availableAmountUsd": 69407189.83,
+      "amountSharePct": 2.5
+    },
+    {
+      "category": "CONTRACT CONSULTING",
+      "recordCount": 82,
+      "amountRecordCount": 82,
+      "availableAmountUsd": 48529466.35,
+      "amountSharePct": 1.75
+    },
+    {
+      "category": "EXTRNL/CATERED EVENT",
+      "recordCount": 75,
+      "amountRecordCount": 68,
+      "availableAmountUsd": 49615758.05,
+      "amountSharePct": 1.79
+    },
+    {
+      "category": "TRAINING",
+      "recordCount": 56,
+      "amountRecordCount": 29,
+      "availableAmountUsd": 11771764.7,
+      "amountSharePct": 0.42
+    },
+    {
+      "category": "MISCELLANEOUS SRVCS",
+      "recordCount": 51,
+      "amountRecordCount": 20,
+      "availableAmountUsd": 68974867.8,
+      "amountSharePct": 2.49
+    },
+    {
+      "category": "IT SERVICES",
+      "recordCount": 44,
+      "amountRecordCount": 10,
+      "availableAmountUsd": 7205105.52,
+      "amountSharePct": 0.26
+    }
+  ],
+  "topSuppliersByAvailableAmount": [
+    {
+      "supplier": "Cigna International Health Services",
+      "recordCount": 6,
+      "amountRecordCount": 2,
+      "availableAmountUsd": 226400000.0,
+      "amountSharePct": 8.16
+    },
+    {
+      "supplier": "Restaurant Associates LLC",
+      "recordCount": 1,
+      "amountRecordCount": 1,
+      "availableAmountUsd": 216000000.0,
+      "amountSharePct": 7.79
+    },
+    {
+      "supplier": "GBT US LLC",
+      "recordCount": 2,
+      "amountRecordCount": 2,
+      "availableAmountUsd": 56200000.0,
+      "amountSharePct": 2.03
+    },
+    {
+      "supplier": "SilverScript Insurance Company",
+      "recordCount": 1,
+      "amountRecordCount": 1,
+      "availableAmountUsd": 52000000.0,
+      "amountSharePct": 1.87
+    },
+    {
+      "supplier": "BDO LLP",
+      "recordCount": 7,
+      "amountRecordCount": 7,
+      "availableAmountUsd": 32474253.0,
+      "amountSharePct": 1.17
+    },
+    {
+      "supplier": "Abyrint AS",
+      "recordCount": 8,
+      "amountRecordCount": 8,
+      "availableAmountUsd": 25633603.0,
+      "amountSharePct": 0.92
+    },
+    {
+      "supplier": "HCL America Inc.",
+      "recordCount": 1,
+      "amountRecordCount": 1,
+      "availableAmountUsd": 24376920.25,
+      "amountSharePct": 0.88
+    },
+    {
+      "supplier": "System One Holdings, LLC",
+      "recordCount": 2,
+      "amountRecordCount": 2,
+      "availableAmountUsd": 22307675.0,
+      "amountSharePct": 0.8
+    },
+    {
+      "supplier": "Citibank NA",
+      "recordCount": 1,
+      "amountRecordCount": 1,
+      "availableAmountUsd": 21941911.45,
+      "amountSharePct": 0.79
+    },
+    {
+      "supplier": "Adobe Systems Incorporated",
+      "recordCount": 3,
+      "amountRecordCount": 3,
+      "availableAmountUsd": 16477568.0,
+      "amountSharePct": 0.59
+    }
+  ],
+  "topSupplierRegistrationCountriesByAvailableAmount": [
+    {
+      "country": "USA",
+      "recordCount": 1326,
+      "amountRecordCount": 1005,
+      "availableAmountUsd": 1120679134.79,
+      "amountSharePct": 40.4
+    },
+    {
+      "country": "Belgium",
+      "recordCount": 69,
+      "amountRecordCount": 62,
+      "availableAmountUsd": 249179611.41,
+      "amountSharePct": 8.98
+    },
+    {
+      "country": "United Kingdom",
+      "recordCount": 473,
+      "amountRecordCount": 445,
+      "availableAmountUsd": 229826318.92,
+      "amountSharePct": 8.28
+    },
+    {
+      "country": "France",
+      "recordCount": 206,
+      "amountRecordCount": 199,
+      "availableAmountUsd": 79384932.02,
+      "amountSharePct": 2.86
+    },
+    {
+      "country": "India",
+      "recordCount": 207,
+      "amountRecordCount": 187,
+      "availableAmountUsd": 69949228.96,
+      "amountSharePct": 2.52
+    },
+    {
+      "country": "Netherlands",
+      "recordCount": 152,
+      "amountRecordCount": 144,
+      "availableAmountUsd": 63834366.69,
+      "amountSharePct": 2.3
+    },
+    {
+      "country": "Brazil",
+      "recordCount": 104,
+      "amountRecordCount": 104,
+      "availableAmountUsd": 60795573.23,
+      "amountSharePct": 2.19
+    },
+    {
+      "country": "Germany",
+      "recordCount": 132,
+      "amountRecordCount": 128,
+      "availableAmountUsd": 57340421.93,
+      "amountSharePct": 2.07
+    },
+    {
+      "country": "Kenya",
+      "recordCount": 103,
+      "amountRecordCount": 91,
+      "availableAmountUsd": 43951276.98,
+      "amountSharePct": 1.58
+    },
+    {
+      "country": "Spain",
+      "recordCount": 128,
+      "amountRecordCount": 123,
+      "availableAmountUsd": 42969303.97,
+      "amountSharePct": 1.55
+    }
+  ],
+  "topOrganizationsByAvailableAmount": [
+    {
+      "organization": "IBRD",
+      "recordCount": 3715,
+      "amountRecordCount": 3295,
+      "availableAmountUsd": 2292017389.07,
+      "amountSharePct": 82.62
+    },
+    {
+      "organization": "IFC",
+      "recordCount": 995,
+      "amountRecordCount": 920,
+      "availableAmountUsd": 431795187.16,
+      "amountSharePct": 15.57
+    },
+    {
+      "organization": "IFC1",
+      "recordCount": 60,
+      "amountRecordCount": 59,
+      "availableAmountUsd": 32065935.87,
+      "amountSharePct": 1.16
+    },
+    {
+      "organization": "MIGA",
+      "recordCount": 18,
+      "amountRecordCount": 15,
+      "availableAmountUsd": 13634186.0,
+      "amountSharePct": 0.49
+    },
+    {
+      "organization": "BKE1",
+      "recordCount": 1,
+      "amountRecordCount": 1,
+      "availableAmountUsd": 1100000.0,
+      "amountSharePct": 0.04
+    },
+    {
+      "organization": "BID1",
+      "recordCount": 3,
+      "amountRecordCount": 3,
+      "availableAmountUsd": 1093565.6,
+      "amountSharePct": 0.04
+    },
+    {
+      "organization": "BSG1",
+      "recordCount": 1,
+      "amountRecordCount": 1,
+      "availableAmountUsd": 524050.0,
+      "amountSharePct": 0.02
+    },
+    {
+      "organization": "BIN1",
+      "recordCount": 1,
+      "amountRecordCount": 1,
+      "availableAmountUsd": 483064.53,
+      "amountSharePct": 0.02
+    }
+  ],
+  "annualTrendByCalendarYear": [
+    {
+      "year": 2013,
+      "recordCount": 137,
+      "amountRecordCount": 103,
+      "missingAmountCount": 34,
+      "availableAmountUsd": 47146923.91,
+      "medianAvailableAmountUsd": 383600.0,
+      "partialYear": true
+    },
+    {
+      "year": 2014,
+      "recordCount": 318,
+      "amountRecordCount": 281,
+      "missingAmountCount": 37,
+      "availableAmountUsd": 161166588.23,
+      "medianAvailableAmountUsd": 386872.0,
+      "partialYear": false
+    },
+    {
+      "year": 2015,
+      "recordCount": 344,
+      "amountRecordCount": 292,
+      "missingAmountCount": 52,
+      "availableAmountUsd": 207992701.02,
+      "medianAvailableAmountUsd": 396727.0,
+      "partialYear": false
+    },
+    {
+      "year": 2016,
+      "recordCount": 337,
+      "amountRecordCount": 277,
+      "missingAmountCount": 60,
+      "availableAmountUsd": 233361560.01,
+      "medianAvailableAmountUsd": 385891.0,
+      "partialYear": false
+    },
+    {
+      "year": 2017,
+      "recordCount": 325,
+      "amountRecordCount": 292,
+      "missingAmountCount": 33,
+      "availableAmountUsd": 151762528.2,
+      "medianAvailableAmountUsd": 365363.52,
+      "partialYear": false
+    },
+    {
+      "year": 2018,
+      "recordCount": 327,
+      "amountRecordCount": 279,
+      "missingAmountCount": 48,
+      "availableAmountUsd": 250677795.62,
+      "medianAvailableAmountUsd": 390075.0,
+      "partialYear": false
+    },
+    {
+      "year": 2019,
+      "recordCount": 358,
+      "amountRecordCount": 313,
+      "missingAmountCount": 45,
+      "availableAmountUsd": 662420434.4,
+      "medianAvailableAmountUsd": 405660.91,
+      "partialYear": false
+    },
+    {
+      "year": 2020,
+      "recordCount": 270,
+      "amountRecordCount": 236,
+      "missingAmountCount": 34,
+      "availableAmountUsd": 111026750.02,
+      "medianAvailableAmountUsd": 368420.0,
+      "partialYear": false
+    },
+    {
+      "year": 2021,
+      "recordCount": 312,
+      "amountRecordCount": 277,
+      "missingAmountCount": 35,
+      "availableAmountUsd": 137686983.95,
+      "medianAvailableAmountUsd": 349157.0,
+      "partialYear": false
+    },
+    {
+      "year": 2022,
+      "recordCount": 340,
+      "amountRecordCount": 286,
+      "missingAmountCount": 54,
+      "availableAmountUsd": 182685434.3,
+      "medianAvailableAmountUsd": 380788.5,
+      "partialYear": false
+    },
+    {
+      "year": 2023,
+      "recordCount": 319,
+      "amountRecordCount": 302,
+      "missingAmountCount": 17,
+      "availableAmountUsd": 171590588.98,
+      "medianAvailableAmountUsd": 403553.5,
+      "partialYear": false
+    },
+    {
+      "year": 2024,
+      "recordCount": 315,
+      "amountRecordCount": 282,
+      "missingAmountCount": 33,
+      "availableAmountUsd": 143063027.05,
+      "medianAvailableAmountUsd": 367118.82,
+      "partialYear": false
+    },
+    {
+      "year": 2025,
+      "recordCount": 746,
+      "amountRecordCount": 734,
+      "missingAmountCount": 12,
+      "availableAmountUsd": 212985326.8,
+      "medianAvailableAmountUsd": 199533.0,
+      "partialYear": false
+    },
+    {
+      "year": 2026,
+      "recordCount": 350,
+      "amountRecordCount": 345,
+      "missingAmountCount": 5,
+      "availableAmountUsd": 100514397.0,
+      "medianAvailableAmountUsd": 186008.0,
+      "partialYear": true
+    }
+  ],
+  "largestRecordedAwards": [
+    {
+      "awardDate": "2019-10-11",
+      "calendarYear": 2019,
+      "category": "MEDICAL",
+      "description": "Medical Benefits Plan for Country office",
+      "supplier": "Cigna International Health Services",
+      "supplierCountry": "Belgium",
+      "amountUsd": 222000000.0
+    },
+    {
+      "awardDate": "2019-02-01",
+      "calendarYear": 2019,
+      "category": "FOOD SERVICE",
+      "description": "Food & Catering and Conference & Hoteling",
+      "supplier": "Restaurant Associates LLC",
+      "supplierCountry": "USA",
+      "amountUsd": 216000000.0
+    },
+    {
+      "awardDate": "2018-08-01",
+      "calendarYear": 2018,
+      "category": "MISCELLANEOUS SRVCS",
+      "description": "Travel Management Services at HQ",
+      "supplier": "GBT US LLC",
+      "supplierCountry": "USA",
+      "amountUsd": 52700000.0
+    },
+    {
+      "awardDate": "2016-01-01",
+      "calendarYear": 2016,
+      "category": "MEDICAL",
+      "description": "PHARMACY BENEFIT ADMINISTRATION",
+      "supplier": "SilverScript Insurance Company",
+      "supplierCountry": "USA",
+      "amountUsd": 52000000.0
+    },
+    {
+      "awardDate": "2015-05-11",
+      "calendarYear": 2015,
+      "category": "CONSULTING",
+      "description": "Global IT Support Services",
+      "supplier": "HCL America Inc.",
+      "supplierCountry": "USA",
+      "amountUsd": 24376920.25
+    }
+  ],
+  "categoryOptions": [
+    "AUDIO VISUAL",
+    "AUDIO VISUAL ",
+    "AUDIO VISUALS",
+    "CARTOGRAPHIC",
+    "CLOUD SERVICES",
+    "CONSULTING",
+    "CONTRACT CONSULTANTS",
+    "CONTRACT CONSULTING",
+    "DATA ACQUISITION",
+    "EXTERNAL EVENT",
+    "EXTERNAL/CATERED EVENT",
+    "EXTRNL/CATERED EVENT",
+    "External Meetings (non-staff)",
+    "FINANCIAL SERVICES",
+    "FINANCIAL SYSTEMS",
+    "FOOD SERVICE",
+    "FREIGHT/MAIL",
+    "FURNITURE",
+    "GENERAL BUILDING",
+    "GENERAL OFFICE",
+    "INFORMATION TECH",
+    "INFORMATION TECH.",
+    "IT HARDWARE",
+    "IT SERVICES",
+    "LABOR",
+    "LANGUAGE SERVICES",
+    "MEDICAL",
+    "MISC",
+    "MISCELANEOUS",
+    "MISCELLANEOUS",
+    "MISCELLANEOUS SERVICES",
+    "MISCELLANEOUS SRVCS",
+    "MKT DATA SUBSCRIPTION",
+    "MKT DATA SUBSCRPTION",
+    "OBSOLETE",
+    "PHOTOCOPY",
+    "PRINTING",
+    "PUBLISHING",
+    "RESEARCH AND ADVISORY SERVICE",
+    "RESIDENCE",
+    "SOFTWARE",
+    "SUBSCRIPTION",
+    "TAX",
+    "TELECOMMUNICATIONS",
+    "TRAINING",
+    "TRANSPORTATION"
+  ]
+}
