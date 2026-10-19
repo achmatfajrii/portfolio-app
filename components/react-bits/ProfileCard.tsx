@@ -535,15 +535,17 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
 }}
             >
               <img
-  className="w-full absolute left-1/2 bottom-[-1px]"
-  src={avatarUrl}
-  alt={`${name || 'User'} avatar`}
-  loading="eager"
-  style={{
-    width: '100%',
-    borderRadius: cardRadius,
-    display: 'block',
-    opacity: 1,
+              className="w-full absolute left-1/2 bottom-[-1px]"
+              src={avatarUrl}
+              alt={`${name || 'User'} avatar`}
+              loading="eager"
+              decoding="async"
+              fetchPriority="low"
+              style={{
+                width: '100%',
+                borderRadius: cardRadius,
+                display: 'block',
+                opacity: 1,
 
     transform: isMobile
       ? 'translateX(-50%)'

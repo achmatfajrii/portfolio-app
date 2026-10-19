@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Galaxy from '@/components/react-bits/Galaxy';
+import dynamic from "next/dynamic";
+import { InView } from "@/components/in-view";
 
 import {
   SiReact,
@@ -307,6 +308,11 @@ const getPosition = (name: string) => {
   return position ?? { x: 50, y: 50 };
 };
 
+const Galaxy = dynamic(
+  () => import("@/components/react-bits/Galaxy"),
+  { ssr: false }
+);
+
 export function SkillsSection() {
   const [activeSkill, setActiveSkill] = useState<string | null>(
     null
@@ -403,7 +409,8 @@ const mobileTranslateY =
       <div className="lg:max-w-7xl mx-auto">
         <div
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)]">
-        <Galaxy
+         <InView rootMargin="200px">
+           <Galaxy
           mouseRepulsion={false}
           mouseInteraction={false}
           density={2.2}
@@ -417,6 +424,8 @@ const mobileTranslateY =
           starSpeed={0.3}
           speed={0.3}
         />
+         </InView>
+       
       </div>
       {/* ======================================== */}
       {/* BACKGROUND */}

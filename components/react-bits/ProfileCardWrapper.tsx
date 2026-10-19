@@ -11,14 +11,14 @@ export default function ProfileCardWrapper() {
         handle="achmadfajrii"
         status="Online"
         contactText="Contact Me"
-        avatarUrl="/assets/profile/achmatfajri.png"
+        avatarUrl="/assets/profile/achmatfajri.webp"
         showUserInfo
         enableTilt={true}
         enableMobileTilt={true}
         mobileTiltSensitivity={5}
         onContactClick={() => console.log('Contact clicked')}
         behindGlowColor="#A855F7"
-        iconUrl="/assets/profile/codingpattern.png"
+        iconUrl="/assets/profile/codingpattern.webp"
         behindGlowEnabled
         innerGradient="linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)"
       />

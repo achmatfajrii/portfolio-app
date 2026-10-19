@@ -8,10 +8,6 @@ import { Lanyard, DotField, WarpText } from '@/components/lazy';
 import { HeroTitleFallback } from './hero-title-fallback';
 import Image from 'next/image';
 
-if (typeof window !== 'undefined') {
-  void import('@/components/react-bits/WarpText');
-}
-
 function useResponsiveHeroFontSize() {
   const [fontSize, setFontSize] = useState(88);
 
@@ -154,12 +150,11 @@ export function Hero() {
               <span className="absolute -bottom-1.5 -left-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
               <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
 
-              <div className="relative z-30 pointer-events-auto">
-                {isDesktop === false
-  ? <WarpText {...warpProps} fontSize={heroFontSize} />
-  : <HeroTitleFallback fontSize={heroFontSize} />}
-
-              </div>
+            <div className="relative z-30 pointer-events-auto">
+  {isDesktop === false && !reduceMotion
+    ? <WarpText {...warpProps} fontSize={heroFontSize} />
+    : <HeroTitleFallback fontSize={heroFontSize} />}
+</div>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-2 pt-8">
@@ -196,10 +191,10 @@ export function Hero() {
           <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
 
           <div className="relative z-30 pointer-events-auto">
-            {isDesktop === true
-  ? <WarpText {...warpProps} fontSize={heroFontSize} style={{ height: '100%' }} />
-  : <HeroTitleFallback fontSize={heroFontSize} />}
-          </div>
+  {isDesktop === true && !reduceMotion
+    ? <WarpText {...warpProps} fontSize={heroFontSize} style={{ height: '100%' }} />
+    : <HeroTitleFallback fontSize={heroFontSize} />}
+</div>
         </div>
 
          <Image

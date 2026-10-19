@@ -132,64 +132,36 @@ export function ProjectsSection() {
                 skewAmount={6}
                 easing="elastic"
               >
-                {projects.map((project, index) => (
+                {projects.map((project) => (
                   <Card
   key={project.id}
   className="overflow-hidden border-white/10 bg-[#120F17]"
 >
   {project.imageUrl ? (
-    <div className="relative h-full w-full overflow-hidden rounded-xl bg-[#120F17]">
-    <div className="relative h-full w-full overflow-hidden rounded-xl bg-[#120F17]">
+  <div className="relative h-full w-full overflow-hidden rounded-xl bg-[#120F17]">
+    <Image
+      src={project.imageUrl}
+      alt={`${project.title} preview`}
+      fill
+      sizes="500px"
+      className="object-contain object-center saturate-[1.05] contrast-[1.08]"
+    />
 
-  {/* Background */}
-  <Image
-    src={project.imageUrl}
-    alt=""
-    fill
-    className="scale-110 object-cover blur-2xl opacity-30"
-    aria-hidden
-  />
+    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
 
-  {/* Overlay */}
-  <div className="absolute inset-0 bg-black/20" />
-
-  {/* Main image */}
-  <Image
-    src={project.imageUrl}
-    alt={`${project.title} preview`}
-    fill
-    priority={index === safeSelectedProject}
-    sizes="500px"
-    className="object-contain object-center saturate-[1.05] contrast-[1.08]"
-  />
-
-  {/* Gradient */}
-  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-
-  {/* Label */}
-  <div className="absolute bottom-4 left-4">
-    <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white/60 backdrop-blur-md">
-      {project.title}
-    </span>
-  </div>
-
-</div>
-
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-
-      <div className="absolute bottom-4 left-4">
-        <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white/60 backdrop-blur-md">
-          {project.title}
-        </span>
-      </div>
-    </div>
-  ) : (
-    <div className="flex h-full w-full items-center justify-center rounded-xl bg-[#120F17]">
-      <span className="font-mono text-xs text-white/20">
-        No preview available
+    <div className="absolute bottom-4 left-4">
+      <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white/60 backdrop-blur-md">
+        {project.title}
       </span>
     </div>
-  )}
+  </div>
+) : (
+  <div className="flex h-full w-full items-center justify-center rounded-xl bg-[#120F17]">
+    <span className="font-mono text-xs text-white/20">
+      No preview available
+    </span>
+  </div>
+)}
 </Card>
                 ))}
               </CardSwap>
