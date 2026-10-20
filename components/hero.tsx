@@ -102,30 +102,26 @@ export function Hero() {
       />
 
       {/* Dot field background */}
-      <div className="absolute left-0 top-0 -z-10 h-full w-full overflow-hidden">
-        <InView>
-          <DotField
-            dotRadius={1}
-            dotSpacing={20}
-            bulgeStrength={67}
-            glowRadius={160}
-            sparkle={false}
-            waveAmplitude={0}
-            cursorRadius={500}
-            cursorForce={0.1}
-            bulgeOnly
-            gradientFrom="#A855F7"
-            gradientTo="#A855F7"
-            glowColor="#A855F7"
-          />
-        </InView>
-
-        <div className="absolute bottom-16 flex w-full justify-center pb-4 md:hidden">
-          <span className="rounded-full border border-white/20 bg-muted px-4 py-2 font-mono text-xs uppercase tracking-wide text-muted-foreground backdrop-blur-xl">
-            Presented by Achmat Fajri
-          </span>
-        </div>
-      </div>
+      <div className="pointer-events-none absolute inset-0 z-0 h-full overflow-hidden">
+  <InView>
+    <div className="h-full w-full">
+      <DotField
+        dotRadius={1}
+        dotSpacing={20}
+        bulgeStrength={67}
+        glowRadius={160}
+        sparkle={false}
+        waveAmplitude={0}
+        cursorRadius={500}
+        cursorForce={0.1}
+        bulgeOnly
+        gradientFrom="#A855F7"
+        gradientTo="#A855F7"
+        glowColor="#A855F7"
+      />
+    </div>
+  </InView>
+</div>
 
       {/* Lanyard 3D — desktop */}
       {show3DDesktop && (
