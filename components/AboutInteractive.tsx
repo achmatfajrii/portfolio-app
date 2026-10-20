@@ -23,48 +23,36 @@ interface AboutInteractiveProps {
   visual: React.ReactNode;
 }
 
-const cardData: BentoCardProps[] = [
+const cardData = [
   {
-    color: "#120F17",
     title: "Understand First",
-    description:
-      "",
     label: "01 — Research",
+    description: "",
   },
   {
-    color: "#120F17",
     title: "Talk It Through",
-    description:
-      "",
-    label: "02 — Collaborate",
+    label: "02 — Communication",
+    description: "",
   },
   {
-    color: "#120F17",
     title: "Make a Plan",
-    description:
-      "",
-    label: "03 — Prepare",
+    label: "03 — Planning",
+    description: "",
   },
   {
-    color: "#120F17",
     title: "Build It",
-    description:
-      "",
-    label: "04 — Build",
+    label: "04 — Development",
+    description: "",
   },
   {
-    color: "#120F17",
     title: "Keep Improving",
-    description:
-      "",
-    label: "05 — Iterate",
+    label: "05 — Iteration",
+    description: "",
   },
   {
-    color: "#120F17",
     title: "Make It Useful",
-    description:
-      "",
-    label: "06 — Deliver",
+    label: "06 — Delivery",
+    description: "",
   },
 ];
 
@@ -72,87 +60,88 @@ const aboutSections = [
     {
         label: "Introduction",
         content: (
-            <div>
-              <div className="hidden md:flex w-fit items-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-4 py-2 shadow-xl backdrop-blur-xl">
-                <p className="text-xs md:text-sm font-semibold leading-tight">
-                  Available for Work and Projects
+          <div>
+            <div className="hidden md:flex w-fit items-center gap-2 rounded-2xl border border-border bg-muted/80 px-4 py-2 shadow-sm backdrop-blur-xl">
+              <p className="text-xs md:text-sm font-semibold leading-tight text-foreground">
+                Available for Work and Projects
+              </p>
+
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+              </span>
+            </div>
+
+            <div className="space-y-1">
+              <p className="pl-1 mt-8 text-lg font-medium tracking-[0.15em] text-muted-foreground sm:text-2xl sm:tracking-[0.2em]">
+                Hi, I'm
+              </p>
+
+              <GradientText
+                colors={["#7C3AED", "#C026D3", "#8B5CF6"]}
+                animationSpeed={8}
+                showBorder={false}
+                className="text-4xl font-bold leading-[0.95] tracking-tight sm:text-5xl md:text-7xl lg:text-8xl"
+              >
+                Achmat Fajri &nbsp;
+              </GradientText>
+
+              <div className="space-y-4">
+                <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-lg">
+                  I'm a Fullstack Web Developer who enjoys turning ideas into
+                  clean, interactive, and purposeful web experiences.
                 </p>
 
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
-                </span>
-              </div>
-               <div className="space-y-1">
-                <p className="pl-1 text-lg font-medium tracking-[0.15em] text-white/50 md:mt-8 sm:text-2xl sm:tracking-[0.2em]">
-    Hi, I'm
-</p>
+                <div className="flex items-center gap-3">
+                  <a
+                    href="https://linkedin.com/in/username"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
+                  >
+                    <FaLinkedinIn className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
+                  </a>
 
-                <GradientText
-    colors={["#5227FF", "#FF9FFC", "#B497CF"]}
-    animationSpeed={8}
-    showBorder={false}
-    className="text-4xl font-bold leading-[0.95] tracking-tight sm:text-5xl md:text-7xl lg:text-8xl"
->
-    Achmat Fajri &nbsp;
-</GradientText>
+                  <a
+                    href="https://instagram.com/username"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
+                  >
+                    <FaInstagram className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
+                  </a>
 
-                <div className="space-y-4">
-                    <p className="max-w-2xl text-xs text-base leading-relaxed text-white/60 md:text-lg">
-                        I'm a Fullstack Web Developer who enjoys turning ideas into
-                    clean, interactive, and purposeful web experiences.
-                    </p>
-
-                    <div className="flex items-center gap-3">
-                        <a
-                            href="https://linkedin.com/in/username"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="LinkedIn"
-                            className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10 hover:text-white"
-                        >
-                            <FaLinkedinIn className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
-                        </a>
-
-                        <a
-                            href="https://instagram.com/username"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Instagram"
-                            className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10 hover:text-white"
-                        >
-                            <FaInstagram className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
-                        </a>
-
-                        <a
-                            href="https://github.com/username"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub"
-                            className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10 hover:text-white"
-                        >
-                            <FaGithub className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
-                        </a>
-                        </div>
-
-                    <div className="flex flex-wrap items-center gap-3">
-                        <Button
-                        className="rounded-full px-4 md:px-6 text-xs md:text-lg"
-                        variant="outline"
-                        >
-                        View Work
-                        </Button>
-
-                        <Button
-                        variant="outline"
-                        className="rounded-full text-xs md:text-lg border-white/20 bg-[#A855F7] px-4 md:px-6 text-white hover:bg-[#A855F7]/80 hover:text-white"
-                        >
-                        Download CV
-                        </Button>
-                    </div>
-                    </div>
+                  <a
+                    href="https://github.com/username"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub"
+                    className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
+                  >
+                    <FaGithub className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
+                  </a>
                 </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button
+                    className="rounded-full px-4 md:px-6 text-xs md:text-lg"
+                    variant="outline"
+                  >
+                    View Work
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="rounded-full border-primary/30 bg-primary px-4 md:px-6 text-xs text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground md:text-lg"
+                  >
+                    Download CV
+                  </Button>
+                </div>
+              </div>
             </div>
+          </div>
         )
     },
   {
@@ -164,7 +153,7 @@ const aboutSections = [
         My Background
       </p>
 
-      <h2 className="text-xl font-semibold tracking-tight text-white md:text-4xl">
+      <h2 className="text-xl font-semibold tracking-tight text-foreground md:text-4xl">
         Where it all started.
       </h2>
     </div>
@@ -194,11 +183,11 @@ const aboutSections = [
           My Approach
         </p>
 
-       <h2 className="text-xl font-semibold tracking-tight text-white md:text-4xl">
+       <h2 className="text-xl font-semibold tracking-tight text-foreground md:text-4xl">
   How I turn ideas into action.
 </h2>
 
-        <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/50">
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
   I usually take a step back before jumping in — understand the problem,
   explore the possibilities, discuss them with the team, and then build.
 </p>
@@ -233,24 +222,24 @@ const aboutSections = [
             My Learning
           </p>
 
-          <h2 className="text-xl font-semibold tracking-tight text-white md:text-4xl">
+          <h2 className="text-xl font-semibold tracking-tight text-foreground md:text-4xl">
             Always learning, always evolving.
           </h2>
 
-          <p className="mt-3 max-w-xl text-xs md:text-sm leading-relaxed text-white/50">
-            I'm constantly exploring new technologies while strengthening the
-            fundamentals behind the tools I use every day.
-          </p>
+          <p className="mt-3 max-w-xl text-xs leading-relaxed text-muted-foreground md:text-sm">
+  I'm constantly exploring new technologies while strengthening the
+  fundamentals behind the tools I use every day.
+</p>
         </div>
 
         <div className="max-w-2xl">
-          <p className="text-xs leading-relaxed md:leading-8 text-white/60 md:text-lg">
+          <p className="text-xs leading-relaxed md:leading-8 text-muted-foreground md:text-lg">
             Right now I'm sharpening my skills across the JavaScript ecosystem
             — React, Vue, Next.js, Node.js, Express.js, and a few CSS
             frameworks.
           </p>
 
-          <p className="mt-4 text-xs leading-relaxed md:leading-8 text-white/60 md:text-lg">
+          <p className="mt-4 text-xs leading-relaxed md:leading-8 text-muted-foreground md:text-lg">
             Alongside that, I've started learning Python, driven by curiosity
             about data analysis and how AI is built. Overall, I'm pushing to
             keep up with how quickly the technology landscape evolves.
@@ -269,33 +258,41 @@ const aboutSections = [
           What I'm Looking For
         </p>
 
-        <h2 className="text-xl font-semibold tracking-tight text-white md:text-4xl">
+        <h2 className="text-xl font-semibold tracking-tight text-foreground md:text-4xl">
           Looking for the next thing to build.
         </h2>
 
-        <p className="mt-5 max-w-xl text-xs leading-relaxed text-white/50 md:text-lg">
-          Right now, I'm most interested in{" "}
-          <span className="font-semibold text-[#C084FC]">
-            Fullstack Web Developer
-          </span>{" "}
-          roles within the{" "}
-          <span className="font-semibold text-white">
-            JavaScript ecosystem
-          </span>
-          , though I'm also open to{" "}
-          <span className="font-semibold text-[#C084FC]">
-            Frontend
-          </span>{" "}
-          or{" "}
-          <span className="font-semibold text-[#C084FC]">
-            Backend
-          </span>{" "}
-          positions.
-        </p>
+<p className="mt-5 max-w-xl text-xs leading-relaxed text-muted-foreground md:text-lg">
+  Right now, I'm most interested in{" "}
+  <span className="font-semibold text-primary">
+    Fullstack Web Developer
+  </span>{" "}
+  roles within the{" "}
+  <span className="font-semibold text-foreground">
+    JavaScript ecosystem
+  </span>
+  , though I'm also open to{" "}
+  <span className="font-semibold text-primary">
+    Frontend
+  </span>{" "}
+  or{" "}
+  <span className="font-semibold text-primary">
+    Backend
+  </span>{" "}
+  positions.
+</p>
 
-        <p className="mt-4 max-w-xl text-xs leading-relaxed text-white/50 md:text-lg">
+<p className="mt-4 max-w-xl text-xs leading-relaxed text-muted-foreground md:text-lg">
+  As I'm exploring{" "}
+  <span className="font-semibold text-foreground">
+    Python and data analysis
+  </span>
+  , I'm also open to opportunities in that direction.
+</p>
+
+        <p className="mt-4 max-w-xl text-xs leading-relaxed text-muted-foreground md:text-lg">
           As I'm exploring{" "}
-          <span className="font-semibold text-white">
+          <span className="font-semibold text-foreground">
             Python and data analysis
           </span>
           , I'm also open to opportunities in that direction.
@@ -344,9 +341,9 @@ export default function AboutInteractive({
               };
               if (indexByValue[value] !== undefined) onSelect(indexByValue[value]);
             }}
-            color="#c4c4c4"
-            accentColor="#C084FC"
-            lineColor="#51465f"
+            color="hsl(var(--foreground))"
+            accentColor="#A855F7"
+            lineColor="hsl(var(--border))"
             width={280}
             rowHeight={48}
             indent={38}
@@ -367,10 +364,10 @@ export default function AboutInteractive({
             key={s.label}
             onClick={() => onSelect(i)}
             className={`shrink-0 rounded-full border px-4 py-2 text-xs transition-colors ${
-              selected === i
-                ? "border-white bg-white text-black"
-                : "border-white/20 text-white/50"
-            }`}
+  selected === i
+    ? "border-primary bg-primary text-primary-foreground"
+    : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-primary"
+}`}
           >
             {s.label}
           </button>

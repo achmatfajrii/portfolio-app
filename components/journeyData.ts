@@ -12,41 +12,77 @@ export const journeyData: JourneyItem[] = [
   {
     year: "2022",
     title: "The Beginning",
-    role: "Programmer Intern",
+    role: "Programmer",
     company: "PT Arkatama Multi Solusindo",
     description:
-      "My first step into the professional world of software development. Through an internship program in Malang, I experienced how software is built and maintained within a real development team.",
-    technologies: ["JavaScript", "Vue.js", "Node.js"],
+      "Started my professional journey as a Programmer intern in Malang, collaborating with a development team to build, test, and maintain web applications. This experience introduced me to real-world software development workflows and established my foundation in programming.",
+    technologies: ["HTML", "CSS", "JavaScript"],
   },
 
   {
     year: "2023",
-    title: "Going Fullstack",
-    role: "Fullstack Web Developer",
-    company: "Harisenin.com",
+    title: "Building a Full-Stack Foundation",
+    role: "Diploma in Informatics Engineering & Full-Stack Training",
+    company: "Universitas Sebelas Maret · Harisenin.com",
     description:
-      "I expanded my skills beyond the frontend and learned how to build complete web applications, from designing interfaces to developing backend services and working with databases.",
-    technologies: ["React", "Node.js", "Express.js", "MySQL"],
+      "Completed my Diploma in Informatics Engineering at Universitas Sebelas Maret with a GPA of 3.73/4.00 and strengthened my development skills through Harisenin's Full-Stack Developer Bootcamp. I explored modern frontend development, backend services, and database integration while building a team-based game voucher platform.",
+    technologies: [
+      "JavaScript",
+      "React.js",
+      "Node.js",
+      "HTML",
+      "CSS",
+      "MySQL",
+    ],
   },
 
   {
-    year: "2024",
-    title: "Growing as a Frontend Developer",
+    year: "2023",
+    title: "Expanding My Frontend Experience",
     role: "Front End Developer",
-    company: "Professional Experience",
+    company: "PT Koneksi Karya Indonesia · RSUD dr. R. Soedarsono",
     description:
-      "I started focusing more deeply on frontend development, turning UI/UX designs into responsive and interactive web interfaces while working closely with backend developers.",
-    technologies: ["React", "Vue.js", "Next.js", "Tailwind CSS"],
+      "Expanded my practical experience in frontend development, from translating UI/UX designs into functional interfaces to maintaining Electronic Medical Record applications. I also contributed to system integrations, usability improvements, and application performance while collaborating with cross-functional teams.",
+    technologies: [
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "React.js",
+      "Vue.js",
+    ],
   },
 
   {
-  year: "2026",
-  title: "Where I Am Now",
-  role: "Front End Developer",
-  company: "Current Role",
-  current: true,
-  description:
-    "Today, I'm building and maintaining enterprise web applications while continuing to grow as a developer. I'm particularly interested in creating clean interfaces and understanding the full journey behind a web application.",
-  technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
-}
+    year: "2023",
+    title: "Growing into Full-Stack Development",
+    role: "Full-Stack Developer",
+    company: "PT Elnusa Fabrikasi Konstruksi",
+    description:
+      "Joined Elnusa Fabrikasi Konstruksi as a Full-Stack Developer, contributing to enterprise applications across procurement, vendor management, OCTG, and payment systems. My responsibilities include developing features, debugging and optimizing code, maintaining application stability, and translating business requirements into practical technical solutions.",
+    technologies: [
+      "Vue.js",
+      "React.js",
+      "Node.js",
+      "MySQL",
+      "PostgreSQL",
+    ],
+  },
+
+  {
+    year: "2026",
+    title: "Building Beyond the Frontend",
+    role: "Full-Stack Developer",
+    company: "PT Elnusa Fabrikasi Konstruksi",
+    current: true,
+    description:
+      "Continuing to develop and maintain enterprise web applications while deepening my expertise across the full development lifecycle. Beyond delivering features, I focus on code quality, performance, maintainability, and solving complex business problems while exploring modern technologies such as Next.js and TypeScript through personal projects.",
+    technologies: [
+      "Vue.js",
+      "React.js",
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL",
+    ],
+  },
 ];

@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="relative w-full bg-[#A855F7] text-white">
+    <footer className="relative w-full bg-[#A855F7] text-foreground">
       <div className="container flex h-[56px] items-center justify-between gap-6 py-5">
         {/* Brand */}
         <div className="flex items-center gap-3">
@@ -16,7 +16,7 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <p className="text-center font-mono text-[10px] uppercase tracking-wider text-white/60">
+        <p className="text-center font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
           © {new Date().getFullYear()} Achmat Fajri
         </p>
 

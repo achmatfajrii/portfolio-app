@@ -99,7 +99,7 @@ export function ContactSection() {
             </div>
 
             {/* heading */}
-            <h2 className="max-w-3xl text-4xl font-medium leading-[0.95] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl">
+            <h2 className="max-w-3xl text-4xl font-medium leading-[0.95] tracking-[-0.04em] text-foreground sm:text-6xl lg:text-7xl">
               Have a project
               <br />
 
@@ -131,7 +131,7 @@ export function ContactSection() {
               <button
                 type="button"
                 onClick={copyEmail}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-3 font-mono text-xs text-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-500/30 hover:bg-purple-500/[0.05] hover:text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-white/[0.03] px-5 py-3 font-mono text-xs text-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-500/30 hover:bg-purple-500/[0.05] hover:text-white"
               >
                 {copied ? "Copied!" : "Copy email"}
 
@@ -179,7 +179,7 @@ export function ContactSection() {
                     Currently open to
                   </p>
 
-                  <h3 className="mt-2 text-2xl font-medium tracking-tight text-white">
+                  <h3 className="mt-2 text-2xl font-medium tracking-tight text-foreground">
                     New opportunities
                   </h3>
 
@@ -201,7 +201,7 @@ export function ContactSection() {
 
                   <a
                     href={`mailto:${email}`}
-                    className="group/link flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-white/60 transition-all duration-300 hover:border-purple-400/40 hover:bg-purple-500/10 hover:text-purple-300"
+                    className="group/link flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white/[0.03] text-muted-foreground transition-all duration-300 hover:border-purple-400/40 hover:bg-purple-500/10 hover:text-purple-300"
                     aria-label="Send email"
                   >
                     <span className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5">
@@ -242,7 +242,7 @@ export function ContactSection() {
                   </p>
                 </div>
 
-                <span className="text-xs md:text-sm text-white/20 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-purple-400">
+                <span className="text-xs md:text-sm text-white/20 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-primary">
                   ↗
                 </span>
               </a>

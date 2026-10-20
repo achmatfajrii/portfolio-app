@@ -569,7 +569,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
 )}
               {showUserInfo && (
                 <div
-  className={`absolute flex z-[2] items-center justify-between border border-white/10 pointer-events-auto ${
+  className={`absolute flex z-[2] items-center justify-between border border-border pointer-events-auto ${
     isMobile ? '' : 'backdrop-blur-[30px]'
   }`}
   style={{
@@ -586,7 +586,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
 >
                   <div className="items-center gap-3 hidden md:flex md:p-4">
                     <div
-                      className="rounded-full overflow-hidden border border-white/10 flex-shrink-0"
+                      className="rounded-full overflow-hidden border border-border flex-shrink-0"
                       style={{ width: '48px', height: '48px' }}
                     >
                       <img

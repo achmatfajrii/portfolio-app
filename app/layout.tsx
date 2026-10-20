@@ -39,12 +39,26 @@ export const metadata: Metadata = {
 // Script ini jalan sebelum React hydrate, supaya tema langsung benar
 // dari awal (tidak ada flash light->dark).
 const themeInitScript = `
-(function() {
+(function () {
+  var theme = "dark";
+
   try {
-    var stored = localStorage.getItem('theme-storage');
-    var theme = stored ? JSON.parse(stored).state.theme : 'dark';
-    if (theme === 'dark') document.documentElement.classList.add('dark');
+    var stored = localStorage.getItem("theme-storage");
+
+    if (stored) {
+      var parsed = JSON.parse(stored);
+      var savedTheme = parsed && parsed.state && parsed.state.theme;
+
+      if (savedTheme === "light" || savedTheme === "dark") {
+        theme = savedTheme;
+      }
+    }
   } catch (e) {}
+
+  var root = document.documentElement;
+
+  root.classList.toggle("dark", theme === "dark");
+  root.style.colorScheme = theme;
 })();
 `;
 

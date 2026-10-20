@@ -339,17 +339,17 @@ const GlobalSpotlight: React.FC<{
       border-radius: 50%;
       pointer-events: none;
       background: radial-gradient(circle,
-        rgba(${glowColor}, 0.15) 0%,
-        rgba(${glowColor}, 0.08) 15%,
-        rgba(${glowColor}, 0.04) 25%,
-        rgba(${glowColor}, 0.02) 40%,
-        rgba(${glowColor}, 0.01) 65%,
+        rgba(${glowColor}, 0.12) 0%,
+        rgba(${glowColor}, 0.07) 15%,
+        rgba(${glowColor}, 0.035) 25%,
+        rgba(${glowColor}, 0.015) 40%,
+        rgba(${glowColor}, 0.005) 65%,
         transparent 70%
       );
       z-index: 200;
       opacity: 0;
       transform: translate(-50%, -50%);
-      mix-blend-mode: screen;
+      mix-blend-mode: normal;
     `;
     document.body.appendChild(spotlight);
     spotlightRef.current = spotlight;
@@ -500,19 +500,23 @@ const MagicBento: React.FC<BentoProps> = ({
       <style>
         {`
           .bento-section {
-            --glow-x: 50%;
-            --glow-y: 50%;
-            --glow-intensity: 0;
-            --glow-radius: 200px;
-            --glow-color: ${glowColor};
-            --border-color: #2F293A;
-            --background-dark: #120F17;
-            --white: hsl(0, 0%, 100%);
-            --purple-primary: rgba(132, 0, 255, 1);
-            --purple-glow: rgba(132, 0, 255, 0.2);
-            --purple-border: rgba(132, 0, 255, 0.8);
-          }
-          
+              --glow-x: 50%;
+              --glow-y: 50%;
+              --glow-intensity: 0;
+              --glow-radius: 200px;
+              --glow-color: ${glowColor};
+
+              /* Mengikuti theme variables dari globals.css */
+              --border-color: hsl(var(--border));
+              --background-dark: hsl(var(--card));
+              --white: hsl(var(--foreground));
+
+              /* Aksen ungu tetap menjadi identitas visual */
+              --purple-primary: rgba(132, 0, 255, 1);
+              --purple-glow: rgba(132, 0, 255, 0.2);
+              --purple-border: rgba(132, 0, 255, 0.8);
+            }
+                      
           .card-responsive {
   grid-template-columns: 1fr;
   width: 100%;
@@ -644,7 +648,7 @@ const MagicBento: React.FC<BentoProps> = ({
             }`;
 
             const cardStyle = {
-              backgroundColor: card.color || 'var(--background-dark)',
+              backgroundColor: 'var(--background-dark)',
               borderColor: 'var(--border-color)',
               color: 'var(--white)',
               '--glow-x': '50%',
@@ -666,10 +670,10 @@ const MagicBento: React.FC<BentoProps> = ({
                   clickEffect={clickEffect}
                   enableMagnetism={enableMagnetism}
                 >
-                  <div className="card__header flex justify-between gap-3 relative text-white">
+                  <div className="card__header flex justify-between gap-3 relative text-foreground">
                     <span className="card__label text-xs md:text-base">{card.label}</span>
                   </div>
-                  <div className="card__content flex flex-col relative text-white">
+                  <div className="card__content flex flex-col relative text-foreground">
                     <h3 className={`card__title font-normal text-xs md:text-base m-0 mb-1 ${textAutoHide ? 'text-clamp-1' : ''}`}>
                       {card.title}
                     </h3>
@@ -798,10 +802,10 @@ const MagicBento: React.FC<BentoProps> = ({
                   el.addEventListener('click', handleClick);
                 }}
               >
-                <div className="card__header flex justify-between gap-3 relative text-white">
+                <div className="card__header flex justify-between gap-3 relative text-foreground">
                   <span className="card__label text-base">{card.label}</span>
                 </div>
-                <div className="card__content flex flex-col relative text-white">
+                <div className="card__content flex flex-col relative text-foreground">
                   <h3 className={`card__title font-normal text-base m-0 mb-1 ${textAutoHide ? 'text-clamp-1' : ''}`}>
                     {card.title}
                   </h3>

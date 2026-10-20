@@ -52,7 +52,7 @@ function useIsDesktopViewport() {
 
 const warpProps = {
   text: 'MY PORTFOLIO',
-  color: '#f8f5ff',
+  color: 'hsl(var(--foreground))',
   warpStrength: 0.08,
   warpScale: 1.7,
   speed: 0.55,
@@ -75,7 +75,7 @@ export function Hero() {
 
   return (
     <>
-      <div className="absolute left-1/2 bottom-8 z-30 hidden w-120 -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/20 bg-white/5 px-8 py-2 shadow-xl backdrop-blur-xl lg:flex">
+      <div className="absolute left-1/2 bottom-8 z-30 hidden w-120 -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/20 bg-muted px-8 py-2 shadow-xl backdrop-blur-xl lg:flex">
         <p className="text-sm font-semibold leading-tight">Presented by Achmat Fajri</p>
       </div>
 
@@ -121,7 +121,7 @@ export function Hero() {
         </InView>
 
         <div className="absolute bottom-16 flex w-full justify-center pb-4 md:hidden">
-          <span className="rounded-full border border-white/20 bg-white/5 px-4 py-2 font-mono text-xs uppercase tracking-wide text-muted-foreground backdrop-blur-xl">
+          <span className="rounded-full border border-white/20 bg-muted px-4 py-2 font-mono text-xs uppercase tracking-wide text-muted-foreground backdrop-blur-xl">
             Presented by Achmat Fajri
           </span>
         </div>
@@ -144,11 +144,11 @@ export function Hero() {
           )}
 
           <div className="flex w-full flex-col items-center gap-6 pb-8">
-            <div className="relative min-h-24 w-full -rotate-1 border border-white/20 bg-transparent shadow-2xl backdrop-blur-xl">
-              <span className="absolute -left-1.5 -top-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
-              <span className="absolute -right-1.5 -top-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
-              <span className="absolute -bottom-1.5 -left-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
-              <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
+            <div className="relative min-h-24 w-full -rotate-1 border border-border bg-transparent shadow-2xl backdrop-blur-xl">
+              <span className="absolute -left-1.5 -top-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
+              <span className="absolute -right-1.5 -top-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
+              <span className="absolute -bottom-1.5 -left-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
+              <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
 
             <div className="relative z-30 pointer-events-auto">
   {isDesktop === false && !reduceMotion
@@ -158,37 +158,51 @@ export function Hero() {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-2 pt-8">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs backdrop-blur-xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-muted px-4 py-2 text-xs backdrop-blur-xl">
                 <Code2 className="h-4 w-4" /> 3+ Years · Fullstack Developer
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs backdrop-blur-xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-muted px-4 py-2 text-xs backdrop-blur-xl">
                 <Sparkles className="h-4 w-4" /> Open to Work
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs backdrop-blur-xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-muted px-4 py-2 text-xs backdrop-blur-xl">
                 <Mail className="h-4 w-4" /> achmatfajri@gmail.com
               </span>
             </div>
 
         
-             <Image
-  src="/assets/carbon.png"
-  alt="Achmat Fajri code profile"
-  width={1840}  // dimensi asli file
-  height={1020} // dimensi asli file
-  loading="lazy"
-  sizes="(max-width: 640px) 100vw, 384px"
-  className="h-auto w-full max-w-lg -rotate-1 rounded-lg shadow-2xl sm:max-w-sm lg:hidden"
-/>
+             
+            {/* Carbon — Light mode, mobile */}
+            <Image
+              src="/assets/carbon-light.webp"
+              alt="Achmat Fajri code profile"
+              width={1840}
+              height={1020}
+              loading="lazy"
+              sizes="(max-width: 640px) 100vw, 384px"
+              className="h-auto w-full max-w-lg -rotate-1 rounded-lg shadow-2xl sm:max-w-sm lg:hidden dark:hidden"
+            />
+
+            {/* Carbon — Dark mode, mobile */}
+            <Image
+              src="/assets/carbon-dark.webp"
+              alt="Achmat Fajri code profile"
+              width={1840}
+              height={1020}
+              loading="lazy"
+              sizes="(max-width: 640px) 100vw, 384px"
+              className="hidden h-auto w-full max-w-lg -rotate-1 rounded-lg shadow-2xl sm:max-w-sm lg:hidden dark:block"
+            />
+
             
           </div>
         </div>
 
         {/* ===== lg ke atas: layout desktop ===== */}
         <div className="relative z-10 hidden w-full max-w-[74vw] -translate-x-[12vh] -translate-y-[8vh] -rotate-2 border border-white/20 bg-transparent px-6 shadow-2xl backdrop-blur-xl lg:block">
-          <span className="absolute -left-1.5 -top-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
-          <span className="absolute -right-1.5 -top-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
-          <span className="absolute -bottom-1.5 -left-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
-          <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-white/40 bg-[#A855F7]" />
+          <span className="absolute -left-1.5 -top-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
+          <span className="absolute -right-1.5 -top-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
+          <span className="absolute -bottom-1.5 -left-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
+          <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
 
           <div className="relative z-30 pointer-events-auto">
   {isDesktop === true && !reduceMotion
@@ -197,15 +211,28 @@ export function Hero() {
 </div>
         </div>
 
-         <Image
-  src="/assets/carbon.png"
-  alt="Achmat Fajri code profile"
-  width={1840}  // dimensi asli file
-  height={1020} // dimensi asli file
-  priority
-  sizes="44vw"
-  className="pointer-events-none absolute top-[40vh] z-20 hidden h-auto max-w-none -translate-y-1/2 -rotate-2 lg:block lg:w-[44vw] lg:right-[-10vw]"
-/>
+        
+        {/* Carbon — Light mode, desktop */}
+        <Image
+          src="/assets/carbon-light.webp"
+          alt="Achmat Fajri code profile"
+          width={1840}
+          height={1020}
+          priority
+          sizes="44vw"
+          className="pointer-events-none absolute top-[40vh] z-20 hidden h-auto max-w-none -translate-y-1/2 -rotate-2 lg:right-[-10vw] lg:block dark:lg:hidden lg:w-[44vw]"
+        />
+
+        {/* Carbon — Dark mode, desktop */}
+        <Image
+          src="/assets/carbon-dark.webp"
+          alt="Achmat Fajri code profile"
+          width={1840}
+          height={1020}
+          sizes="44vw"
+          className="pointer-events-none absolute top-[40vh] z-20 hidden h-auto max-w-none -translate-y-1/2 -rotate-2 lg:right-[-10vw] lg:w-[44vw] dark:lg:block"
+        />
+
       </section>
     </>
   );

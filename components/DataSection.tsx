@@ -184,7 +184,7 @@ export function DataSection() {
             </span>
           </div>
 
-          <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl">
             Procurement Spend <span className="text-white/35">Intelligence.</span>
           </h2>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-white/50 md:text-base md:leading-7">
@@ -195,7 +195,7 @@ export function DataSection() {
             {["Python", "Data Cleaning", "Exploratory Analysis", "Next.js"].map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-white/10 bg-white/[0.025] px-3 py-1.5 font-mono text-[10px] text-white/55"
+                className="rounded-full border border-border bg-white/[0.025] px-3 py-1.5 font-mono text-[10px] text-white/55"
               >
                 {item}
               </span>
@@ -204,11 +204,11 @@ export function DataSection() {
         </div>
 
         {loadError ? (
-          <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-6 sm:p-8">
+          <div className="rounded-2xl border border-border bg-[#100D15]/70 p-6 sm:p-8">
             <div className="flex items-start gap-3">
               <Database size={18} className="mt-0.5 shrink-0 text-purple-300" />
               <div>
-                <h3 className="font-medium text-white">Analytics data could not be loaded</h3>
+                <h3 className="font-medium text-foreground">Analytics data could not be loaded</h3>
                 <p className="mt-2 text-sm leading-6 text-white/50">
                   Check that the file exists at <code className="text-purple-200">public/data/procurement-spend-analytics.json</code> and that the filename matches exactly.
                 </p>
@@ -216,7 +216,7 @@ export function DataSection() {
             </div>
           </div>
         ) : !analytics ? (
-          <div className="rounded-2xl border border-white/10 bg-[#100D15]/60 p-6 sm:p-8" aria-live="polite">
+          <div className="rounded-2xl border border-border bg-[#100D15]/60 p-6 sm:p-8" aria-live="polite">
             <div className="flex items-center gap-3 text-sm text-white/50">
               <span className="h-2 w-2 animate-pulse rounded-full bg-purple-400" />
               Loading verified dataset summaries…
@@ -231,13 +231,13 @@ export function DataSection() {
           <div className="space-y-4 md:space-y-5">
             {/* Project overview and source details */}
             <div className="grid gap-4 lg:grid-cols-[1.25fr_0.75fr]">
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#100D15]/80 p-5 sm:p-7">
+              <div className="relative overflow-hidden rounded-2xl border border-border bg-[#100D15]/80 p-5 sm:p-7">
                 <div className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-purple-500/[0.07] blur-3xl" />
                 <div className="relative flex items-start justify-between gap-4">
                   <div>
                     <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-purple-300/75">Executive overview</p>
                     <p className="mt-2 text-sm leading-6 text-white/50">Total available award amount in the cleaned records.</p>
-                    <p className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                    <p className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
                       {formatCompactUsd(analytics.kpis.availableAmountSumUsd)}
                     </p>
                     <p className="mt-2 text-xs leading-5 text-white/35">
@@ -252,26 +252,26 @@ export function DataSection() {
                 <div className="relative mt-6 grid grid-cols-2 gap-3 border-t border-white/[0.07] pt-5 sm:grid-cols-3">
                   <div>
                     <p className="text-[10px] uppercase tracking-[0.16em] text-white/35">Dataset records</p>
-                    <p className="mt-1.5 text-lg font-semibold tabular-nums text-white">{formatNumber(analytics.kpis.awardRecords)}</p>
+                    <p className="mt-1.5 text-lg font-semibold tabular-nums text-foreground">{formatNumber(analytics.kpis.awardRecords)}</p>
                   </div>
                   <div>
                     <p className="text-[10px] uppercase tracking-[0.16em] text-white/35">Records with amount</p>
-                    <p className="mt-1.5 text-lg font-semibold tabular-nums text-white">{formatNumber(analytics.kpis.recordsWithAmount)}</p>
+                    <p className="mt-1.5 text-lg font-semibold tabular-nums text-foreground">{formatNumber(analytics.kpis.recordsWithAmount)}</p>
                   </div>
                   <div className="col-span-2 sm:col-span-1">
                     <p className="text-[10px] uppercase tracking-[0.16em] text-white/35">Median recorded award</p>
-                    <p className="mt-1.5 text-lg font-semibold tabular-nums text-white">{formatCompactUsd(analytics.kpis.medianAvailableAmountUsd)}</p>
+                    <p className="mt-1.5 text-lg font-semibold tabular-nums text-foreground">{formatCompactUsd(analytics.kpis.medianAvailableAmountUsd)}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#100D15]/60 p-5 sm:p-7">
+              <div className="flex flex-col justify-between rounded-2xl border border-border bg-[#100D15]/60 p-5 sm:p-7">
                 <div>
                   <div className="flex items-center gap-2 text-purple-200/80">
                     <FileText size={15} />
                     <p className="font-mono text-[10px] uppercase tracking-[0.2em]">Dataset profile</p>
                   </div>
-                  <h3 className="mt-3 text-lg font-medium text-white">{analytics.project.dataset}</h3>
+                  <h3 className="mt-3 text-lg font-medium text-foreground">{analytics.project.dataset}</h3>
                   <p className="mt-2 text-sm leading-6 text-white/45">Source: {analytics.project.source}</p>
 
                   <div className="mt-5 space-y-3 border-t border-white/[0.07] pt-4">
@@ -318,7 +318,7 @@ export function DataSection() {
                     <p className="text-xs text-white/45">{label}</p>
                     <Icon size={15} className="text-purple-300/70" />
                   </div>
-                  <p className="mt-3 text-2xl font-semibold tracking-tight tabular-nums text-white">{value}</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-tight tabular-nums text-foreground">{value}</p>
                   <p className="mt-1.5 text-[10px] leading-4 text-white/30">{note}</p>
                 </div>
               ))}
@@ -326,13 +326,13 @@ export function DataSection() {
 
             {/* Category chart + annual trend */}
             <div className="grid gap-4 lg:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-5 sm:p-6">
+              <div className="rounded-2xl border border-border bg-[#100D15]/70 p-5 sm:p-6">
                 <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
                   <div>
                     <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">Category breakdown</p>
-                    <h3 className="mt-2 text-lg font-medium text-white">Where awards are concentrated</h3>
+                    <h3 className="mt-2 text-lg font-medium text-foreground">Where awards are concentrated</h3>
                   </div>
-                  <div className="inline-flex w-fit rounded-lg border border-white/10 bg-black/20 p-1" role="group" aria-label="Category chart metric">
+                  <div className="inline-flex w-fit rounded-lg border border-border bg-black/20 p-1" role="group" aria-label="Category chart metric">
                     <button
                       type="button"
                       onClick={() => setCategoryMode("amount")}
@@ -389,10 +389,10 @@ export function DataSection() {
                 <p className="mt-5 text-[10px] leading-5 text-white/30">Category labels are shown as provided by the source; similar-looking raw labels are not automatically merged.</p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-5 sm:p-6">
+              <div className="rounded-2xl border border-border bg-[#100D15]/70 p-5 sm:p-6">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">Calendar year overview</p>
-                  <h3 className="mt-2 text-lg font-medium text-white">Recorded award value over time</h3>
+                  <h3 className="mt-2 text-lg font-medium text-foreground">Recorded award value over time</h3>
                   <p className="mt-2 text-xs leading-5 text-white/40">Annual sum of non-missing award amounts, in USD.</p>
                 </div>
 
@@ -430,11 +430,11 @@ export function DataSection() {
 
             {/* Supplier leaderboard and findings */}
             <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-              <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-5 sm:p-6">
+              <div className="rounded-2xl border border-border bg-[#100D15]/70 p-5 sm:p-6">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">Supplier leaderboard</p>
-                    <h3 className="mt-2 text-lg font-medium text-white">Largest available award amounts</h3>
+                    <h3 className="mt-2 text-lg font-medium text-foreground">Largest available award amounts</h3>
                   </div>
                   <Users size={17} className="mt-1 text-purple-300/70" />
                 </div>
@@ -453,10 +453,10 @@ export function DataSection() {
                 <p className="mt-5 border-t border-white/[0.07] pt-4 text-[10px] leading-5 text-white/30">Ranked by the sum of available amounts associated with each supplier name. Missing amount values are excluded.</p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-[#100D15]/70 p-5 sm:p-6">
+              <div className="rounded-2xl border border-border bg-[#100D15]/70 p-5 sm:p-6">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">What stands out</p>
-                  <h3 className="mt-2 text-lg font-medium text-white">Signals from the dataset</h3>
+                  <h3 className="mt-2 text-lg font-medium text-foreground">Signals from the dataset</h3>
                 </div>
                 <div className="mt-5 space-y-4">
                   {analytics.insights.slice(0, 3).map((insight, index) => (

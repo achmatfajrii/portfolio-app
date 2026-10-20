@@ -30,7 +30,7 @@ export default function PageLoader() {
   if (!loading) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#0E0C14]">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-background">
       <Loader />
     </div>
   );

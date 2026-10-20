@@ -113,9 +113,9 @@ export function ProjectList({
 
   if (projects.length === 0) {
     return (
-      <div className="py-8 text-sm text-white/30">
-        No projects available.
-      </div>
+      <div className="py-8 text-sm text-muted-foreground">
+  No projects available.
+</div>
     );
   }
 
@@ -130,15 +130,15 @@ export function ProjectList({
       <div className="lg:hidden">
         {/* Header */}
         <div className="mb-5 flex items-center justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/30">
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             Projects
           </span>
 
-          <span className="font-mono text-xs text-white/40">
+          <span className="font-mono text-xs text-muted-foreground">
             <span className="text-[#A855F7]">
               {String(selectedProject + 1).padStart(2, "0")}
             </span>
-            <span className="mx-1 text-white/20">/</span>
+            <span className="mx-1 text-muted-foreground/50">/</span>
             {String(projects.length).padStart(2, "0")}
           </span>
         </div>
@@ -149,7 +149,7 @@ export function ProjectList({
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <h3 className="text-lg font-medium text-white">
+          <h3 className="text-lg font-medium text-foreground">
             {currentProject.title}
           </h3>
 
@@ -158,7 +158,7 @@ export function ProjectList({
               {currentProject.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="text-[11px] text-white/35"
+                  className="text-[11px] text-muted-foreground"
                 >
                   {tech}
                 </span>
@@ -166,13 +166,13 @@ export function ProjectList({
             </div>
           )}
 
-          <p className="hidden md:block mt-2 line-clamp-2 text-sm leading-relaxed text-white/45">
+          <p className="hidden md:block mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
             {currentProject.description}
           </p>
 
           <div className="mt-3 flex items-center gap-5">
             {currentProject.repoUrl && (
-              <a href={currentProject.repoUrl} target="_blank" rel="noopener noreferrer" className="group/link inline-flex items-center gap-2 text-xs text-white/50 transition-colors hover:text-white">
+              <a href={currentProject.repoUrl} target="_blank" rel="noopener noreferrer" className="group/link inline-flex items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground">
                 GitHub
                 <span className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">
                   ↗
@@ -198,10 +198,10 @@ export function ProjectList({
             onClick={() => goToProject(selectedProject - 1)}
             disabled={selectedProject === 0}
             className={`text-xs transition-colors ${
-              selectedProject === 0
-                ? "cursor-not-allowed text-white/10"
-                : "text-white/40 hover:text-white"
-            }`}
+  selectedProject === 0
+    ? "cursor-not-allowed text-muted-foreground/30"
+    : "text-muted-foreground hover:text-foreground"
+}`}
           >
             ← Previous
           </button>
@@ -215,7 +215,7 @@ export function ProjectList({
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   selectedProject === index
                     ? "w-6 bg-[#A855F7]"
-                    : "w-1.5 bg-white/20 hover:bg-white/40"
+                    : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60"
                 }`}
                 aria-label={`Go to project ${index + 1}`}
               />
@@ -228,8 +228,8 @@ export function ProjectList({
             disabled={selectedProject === projects.length - 1}
             className={`text-xs transition-colors ${
               selectedProject === projects.length - 1
-                ? "cursor-not-allowed text-white/10"
-                : "text-white/40 hover:text-white"
+                ? "cursor-not-allowed text-muted-foreground/30"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Next →
@@ -243,16 +243,16 @@ export function ProjectList({
       <div className="hidden lg:block">
         {/* Header */}
         <div className="mb-5 flex items-center justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/30">
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             Projects
           </span>
 
-          <span className="font-mono text-xs text-white/40">
+          <span className="font-mono text-xs text-muted-foreground">
             <span className="text-[#A855F7]">
               {String(selectedProject + 1).padStart(2, "0")}
             </span>
 
-            <span className="mx-1 text-white/20">
+            <span className="mx-1 text-muted-foreground/50">
               /
             </span>
 
@@ -273,9 +273,9 @@ export function ProjectList({
               return (
                 <div
                   key={project.id}
-                  className={`relative border-b border-white/10 transition-all duration-500 ${
+                  className={`relative border-b border-border transition-all duration-500 ${
                     isActive
-                      ? "border-white/20"
+                      ? "border-primary/30"
                       : ""
                   }`}
                 >
@@ -300,7 +300,7 @@ export function ProjectList({
                         className={`w-8 shrink-0 font-mono text-xs transition-colors duration-300 ${
                           isActive
                             ? "text-[#A855F7]"
-                            : "text-white/25 group-hover:text-white/50"
+                            : "text-muted-foreground/60 group-hover:text-muted-foreground"
                         }`}
                       >
                         {String(index + 1).padStart(
@@ -312,11 +312,11 @@ export function ProjectList({
                       {/* Title */}
                       <div className="min-w-0 flex-1">
                         <h3
-                          className={`text-base font-medium transition-all duration-300 ${
-                            isActive
-                              ? "translate-x-1 text-white"
-                              : "text-white/55 group-hover:translate-x-1 group-hover:text-white"
-                          }`}
+                         className={`text-base font-medium transition-all duration-300 ${
+  isActive
+    ? "translate-x-1 text-foreground"
+    : "text-muted-foreground group-hover:translate-x-1 group-hover:text-foreground"
+}`}
                         >
                           {project.title}
                         </h3>
@@ -330,7 +330,7 @@ export function ProjectList({
                                 .map((tech) => (
                                   <span
                                     key={tech}
-                                    className="text-[11px] text-white/25"
+                                    className="text-[11px] text-muted-foreground/60"
                                   >
                                     {tech}
                                   </span>
@@ -341,11 +341,11 @@ export function ProjectList({
 
                       {/* Arrow */}
                       <span
-                        className={`shrink-0 text-lg transition-all duration-300 ${
-                          isActive
-                            ? "rotate-90 text-[#A855F7]"
-                            : "text-white/20 group-hover:text-white/50"
-                        }`}
+                       className={`shrink-0 text-lg transition-all duration-300 ${
+  isActive
+    ? "rotate-90 text-primary"
+    : "text-muted-foreground/60 group-hover:text-foreground"
+}`}
                       >
                         →
                       </span>
@@ -363,7 +363,7 @@ export function ProjectList({
                     <div className="overflow-hidden">
                       <div className="pb-6 pl-16 pr-6">
                         {/* Description */}
-                        <p className="max-w-lg text-sm leading-relaxed text-white/45">
+                        <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
                           {project.description}
                         </p>
 
@@ -374,7 +374,7 @@ export function ProjectList({
                               (tech) => (
                                 <span
                                   key={tech}
-                                  className="text-[11px] text-white/35"
+                                  className="text-[11px] text-muted-foreground"
                                 >
                                   {tech}
                                 </span>
@@ -386,7 +386,7 @@ export function ProjectList({
                         {/* Links */}
                         <div className="mt-5 flex items-center gap-5">
                           {project.repoUrl && (
-                            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" onClick={(event) => event.stopPropagation()} className="group/link inline-flex items-center gap-2 text-xs text-white/50 transition-colors hover:text-white">
+                            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" onClick={(event) => event.stopPropagation()} className="group/link inline-flex items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground">
                               GitHub
                               <span className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">
                                 ↗
@@ -423,8 +423,8 @@ export function ProjectList({
               disabled={currentPage === 0}
               className={`text-xs transition-colors ${
                 currentPage === 0
-                  ? "cursor-not-allowed text-white/10"
-                  : "text-white/40 hover:text-white"
+                  ? "cursor-not-allowed text-muted-foreground/30"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               ← Previous
@@ -443,7 +443,7 @@ export function ProjectList({
                     className={`h-1.5 rounded-full transition-all duration-300 ${
                       currentPage === index
                         ? "w-6 bg-[#A855F7]"
-                        : "w-1.5 bg-white/20 hover:bg-white/40"
+                        : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60"
                     }`}
                     aria-label={`Go to page ${
                       index + 1
@@ -463,8 +463,8 @@ export function ProjectList({
               }
               className={`text-xs transition-colors ${
                 currentPage === totalPages - 1
-                  ? "cursor-not-allowed text-white/10"
-                  : "text-white/40 hover:text-white"
+                  ? "cursor-not-allowed text-muted-foreground/30"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Next →

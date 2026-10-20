@@ -33,7 +33,7 @@ export function AboutSection() {
   const Visual = VISUALS[aboutSelected];
 
   return (
-    <section id="about" className="bg-[#0E0C14] py-8 md:pt-24">
+    <section id="about" className="bg-background py-8 md:pt-24">
       <div className="container grid gap-10 md:grid-cols-[2fr_1fr]">
         <div className="relative w-full min-w-0 flex flex-row items-center justify-center text-muted-foreground">
           <AboutInteractive

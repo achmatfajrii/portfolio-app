@@ -198,10 +198,12 @@ const buildTextCanvas = ({ container, width, height, dpr, props }: BuildTextCanv
     fontSize: getFontValue(props.fontSize),
     fontWeight: String(props.fontWeight),
     letterSpacing: getFontValue(props.letterSpacing),
-    lineHeight: typeof props.lineHeight === 'number' ? String(props.lineHeight) : props.lineHeight
+    lineHeight: typeof props.lineHeight === 'number' ? String(props.lineHeight) : props.lineHeight,
+    color: props.color,
   });
   container.appendChild(probe);
   const computed = window.getComputedStyle(probe);
+  const resolvedColor = computed.color || props.color;
   let fontSizePx = parseFloat(computed.fontSize) || 96;
   const fontFamily = computed.fontFamily || 'sans-serif';
   const fontWeight = computed.fontWeight || String(props.fontWeight);
@@ -216,7 +218,7 @@ const buildTextCanvas = ({ container, width, height, dpr, props }: BuildTextCanv
   ctx.clearRect(0, 0, width, height);
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = props.color;
+  ctx.fillStyle = resolvedColor;
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
@@ -344,6 +346,7 @@ const WarpText = ({
     let texture: Texture;
     let resizeObserver: ResizeObserver | null = null;
     let intersectionObserver: IntersectionObserver | null = null;
+    let themeObserver: MutationObserver | null = null;
     let raf = 0;
     let disposed = false;
     let contextLost = false;
@@ -537,6 +540,16 @@ const WarpText = ({
 
     syncUniforms(program, propsRef.current);
     contextRef.current = { program, rasterize };
+
+    themeObserver = new MutationObserver(() => {
+      rasterize();
+    });
+
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
     resize();
     raf = requestAnimationFrame(loop);
 
@@ -546,6 +559,7 @@ const WarpText = ({
       if (raf) cancelAnimationFrame(raf);
       resizeObserver?.disconnect();
       intersectionObserver?.disconnect();
+      themeObserver?.disconnect();
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerleave', onPointerLeave);
       canvas.removeEventListener('webglcontextlost', onContextLost);

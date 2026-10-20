@@ -1,8 +1,9 @@
+
 .branched-menu {
   --bm-w: 240px;
-  --bm-ink: #f5f5f5;
-  --bm-accent: #f5f5f5;
-  --bm-line: #3f3f46;
+  --bm-ink: hsl(var(--foreground));
+  --bm-accent: #a855f7;
+  --bm-line: hsl(var(--border));
   --bm-font: 14px;
   --bm-row: 36px;
   --bm-indent: 40px;
@@ -10,7 +11,9 @@
   --bm-draw: 400ms;
   --bm-fold: 300ms;
   --bm-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --bm-muted: color-mix(in srgb, var(--bm-ink) 55%, transparent);
+
+  /* Teks sekunder dengan kontras lebih baik */
+  --bm-muted: hsl(var(--muted-foreground));
 
   position: relative;
   display: flex;
@@ -32,7 +35,12 @@
   left: 0;
   width: 2px;
   border-radius: 1px;
-  background: linear-gradient(to bottom, var(--bm-line) 0%, var(--bm-line) 55%, transparent 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--bm-line) 0%,
+    var(--bm-line) 55%,
+    transparent 100%
+  );
 }
 
 .branched-menu__marker {
@@ -83,7 +91,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .branched-menu__head:hover {
-    color: var(--bm-ink);
+    color: var(--bm-accent);
   }
 }
 
@@ -162,13 +170,13 @@
 
 @media (hover: hover) and (pointer: fine) {
   .branched-menu__item:hover {
-    color: var(--bm-ink);
+    color: var(--bm-accent);
   }
 }
 
 .branched-menu__item[data-active] {
   color: var(--bm-accent);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .branched-menu__icon {
