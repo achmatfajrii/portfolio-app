@@ -1,6 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import dynamic from "next/dynamic";
 import { InView } from "@/components/in-view";
 
@@ -57,7 +62,7 @@ const skills: Skill[] = [
     name: "Next.js",
     category: "Frontend",
     icon: SiNextdotjs,
-    color: "#FFFFFF",
+    color: "#A855F7",
     description:
       "Used for building production-ready React applications and portfolio projects.",
     level: "Core",
@@ -102,7 +107,7 @@ const skills: Skill[] = [
     name: "Express.js",
     category: "Backend",
     icon: SiExpress,
-    color: "#FFFFFF",
+    color: "#A855F7",
     description:
       "A lightweight framework I use for building REST APIs with Node.js.",
     level: "Core",
@@ -111,7 +116,7 @@ const skills: Skill[] = [
     name: "Prisma",
     category: "Backend",
     icon: SiPrisma,
-    color: "#FFFFFF",
+    color: "#A855F7",
     description:
       "Used as an ORM to interact with relational databases in modern applications.",
     level: "Working",
@@ -165,7 +170,7 @@ const skills: Skill[] = [
     name: "GitHub",
     category: "Tools",
     icon: SiGithub,
-    color: "#FFFFFF",
+    color: "#A855F7",
     description:
       "Used for source control, collaboration, and managing development projects.",
     level: "Core",
@@ -180,7 +185,7 @@ const skills: Skill[] = [
  */
 const positions: Record<string, Position> = {
   React: { x: 16, y: 25 },
-  Nextjs: { x: 30, y: 10 },
+  "Next.js": { x: 30, y: 10 },
   TypeScript: { x: 50, y: 20 },
   JavaScript: { x: 70, y: 11 },
   "Tailwind CSS": { x: 85, y: 28 },
@@ -245,13 +250,11 @@ const getMobileFocus = (
     getMobilePosition(skill.name)
   );
 
-  const centerX =
-    positions.reduce((sum, position) => sum + position.x, 0) /
-    positions.length;
+  const xs = positions.map((position) => position.x);
+const ys = positions.map((position) => position.y);
 
-  const centerY =
-    positions.reduce((sum, position) => sum + position.y, 0) /
-    positions.length;
+const centerX = (Math.min(...xs) + Math.max(...xs)) / 2;
+const centerY = (Math.min(...ys) + Math.max(...ys)) / 2;
 
   return {
     x: centerX,
@@ -313,6 +316,19 @@ const Galaxy = dynamic(
   { ssr: false }
 );
 
+const neutralIconNames = new Set([
+  "Next.js",
+  "Express.js",
+  "Prisma",
+  "GitHub",
+]);
+
+function getSkillIconColor(skill: Skill): string | undefined {
+  return neutralIconNames.has(skill.name)
+    ? undefined
+    : skill.color;
+}
+
 export function SkillsSection() {
   const [activeSkill, setActiveSkill] = useState<string | null>(
     null
@@ -325,6 +341,40 @@ export function SkillsSection() {
   const [activeCategory, setActiveCategory] = useState<
     "All" | Category
   >("All");
+
+  const mobileOrbitRef = useRef<HTMLDivElement>(null);
+const [mobileOrbitWidth, setMobileOrbitWidth] = useState(360);
+
+useEffect(() => {
+  const element = mobileOrbitRef.current;
+
+  if (!element) return;
+
+  const updateWidth = () => {
+    const width = element.clientWidth;
+
+    if (width > 0) {
+      setMobileOrbitWidth(width);
+    }
+  };
+
+  updateWidth();
+
+  if (typeof ResizeObserver === "undefined") {
+    window.addEventListener("resize", updateWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }
+
+  const observer = new ResizeObserver(updateWidth);
+  observer.observe(element);
+
+  return () => {
+    observer.disconnect();
+  };
+}, []);
 
   const selectedSkill = lockedSkill ?? activeSkill;
 
@@ -342,25 +392,50 @@ export function SkillsSection() {
     );
   }, [activeCategory]);
 
-  const visibleSkillNames = new Set(
-    visibleSkills.map((skill) => skill.name)
+const mobileFocus = getMobileFocus(activeCategory);
+
+// Hitung skala berdasarkan rentang posisi skill yang tampil.
+const mobileOrbitScale = useMemo(() => {
+  const currentSkills =
+    activeCategory === "All"
+      ? skills
+      : skills.filter(
+          (skill) => skill.category === activeCategory
+        );
+
+  const points = currentSkills.map((skill) =>
+    getMobilePosition(skill.name)
   );
 
-  const mobileFocus = getMobileFocus(activeCategory);
+  if (points.length === 0) {
+    return 0.72;
+  }
 
+  const minX = Math.min(...points.map((point) => point.x));
+  const maxX = Math.max(...points.map((point) => point.x));
+
+  // Sisakan ruang untuk tombol node dan label teknologi.
+  const requiredWidth = (maxX - minX) * 5.2 + 72;
+  const availableWidth = Math.max(1, mobileOrbitWidth - 24);
+
+  return Math.min(
+    mobileFocus.scale,
+    availableWidth / requiredWidth
+  );
+}, [activeCategory, mobileFocus.scale, mobileOrbitWidth]);
+
+// Pusatkan kelompok skill berdasarkan skala yang benar-benar dipakai.
 const mobileTranslateX =
-  activeCategory === "All"
-    ? 0
-    : (50 - mobileFocus.x) * 6.5;
+  (50 - mobileFocus.x) * 5.2 * mobileOrbitScale;
 
 const mobileTranslateY =
-  activeCategory === "All"
-    ? 0
-    : (50 - mobileFocus.y) * 6.5;
-  /**
-   * Apakah sebuah connection berhubungan
-   * dengan skill yang sedang aktif?
-   */
+  (50 - mobileFocus.y) * 5 * mobileOrbitScale;
+
+// Kompensasi agar canvas yang diperkecil tetap mulai dari atas
+// area layout, bukan bergeser ke atas atau ke bawah.
+const mobileCanvasOffsetY =
+  250 * (mobileOrbitScale - 1);
+
   const isConnectionActive = (
     from: string,
     to: string
@@ -408,22 +483,23 @@ const mobileTranslateY =
 
       <div className="lg:max-w-7xl mx-auto">
         <div
-        className="pointer-events-none absolute inset-0 z-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)]">
+  className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-[0.10] dark:opacity-[0.45] [mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)]"
+>
          <InView rootMargin="200px">
-           <Galaxy
-          mouseRepulsion={false}
-          mouseInteraction={false}
-          density={2.2}
-          glowIntensity={0.1}
-          saturation={0}
-          hueShift={90}
-          twinkleIntensity={0.1}
-          rotationSpeed={0.05}
-          repulsionStrength={2}
-          autoCenterRepulsion={0}
-          starSpeed={0.3}
-          speed={0.3}
-        />
+          <Galaxy
+            mouseRepulsion={false}
+            mouseInteraction={false}
+            density={1.15}
+            glowIntensity={0.24}
+            saturation={0.8}
+            hueShift={255}
+            twinkleIntensity={0.18}
+            rotationSpeed={0.018}
+            repulsionStrength={2}
+            autoCenterRepulsion={0}
+            starSpeed={0.2}
+            speed={0.2}
+          />
          </InView>
        
       </div>
@@ -431,13 +507,7 @@ const mobileTranslateY =
       {/* BACKGROUND */}
       {/* ======================================== */}
 
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/[0.035] blur-[140px]" />
-
-        <div className="absolute left-0 top-1/4 h-[300px] w-[300px] rounded-full bg-blue-500/[0.025] blur-[120px]" />
-
-        <div className="absolute bottom-0 right-0 h-[350px] w-[350px] rounded-full bg-cyan-500/[0.025] blur-[120px]" />
-      </div>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,rgba(168,85,247,0.07),transparent_58%)]" />
 
       <div className="container relative z-10 mx-auto flex min-h-screen w-full flex-col justify-center md:py-24">
         {/* ======================================== */}
@@ -448,16 +518,18 @@ const mobileTranslateY =
           <div className="mb-5 flex items-center gap-3">
             <span className="h-px w-8 bg-purple-400/70" />
 
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/35">
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
               The tools behind the work
             </span>
           </div>
           
             <div className="max-w-2xl">
             <h2 className="text-3xl font-semibold tracking-tight text-foreground md:text-5xl">
-                Built with a
-                <p className="text-[#A855F7]">growing stack.</p>
-            </h2>
+  Built with a
+  <span className="block text-primary">
+    growing stack.
+  </span>
+</h2>
             </div>
 
           {/* <p className="mt-5 max-w-xl text-sm leading-7 text-white/40">
@@ -476,17 +548,23 @@ const mobileTranslateY =
             const isActive =
               activeCategory === category;
 
+              const handleCategoryChange = (
+  category: "All" | Category
+) => {
+  setActiveCategory(category);
+  setActiveSkill(null);
+  setLockedSkill(null);
+};
+
             return (
               <button
                 key={category}
                 type="button"
-                onClick={() =>
-                  setActiveCategory(category)
-                }
+               onClick={() => handleCategoryChange(category)}
                 className={`rounded-full border px-2 md:px-4 py-2 font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
                   isActive
-                    ? "border-purple-400/40 bg-purple-400/10 text-purple-300"
-                    : "border-border bg-white/[0.015] text-white/30 hover:border-white/20 hover:text-muted-foreground"
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-border bg-card/40 text-muted-foreground hover:border-primary/30 hover:text-foreground"
                 }`}
               >
                 {category}
@@ -500,7 +578,7 @@ const mobileTranslateY =
         {/* ======================================== */}
 
         <div
-          className="relative hidden h-[560px] w-full overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.012] md:block"
+          className="relative hidden h-[560px] w-full overflow-hidden rounded-3xl border border-border bg-card/40 md:block"
           onMouseLeave={() => {
             if (!lockedSkill) {
               setActiveSkill(null);
@@ -527,10 +605,10 @@ const mobileTranslateY =
           {/* ====================================== */}
 
           <svg
-            className="pointer-events-none absolute inset-0 h-full w-full"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
+  className="pointer-events-none absolute inset-0 h-full w-full text-border/40"
+  viewBox="0 0 100 100"
+  preserveAspectRatio="none"
+>
             <defs>
               <linearGradient
                 id="skillConnection"
@@ -558,28 +636,12 @@ const mobileTranslateY =
                 />
               </linearGradient>
 
-              <filter
-                id="connectionGlow"
-                x="-100%"
-                y="-100%"
-                width="300%"
-                height="300%"
-              >
-                <feGaussianBlur
-                  stdDeviation="0.8"
-                  result="blur"
-                />
-
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
+              
             </defs>
 
           {connections.map(([from, to]) => {
-  const fromPosition = getMobilePosition(from);
-  const toPosition = getMobilePosition(to);
+  const fromPosition = getPosition(from);
+  const toPosition = getPosition(to);
 
   const active = isConnectionActive(from, to);
 
@@ -589,16 +651,12 @@ const mobileTranslateY =
 
   return (
     <line
-      key={`mobile-${from}-${to}`}
+      key={`desktop-${from}-${to}`}
       x1={fromPosition.x}
       y1={fromPosition.y}
       x2={toPosition.x}
       y2={toPosition.y}
-      stroke={
-        active
-          ? "url(#mobileSkillConnection)"
-          : "rgba(255,255,255,0.045)"
-      }
+      stroke={active ? "url(#skillConnection)" : "currentColor"}
       strokeWidth={active ? 0.7 : 0.25}
       strokeDasharray={active ? "2 4" : "none"}
       opacity={
@@ -629,8 +687,8 @@ const mobileTranslateY =
 
               <div className="absolute -inset-5 animate-pulse rounded-full border border-purple-400/[0.08]" />
 
-              <div className="relative flex h-28 w-28 flex-col items-center justify-center rounded-3xl border border-purple-400/20 bg-[#0C0A10]/95 shadow-[0_0_50px_rgba(168,85,247,0.08)] backdrop-blur-xl">
-                <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-purple-300/60">
+              <div className="relative flex h-28 w-28 flex-col items-center justify-center rounded-3xl border border-purple-400/20 bg-card/95 shadow-[0_0_50px_rgba(168,85,247,0.08)] backdrop-blur-xl">
+                <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary/70">
                   My
                 </span>
 
@@ -638,7 +696,7 @@ const mobileTranslateY =
                   STACK
                 </span>
 
-                <span className="mt-2 font-mono text-[8px] uppercase tracking-widest text-white/20">
+                <span className="mt-2 font-mono text-[8px] uppercase tracking-widest text-muted-foreground/60">
                   Fullstack
                 </span>
               </div>
@@ -699,17 +757,18 @@ const mobileTranslateY =
                   className={`relative flex h-[68px] w-[68px] items-center justify-center rounded-2xl border backdrop-blur-xl transition-all duration-300 ${
                     isSelected
                       ? "scale-110 border-purple-400/50 bg-purple-400/[0.08] shadow-[0_0_35px_rgba(168,85,247,0.15)]"
-                      : "border-white/[0.09] bg-[#0C0A10]/90 group-hover:scale-105 group-hover:border-white/25"
+                      : "border-border bg-card/95 group-hover:scale-105 group-hover:border-primary/30"
                   }`}
                 >
                   <Icon
-                    size={27}
+                    size={24}
+                    className={
+                      neutralIconNames.has(skill.name) ? "text-foreground" : ""
+                    }
                     style={{
-                      color: isSelected
-                        ? skill.color
-                        : "rgba(255,255,255,0.45)",
+                      color: getSkillIconColor(skill),
+                      opacity: isSelected ? 1 : 0.82,
                     }}
-                    className="transition-all duration-300"
                   />
 
                   {/* Active dot */}
@@ -729,8 +788,8 @@ const mobileTranslateY =
                 <span
                   className={`absolute left-1/2 top-full mt-3 -translate-x-1/2 whitespace-nowrap font-mono text-[9px] uppercase tracking-wider transition-all duration-300 ${
                     isSelected
-                      ? "text-white/80"
-                      : "text-white/25 group-hover:text-muted-foreground"
+                      ? "text-foreground/90"
+                      : "text-muted-foreground/60 group-hover:text-muted-foreground"
                   }`}
                 >
                   {skill.name}
@@ -757,22 +816,22 @@ const mobileTranslateY =
 
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="font-mono text-xs text-white/80">
+                    <p className="font-mono text-xs text-foreground/90">
                       {activeSkillData.name}
                     </p>
 
-                    <span className="font-mono text-[8px] uppercase tracking-widest text-white/20">
+                    <span className="font-mono text-[8px] uppercase tracking-widest text-muted-foreground/60">
                       {activeSkillData.level}
                     </span>
                   </div>
 
-                  <p className="mt-1 max-w-xs text-[11px] leading-5 text-white/35">
+                  <p className="mt-1 max-w-xs text-[11px] leading-5 text-muted-foreground">
                     {activeSkillData.description}
                   </p>
                 </div>
               </div>
             ) : (
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/60">
                 Hover a technology to explore
               </p>
             )}
@@ -780,7 +839,7 @@ const mobileTranslateY =
 
           {/* Counter */}
           <div className="absolute bottom-6 right-6">
-            <span className="font-mono text-[9px] uppercase tracking-widest text-white/20">
+            <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/60">
               {String(visibleSkills.length).padStart(
                 2,
                 "0"
@@ -792,7 +851,7 @@ const mobileTranslateY =
           {/* Click hint */}
           {!lockedSkill && (
             <div className="absolute right-6 top-6">
-              <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/15">
+              <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-muted-foreground/60">
                 Click to lock
               </span>
             </div>
@@ -805,7 +864,7 @@ const mobileTranslateY =
                 setLockedSkill(null);
                 setActiveSkill(null);
               }}
-              className="absolute right-6 top-6 font-mono text-[8px] uppercase tracking-[0.2em] text-purple-300/50 transition-colors hover:text-purple-300"
+              className="absolute right-6 top-6 font-mono text-[8px] uppercase tracking-[0.2em] text-primary/70 transition-colors hover:text-primary"
             >
               Clear selection
             </button>
@@ -815,268 +874,263 @@ const mobileTranslateY =
 {/* =========================
     MOBILE ORBIT ECOSYSTEM
     ========================= */}
-<div className="relative top-[-80px] right-[30%] w-screen md:hidden">
-  <div className="relative mx-auto h-[500px] w-[520px] overflow-visible">
-<div
-      className="absolute inset-0 transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]"
+<div className="relative w-full md:hidden">
+  {/* Container mengikuti lebar area mobile */}
+  <div
+    ref={mobileOrbitRef}
+    className="relative mx-auto w-full overflow-visible"
+    style={{
+      height: `${500 * mobileOrbitScale}px`,
+    }}
+  >
+    {/* Canvas 520px, dipusatkan dan diskalakan satu kali */}
+    <div
+      className="absolute left-1/2 top-0 h-[500px] w-[520px]"
       style={{
-        transform: `
-          translate(${mobileTranslateX}px, ${mobileTranslateY}px)
-          scale(${mobileFocus.scale})
-        `,
+        transform: `translate(calc(-50% + ${mobileTranslateX}px), ${mobileCanvasOffsetY + mobileTranslateY}px) scale(${mobileOrbitScale})`,
+        transformOrigin: "center center",
       }}
     >
-    {/* Background grid */}
-    <div
-      className="pointer-events-none absolute inset-0 opacity-20 "
-      style={{
-        backgroundImage:
-          "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
-        backgroundSize: "32px 32px"
-      }}
-    />
+      {/* Background grid */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-20"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(168,85,247,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.06) 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+      />
 
-    {/* Ambient glow */}
-    <div className="pointer-events-none absolute left-1/2 top-1/2 h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/[0.045] blur-[90px]" />
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/[0.045] blur-[90px]" />
 
-    {/* Outer orbit */}
-    <div className="pointer-events-none absolute left-1/2 top-1/2 h-[440px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-purple-400/[0.08]" />
+      {/* Outer orbit */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[440px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-purple-400/[0.08]" />
 
-    {/* Inner orbit */}
-    <div className="pointer-events-none absolute left-1/2 top-1/2 h-[280px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.04]" />
+      {/* Inner orbit */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[280px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/50" />
 
-    {/* Rotating orbit glow */}
-    <div
-      className="pointer-events-none absolute left-1/2 top-1/2 h-[440px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-      style={{
-        background:
-          "conic-gradient(from 0deg, transparent 0deg, rgba(168,85,247,0.18) 45deg, transparent 90deg, transparent 180deg, rgba(168,85,247,0.08) 225deg, transparent 270deg)",
-        maskImage:
-          "radial-gradient(circle, transparent 49%, black 50%, black 50.5%, transparent 51%)",
-        WebkitMaskImage:
-          "radial-gradient(circle, transparent 49%, black 50%, black 50.5%, transparent 51%)",
-        animation: "skillOrbitSpin 18s linear infinite"
-      }}
-    />
+      {/* Rotating orbit glow */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[440px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "conic-gradient(from 0deg, transparent 0deg, rgba(168,85,247,0.18) 45deg, transparent 90deg, transparent 180deg, rgba(168,85,247,0.08) 225deg, transparent 270deg)",
+          maskImage:
+            "radial-gradient(circle, transparent 49%, black 50%, black 50.5%, transparent 51%)",
+          WebkitMaskImage:
+            "radial-gradient(circle, transparent 49%, black 50%, black 50.5%, transparent 51%)",
+          animation: "skillOrbitSpin 18s linear infinite",
+        }}
+      />
 
-    {/* SVG connections */}
-    <svg
-      className="pointer-events-none absolute inset-0 h-full w-full"
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-    >
-      <defs>
-        <linearGradient
-          id="mobileSkillConnection"
-          x1="0%"
-          y1="0%"
-          x2="100%"
-          y2="100%"
-        >
-          <stop
-            offset="0%"
-            stopColor="#A855F7"
-            stopOpacity="0"
-          />
+      {/* SVG connections */}
+      <svg
+        className="pointer-events-none absolute inset-0 h-full w-full text-border/40"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient
+            id="mobileSkillConnection"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop
+              offset="0%"
+              stopColor="#A855F7"
+              stopOpacity="0"
+            />
+            <stop
+              offset="50%"
+              stopColor="#A855F7"
+              stopOpacity="0.65"
+            />
+            <stop
+              offset="100%"
+              stopColor="#A855F7"
+              stopOpacity="0"
+            />
+          </linearGradient>
+        </defs>
 
-          <stop
-            offset="50%"
-            stopColor="#A855F7"
-            stopOpacity="0.65"
-          />
+        {connections.map(([from, to]) => {
+          const fromPosition = getMobilePosition(from);
+          const toPosition = getMobilePosition(to);
+          const active = isConnectionActive(from, to);
 
-          <stop
-            offset="100%"
-            stopColor="#A855F7"
-            stopOpacity="0"
-          />
-        </linearGradient>
-      </defs>
+          const related =
+            selectedSkill &&
+            (from === selectedSkill ||
+              to === selectedSkill);
 
-      {connections.map(([from, to]) => {
-        const fromPosition = getMobilePosition(from);
-        const toPosition = getMobilePosition(to);
+          return (
+            <line
+              key={`mobile-${from}-${to}`}
+              x1={fromPosition.x}
+              y1={fromPosition.y}
+              x2={toPosition.x}
+              y2={toPosition.y}
+              stroke={
+                active
+                  ? "url(#mobileSkillConnection)"
+                  : "currentColor"
+              }
+              strokeWidth={active ? 0.7 : 0.25}
+              strokeDasharray={active ? "2 4" : "none"}
+              opacity={
+                selectedSkill
+                  ? related
+                    ? 1
+                    : 0.18
+                  : 0.7
+              }
+              className={
+                active
+                  ? "animate-[skillDash_3s_linear_infinite]"
+                  : ""
+              }
+              vectorEffect="non-scaling-stroke"
+            />
+          );
+        })}
+      </svg>
 
-        const active = isConnectionActive(from, to);
+      {/* Central STACK */}
+      <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+        <div className="relative">
+          {/* Glow */}
+          <div className="absolute -inset-10 rounded-full bg-purple-500/[0.08] blur-3xl" />
 
-        const related =
-          selectedSkill &&
-          (from === selectedSkill ||
-            to === selectedSkill);
+          {/* Pulse ring */}
+          <div className="absolute -inset-5 animate-pulse rounded-full border border-purple-400/[0.12]" />
 
-        return (
-         <line
-  key={`mobile-${from}-${to}`}
-  x1={fromPosition.x}
-  y1={fromPosition.y}
-  x2={toPosition.x}
-  y2={toPosition.y}
-  stroke={
-    active
-      ? "url(#mobileSkillConnection)"
-      : "rgba(255,255,255,0.045)"
-  }
-  strokeWidth={active ? 0.7 : 0.25}
-  strokeDasharray={active ? "2 4" : "none"}
-  opacity={
-    selectedSkill
-      ? related
-        ? 1
-        : 0.18
-      : 0.7
-  }
-  className={
-    active
-      ? "animate-[skillDash_3s_linear_infinite]"
-      : ""
-  }
-  vectorEffect="non-scaling-stroke"
-/>
-        );
-      })}
-    </svg>
+          {/* Center card */}
+          <div className="relative flex h-[118px] w-[118px] flex-col items-center justify-center rounded-[30px] border border-purple-400/20 bg-card/95 shadow-[0_0_55px_rgba(168,85,247,0.12)] backdrop-blur-xl">
+            <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-primary/70">
+              My
+            </span>
 
-    {/* Central STACK */}
-    <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-      <div className="relative">
+            <span className="mt-1 text-xl font-semibold tracking-tight text-foreground">
+              STACK
+            </span>
 
-        {/* Glow */}
-        <div className="absolute -inset-10 rounded-full bg-purple-500/[0.08] blur-3xl" />
-
-        {/* Pulse ring */}
-        <div className="absolute -inset-5 animate-pulse rounded-full border border-purple-400/[0.12]" />
-
-        {/* Center */}
-        <div className="relative flex h-[118px] w-[118px] flex-col items-center justify-center rounded-[30px] border border-purple-400/20 bg-[#0C0A10]/95 shadow-[0_0_55px_rgba(168,85,247,0.12)] backdrop-blur-xl">
-
-          <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-purple-300/60">
-            My
-          </span>
-
-          <span className="mt-1 text-xl font-semibold tracking-tight text-foreground">
-            STACK
-          </span>
-
-          <span className="mt-2 font-mono text-[7px] uppercase tracking-[0.25em] text-white/20">
-            Fullstack
-          </span>
+            <span className="mt-2 font-mono text-[7px] uppercase tracking-[0.25em] text-muted-foreground/60">
+              Fullstack
+            </span>
+          </div>
         </div>
       </div>
-    </div>
 
-    {/* Skill Nodes */}
-   {visibleSkills.map((skill) => {
-      const Icon = skill.icon;
+      {/* Skill nodes */}
+      {visibleSkills.map((skill) => {
+        const Icon = skill.icon;
+        const position = getMobilePosition(skill.name);
+        const isSelected = selectedSkill === skill.name;
+        const isConnected = isNodeConnected(skill.name);
 
-      const position = getMobilePosition(skill.name);
-
-      const isSelected =
-        selectedSkill === skill.name;
-
-      const isConnected =
-        isNodeConnected(skill.name);
-
-      return (
-        <button
-          key={skill.name}
-          type="button"
-          onClick={() =>
-            handleSkillClick(skill.name)
-          }
-          className={`absolute z-30 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${
-            selectedSkill && !isConnected
-              ? "opacity-25"
-              : "opacity-100"
-          }`}
-          style={{
-  left: `${position.x}%`,
-  top: `${position.y}%`
-}}
-        >
-          {/* Node glow */}
-          <span
-            className={`absolute -inset-5 rounded-full blur-xl transition-all duration-500 ${
-              isSelected
-                ? "opacity-100"
-                : "opacity-0"
+        return (
+          <button
+            key={skill.name}
+            type="button"
+            onClick={() => handleSkillClick(skill.name)}
+            className={`absolute z-30 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${
+              selectedSkill && !isConnected
+                ? "opacity-25"
+                : "opacity-100"
             }`}
             style={{
-              backgroundColor: skill.color
-            }}
-          />
-
-          {/* Node */}
-          <span
-            className={`relative flex h-[58px] w-[58px] items-center justify-center rounded-2xl border transition-all duration-500 ${
-              isSelected
-                ? "scale-125 border-purple-400/50 bg-purple-400/[0.1]"
-                : "border-white/[0.09] bg-[#0C0A10]/90"
-            }`}
-            style={{
-              boxShadow: isSelected
-                ? `0 0 28px ${skill.color}30`
-                : "none"
+              left: `${position.x}%`,
+              top: `${position.y}%`,
             }}
           >
-            <Icon
-              size={24}
+            {/* Node glow */}
+            <span
+              className={`absolute -inset-5 rounded-full blur-xl transition-all duration-500 ${
+                isSelected ? "opacity-100" : "opacity-0"
+              }`}
               style={{
-                color: isSelected
-                  ? skill.color
-                  : "rgba(255,255,255,0.5)"
+                backgroundColor: skill.color,
               }}
             />
 
-            {/* Active indicator */}
-            {isSelected && (
-              <span
-                className="absolute -right-1 -top-1 h-2 w-2 rounded-full"
+            {/* Node card */}
+            <span
+              className={`relative flex h-[58px] w-[58px] items-center justify-center rounded-2xl border transition-all duration-500 ${
+                isSelected
+                  ? "scale-125 border-purple-400/50 bg-purple-400/[0.1]"
+                  : "border-border bg-card/95"
+              }`}
+              style={{
+                boxShadow: isSelected
+                  ? `0 0 28px ${skill.color}30`
+                  : "none",
+              }}
+            >
+              <Icon
+                size={24}
+                className={
+                  neutralIconNames.has(skill.name)
+                    ? "text-foreground"
+                    : ""
+                }
                 style={{
-                  backgroundColor: skill.color,
-                  boxShadow: `0 0 10px ${skill.color}`
+                  color: getSkillIconColor(skill),
+                  opacity: isSelected ? 1 : 0.82,
                 }}
               />
-            )}
-          </span>
 
-          {/* Label */}
-          <span
-            className={`absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap font-mono text-[7px] uppercase tracking-wider transition-all duration-300 ${
-              isSelected
-                ? "text-white/80"
-                : "text-white/25"
-            }`}
-          >
-            {skill.name}
-          </span>
-        </button>
-      );
-    })}
+              {/* Active indicator */}
+              {isSelected && (
+                <span
+                  className="absolute -right-1 -top-1 h-2 w-2 rounded-full"
+                  style={{
+                    backgroundColor: skill.color,
+                    boxShadow: `0 0 10px ${skill.color}`,
+                  }}
+                />
+              )}
+            </span>
 
-    {/* Top hint */}
-    {!selectedSkill && (
-      <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2">
-        <span className="font-mono text-[7px] uppercase tracking-[0.25em] text-white/20">
-          Tap a technology
+            {/* Skill label */}
+            <span
+              className={`absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap font-mono text-[7px] uppercase tracking-wider transition-all duration-300 ${
+                isSelected
+                  ? "text-foreground/90"
+                  : "text-muted-foreground/60"
+              }`}
+            >
+              {skill.name}
+            </span>
+          </button>
+        );
+      })}
+
+      {/* Top hint */}
+      {!selectedSkill && (
+        <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2">
+          <span className="font-mono text-[7px] uppercase tracking-[0.25em] text-muted-foreground/60">
+            Tap a technology
+          </span>
+        </div>
+      )}
+
+      {/* Counter */}
+      <div className="pointer-events-none absolute bottom-4 right-4">
+        <span className="font-mono text-[7px] uppercase tracking-widest text-muted-foreground/60">
+          {String(visibleSkills.length).padStart(2, "0")} technologies
         </span>
       </div>
-    )}
-
-    {/* Counter */}
-    <div className="pointer-events-none absolute bottom-4 right-4">
-      <span className="font-mono text-[7px] uppercase tracking-widest text-white/20">
-        {String(visibleSkills.length).padStart(2, "0")}{" "}
-        technologies
-      </span>
     </div>
   </div>
-</div>
 </div>
 
 {/* Mobile description */}
 <div className="mt-5 md:hidden">
   {activeSkillData && (
-    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.015] p-5">
+    <div className="rounded-2xl border border-border bg-card/60 p-5">
       <div className="flex items-center gap-2">
         <span
           className="h-2 w-2 rounded-full"
@@ -1088,16 +1142,16 @@ const mobileTranslateY =
           }}
         />
 
-        <span className="font-mono text-xs text-white/70">
+        <span className="font-mono text-xs text-foreground/90">
           {activeSkillData.name}
         </span>
 
-        <span className="ml-auto font-mono text-[8px] uppercase tracking-widest text-white/20">
+        <span className="ml-auto font-mono text-[8px] uppercase tracking-widest text-muted-foreground/60">
           {activeSkillData.level}
         </span>
       </div>
 
-      <p className="mt-3 text-xs leading-6 text-white/35">
+      <p className="mt-3 text-xs leading-6 text-muted-foreground">
         {activeSkillData.description}
       </p>
     </div>
