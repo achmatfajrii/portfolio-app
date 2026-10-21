@@ -6,28 +6,28 @@ import { useState } from "react";
 const contactLinks = [
   {
     label: "Email",
-    value: "achmatfajrii@gmail.com",
-    href: "mailto:achmatfajrii@gmail.com",
+    value: "achmatfajri@gmail.com",
+    href: "mailto:achmatfajri@gmail.com",
     external: false,
   },
   {
-    label: "GitHub",
-    value: "github.com/achmatfajrii",
-    href: "https://github.com/achmatfajrii",
-    external: true,
-  },
-  {
-    label: "LinkedIn",
-    value: "linkedin.com/in/achmatfajri",
-    href: "https://www.linkedin.com/in/achmatfajri/",
-    external: true,
-  },
+  label: "GitHub",
+  value: "github.com/achmatfajrii",
+  href: "https://github.com/achmatfajrii",
+  external: true,
+},
+{
+  label: "LinkedIn",
+  value: "linkedin.com/in/achmatfajri",
+  href: "https://www.linkedin.com/in/achmatfajri/",
+  external: true,
+},
 ];
 
 export function ContactSection() {
   const [copied, setCopied] = useState(false);
 
-  const email = "achmatfajrii@gmail.com";
+  const email = "achmatfajri@gmail.com";
 
   const copyEmail = async () => {
     try {
@@ -131,6 +131,7 @@ export function ContactSection() {
               <button
                 type="button"
                 onClick={copyEmail}
+                aria-live="polite"
                 className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-5 py-3 font-mono text-xs text-muted-foreground backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
               >
                 {copied ? "Copied!" : "Copy email"}

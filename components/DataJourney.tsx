@@ -168,10 +168,10 @@ export function DataJourney() {
           </h2>
 
           <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
-            SQL is already in my toolkit. I&apos;m building up Python and pandas,
-            and exploring how to turn a good question into a thoughtful,
-            evidence-led analysis.
-          </p>
+  As a fullstack developer, I&apos;m expanding my skills into data
+  analysis. I use SQL and am learning Python, pandas, and Matplotlib
+  to explore data and develop evidence-based insights.
+</p>
         </div>
 
         {/* Notebook window */}

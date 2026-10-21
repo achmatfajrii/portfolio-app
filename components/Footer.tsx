@@ -22,14 +22,14 @@ export function Footer() {
 
         {/* Links */}
         <div className="flex items-center gap-4">
-          <a
-            href="https://github.com/achmatfajrii"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-mono text-[10px] uppercase tracking-wider text-white/70 transition-colors hover:text-white"
-          >
-            GitHub
-          </a>
+         <a
+  href="https://github.com/achmatfajrii"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="font-mono text-[10px] uppercase tracking-wider text-white/70 transition-colors hover:text-white"
+>
+  GitHub
+</a>
 
           <a
             href="#contact"

@@ -91,13 +91,14 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full border-border bg-background/70 transition-colors duration-200 hover:border-primary/40"
+            <a
+              href="/assets/profile/achmat-fajri-cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-9 items-center justify-center rounded-full border border-border bg-background/70 px-3 text-sm transition-colors duration-200 hover:border-primary/40"
             >
               Resume
-            </Button>
+            </a>
           </div>
         </div>
       </nav>

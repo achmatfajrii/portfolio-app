@@ -1,4 +1,3 @@
-// components/hero-title-fallback.tsx
 
 export function HeroTitleFallback({
   fontSize = 88,
@@ -6,7 +5,7 @@ export function HeroTitleFallback({
   fontSize?: number;
 }) {
   return (
-    <h1
+    <div
       className="select-none py-4 text-center uppercase text-foreground"
       style={{
         fontSize,
@@ -14,8 +13,9 @@ export function HeroTitleFallback({
         letterSpacing: '-0.06em',
         lineHeight: 1,
       }}
+      aria-hidden="true"
     >
       MY PORTFOLIO
-    </h1>
+    </div>
   );
 }

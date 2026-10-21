@@ -12,7 +12,8 @@ id: string;
 title: string;
 description: string;
 techStack: string[];
-repoUrl: string;
+repoUrl?: string;
+demoUrl?: string;
 imageUrl?: string;
 };
 
@@ -23,7 +24,7 @@ title: "Konekseed",
 description:
 "Social networking platform that brings people with entrepreneurial spirit that looking for business partners.",
 techStack: ["Next.js", "Tailwind CSS", "Git", "WebSocket"],
-repoUrl: "[https://github.com/achmatfajrii](https://github.com/achmatfajrii)",
+demoUrl: "https://konekseed.id/",
 imageUrl: "/assets/project/konekseed.png",
 },
 {
@@ -32,26 +33,32 @@ title: "Vouchify",
 description:
 "Vouchify is an e-commerce platform that specializes in the sale of digital game vouchers. The main objective of this project is to provide users with easy and secure access to purchasing digital game vouchers from various popular gaming platforms.",
 techStack: ["Three.js", "Javascript", "HTML5", "Tailwind CSS"],
-repoUrl: "[https://achmatfajrii.github.io/VouchifyApp/](https://achmatfajrii.github.io/VouchifyApp/)",
+repoUrl: "https://github.com/achmatfajrii/VochifyApp-ReactJS",
+demoUrl: "https://achmatfajrii.github.io/VouchifyApp/",
 imageUrl: "/assets/project/vouchify-home-card.png",
 },
 {
-id: "3",
-title: "ERM",
-description:
-"Vouchify is an e-commerce platform that specializes in the sale of digital game vouchers. The main objective of this project is to provide users with easy and secure access to purchasing digital game vouchers from various popular gaming platforms.",
-techStack: ["Three.js", "Javascript", "HTML5", "Tailwind CSS"],
-repoUrl: "[https://achmatfajrii.github.io/VouchifyApp/](https://achmatfajrii.github.io/VouchifyApp/)",
-imageUrl: "/assets/project/erm.png",
+  id: "3",
+  title: "ERM",
+  description:
+    "An internal electronic medical records application developed to support digital medical record management in a hospital environment.",
+  techStack: [
+    "React.js", "Laravel", "MySQL", "Tailwind CSS", "Git", "REST API"
+  ],
+  repoUrl: "",
+  imageUrl: "/assets/project/erm.png",
 },
 {
-id: "4",
-title: "AMD-Academy",
-description:
-"Vouchify is an e-commerce platform that specializes in the sale of digital game vouchers. The main objective of this project is to provide users with easy and secure access to purchasing digital game vouchers from various popular gaming platforms.",
-techStack: ["Three.js", "Javascript", "HTML5", "Tailwind CSS"],
-repoUrl: "[https://achmatfajrii.github.io/VouchifyApp/](https://achmatfajrii.github.io/VouchifyApp/)",
-imageUrl: "/assets/project/amd.png",
+  id: "4",
+  title: "AMD Academy",
+  description:
+    "A training and bootcamp website providing professional learning opportunities and certification programs.",
+  techStack: [
+    "WordPress", "PHP", "MySQL", "HTML5", "CSS3", "JavaScript", "Site Kit", "Elementor", "Google Analytics"
+  ],
+  repoUrl: "",
+  demoUrl: "https://amdacademy.id/",
+  imageUrl: "/assets/project/amd.png",
 },
 ];
 

@@ -132,6 +132,11 @@ export function Hero() {
 
       <section className="relative px-4 pt-8 sm:px-8 lg:flex min-h-screen lg:items-center lg:justify-center lg:top-20 lg:pt-0 lg:pb-0">
         {/* ===== Below lg ===== */}
+        
+        <h1 className="sr-only">
+          Achmat Fajri — Fullstack Developer
+        </h1>
+
         <div className={`flex w-full flex-col lg:hidden ${reduceMotion ? 'pt-24' : ''}`}>
           {show3DMobile && (
             <div className="pointer-events-none relative left-1/2 right-1/2 -mx-[50vw] -mt-24 h-[calc(100vh+6rem)] h-[calc(100dvh+6rem)] w-screen overflow-hidden">
@@ -147,9 +152,7 @@ export function Hero() {
               <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
 
             <div className="relative z-30 pointer-events-auto">
-  {isDesktop === false && !reduceMotion
-    ? <WarpText {...warpProps} fontSize={heroFontSize} />
-    : <HeroTitleFallback fontSize={heroFontSize} />}
+ <h1>MY PORTFOLIO</h1>
 </div>
             </div>
 
@@ -201,9 +204,7 @@ export function Hero() {
           <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
 
           <div className="relative z-30 pointer-events-auto">
-  {isDesktop === true && !reduceMotion
-    ? <WarpText {...warpProps} fontSize={heroFontSize} style={{ height: '100%' }} />
-    : <HeroTitleFallback fontSize={heroFontSize} />}
+ <h1>MY PORTFOLIO</h1>
 </div>
         </div>
 

@@ -77,14 +77,18 @@ const aboutSections = [
                   Hi, I'm
                 </p>
 
-                <GradientText
-                  colors={["#7C3AED", "#C026D3", "#8B5CF6"]}
-                  animationSpeed={8}
-                  showBorder={false}
-                  className="text-4xl font-bold leading-[0.85] tracking-tight sm:text-5xl md:text-7xl lg:text-7xl 2xl:text-8xl"
-                >
-                  Achmat Fajri&nbsp;
-                </GradientText>
+                
+<h2 className="m-0">
+  <GradientText
+    colors={["#7C3AED", "#C026D3", "#8B5CF6"]}
+    animationSpeed={8}
+    showBorder={false}
+    className="text-4xl font-bold leading-[0.85] tracking-tight sm:text-5xl md:text-7xl lg:text-7xl 2xl:text-8xl"
+  >
+    Achmat Fajri
+  </GradientText>
+</h2>
+
 
                 <div className="-mt-1 space-y-4">
                   <p className="m-0 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-lg">

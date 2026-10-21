@@ -530,13 +530,13 @@ const mobileCanvasOffsetY =
     growing stack.
   </span>
 </h2>
-            </div>
 
-          {/* <p className="mt-5 max-w-xl text-sm leading-7 text-white/40">
-            Technologies I use to turn ideas into interfaces,
-            applications, and systems — with plenty more
-            still to explore.
-          </p> */}
+<p className="mt-5 max-w-xl text-sm leading-7 text-muted-foreground">
+  I build fullstack web applications using React, Next.js,
+  Vue.js, Node.js, and Express.js, with experience in
+  relational databases and collaborative development tools.
+</p>
+            </div>
         </div>
 
         {/* ======================================== */}
