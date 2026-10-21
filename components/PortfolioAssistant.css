@@ -1,0 +1,77 @@
+.portfolio-assistant__panel {
+  animation: portfolio-assistant-enter 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: bottom right;
+}
+
+@keyframes portfolio-assistant-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.portfolio-assistant__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: hsl(var(--primary));
+  animation: portfolio-assistant-bounce 900ms ease-in-out infinite;
+}
+
+.portfolio-assistant__dot--delay-1 {
+  animation-delay: 120ms;
+}
+
+.portfolio-assistant__dot--delay-2 {
+  animation-delay: 240ms;
+}
+
+@keyframes portfolio-assistant-bounce {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+/* This portfolio assistant does not use attachment/source controls. */
+.portfolio-assistant__composer .prompt-bar__bar > .prompt-bar__tool {
+  display: none;
+}
+
+.portfolio-assistant__composer .prompt-bar__field {
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.025);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.portfolio-assistant__composer .prompt-bar__field:focus-within {
+  border-color: hsl(var(--primary) / 0.55);
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.09);
+}
+
+.portfolio-assistant__composer .prompt-bar__send[data-armed] {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.portfolio-assistant__composer .prompt-bar__send:disabled {
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-assistant__panel,
+  .portfolio-assistant__dot {
+    animation: none;
+  }
+}

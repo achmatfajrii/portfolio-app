@@ -5,22 +5,21 @@ import { ProjectsSection } from '@/components/projects-section';
 import { SkillsSection } from '@/components/SkillsSection';
 import DataJourney from '@/components/DataJourney';
 import ContactSection from '@/components/ContactSection';
-
+import PortfolioAssistant from "@/components/PortfolioAssistant";
 import { Footer } from '@/components/Footer';
-
-
 
 export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden">
       <Navbar />
-      <Hero />
+      <Hero />  
       <AboutSection />
       <ProjectsSection />
       <SkillsSection />
       <DataJourney />
       <ContactSection />
       <Footer />
+      <PortfolioAssistant />
     </main>
   );
 }
