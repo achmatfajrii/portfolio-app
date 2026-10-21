@@ -72,25 +72,26 @@ const aboutSections = [
               </span>
             </div>
 
-            <div className="space-y-1">
-              <p className="pl-1 mt-8 text-lg font-medium tracking-[0.15em] text-muted-foreground sm:text-2xl sm:tracking-[0.2em]">
-                Hi, I'm
-              </p>
-
-              <GradientText
-                colors={["#7C3AED", "#C026D3", "#8B5CF6"]}
-                animationSpeed={8}
-                showBorder={false}
-                className="text-4xl font-bold leading-[0.95] tracking-tight sm:text-5xl md:text-7xl lg:text-8xl"
-              >
-                Achmat Fajri &nbsp;
-              </GradientText>
-
-              <div className="space-y-4">
-                <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-lg">
-                  I'm a Fullstack Web Developer who enjoys turning ideas into
-                  clean, interactive, and purposeful web experiences.
+            <div className="flex flex-col items-start gap-4">
+                <p className="mt-8 mb-0 pl-1 text-lg font-medium tracking-[0.15em] text-muted-foreground sm:text-2xl sm:tracking-[0.2em]">
+                  Hi, I'm
                 </p>
+
+                <GradientText
+                  colors={["#7C3AED", "#C026D3", "#8B5CF6"]}
+                  animationSpeed={8}
+                  showBorder={false}
+                  className="text-4xl font-bold leading-[0.85] tracking-tight sm:text-5xl md:text-7xl lg:text-7xl 2xl:text-8xl"
+                >
+                  Achmat Fajri&nbsp;
+                </GradientText>
+
+                <div className="-mt-1 space-y-4">
+                  <p className="m-0 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-lg">
+                    I'm a Fullstack Web Developer who enjoys turning ideas into
+                    clean, interactive, and purposeful web experiences.
+                  </p>
+
 
                 <div className="flex items-center gap-3">
                   <a

@@ -30,8 +30,14 @@ const send = async (text: any, { attachments, model, effort }: any) => {
     busy={busy}
     onSend={send}
     onStop={() => controller.current?.abort()}
-    onAttach={() => console.log('Attach clicked')}
-    onDictate={() => console.log('Dictate clicked')}
+    onAttach={() => {
+        console.log('Attach clicked');
+        return null;
+        }}
+        onDictate={() => {
+        console.log('Dictate clicked');
+        return null;
+        }}
     background="#27272a"
     color="#f5f5f5"
     menuBackground="#323236"
