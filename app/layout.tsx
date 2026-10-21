@@ -15,11 +15,18 @@ const jetbrainsMono = JetBrains_Mono({
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+
   title: "Achmat Fajri — Fullstack Developer",
   description:
     "Portfolio of Achmat Fajri, a fullstack developer specializing in React, Vue, Node.js, and SQL.",
+
+  alternates: {
+    canonical: "/",
+  },
+
   openGraph: {
     title: "Achmat Fajri — Fullstack Developer",
     description:
@@ -27,14 +34,28 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: "Achmat Fajri",
     type: "website",
+    images: [
+      {
+        url: "/assets/profile/achmatfajri.webp",
+        alt: "Achmat Fajri — Fullstack Developer",
+      },
+    ],
   },
+
   twitter: {
     card: "summary_large_image",
     title: "Achmat Fajri — Fullstack Developer",
     description:
       "Portfolio of Achmat Fajri, a fullstack developer specializing in React, Vue, Node.js, and SQL.",
+    images: [
+      {
+        url: "/assets/profile/achmatfajri.webp",
+        alt: "Achmat Fajri — Fullstack Developer",
+      },
+    ],
   },
 };
+
 
 // Script ini jalan sebelum React hydrate, supaya tema langsung benar
 // dari awal (tidak ada flash light->dark).
