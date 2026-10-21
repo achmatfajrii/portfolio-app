@@ -13,7 +13,7 @@ import {
 import BranchedMenu from "./react-bits/BranchedMenu";
 import { Button } from "./ui/button";
 import { FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa";
-import type { BentoCardProps } from "./react-bits/MagicBento";
+import { useEffect, useRef } from "react";
 
 const MagicBento = dynamic(() => import("./react-bits/MagicBento"));
 
@@ -303,12 +303,89 @@ const aboutSections = [
   },
 ];
 
+const ABOUT_SECTION_IDS = [
+  "about-introduction",
+  "about-background",
+  "about-approach",
+  "about-learning",
+  "about-looking-for",
+] as const;
+
+const ABOUT_HASH_INDEX: Record<string, number> = {
+  "#about-introduction": 0,
+  "#about-background": 1,
+  "#about-approach": 2,
+  "#about-learning": 3,
+  "#about-looking-for": 4,
+};
+
+
 export default function AboutInteractive({
   selected,
   onSelect,
   visual,
 }: AboutInteractiveProps) {
   const isMd = useMediaQuery("(min-width: 768px)");
+
+
+  const hashScrollTargetRef = useRef<string | null>(null);
+
+useEffect(() => {
+  const syncAboutFromHash = () => {
+    const index = ABOUT_HASH_INDEX[window.location.hash];
+
+    if (index !== undefined) {
+      hashScrollTargetRef.current = ABOUT_SECTION_IDS[index];
+      onSelect(index);
+    }
+  };
+
+  // Mendukung URL langsung seperti /#about-background.
+  syncAboutFromHash();
+  window.addEventListener("hashchange", syncAboutFromHash);
+
+  return () => {
+    window.removeEventListener("hashchange", syncAboutFromHash);
+  };
+}, [onSelect]);
+
+useEffect(() => {
+  const targetId = ABOUT_SECTION_IDS[selected];
+
+  // Scroll otomatis hanya untuk navigasi melalui URL/hash,
+  // bukan ketika pengguna sekadar mengganti tab About.
+  if (
+    !targetId ||
+    hashScrollTargetRef.current !== targetId ||
+    window.location.hash !== `#${targetId}`
+  ) {
+    return;
+  }
+
+  hashScrollTargetRef.current = null;
+
+  const frame = window.requestAnimationFrame(() => {
+    document.getElementById(targetId)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  });
+
+  return () => window.cancelAnimationFrame(frame);
+}, [selected]);
+
+const selectAboutSection = (index: number) => {
+  onSelect(index);
+
+  const nextHash = `#${ABOUT_SECTION_IDS[index]}`;
+
+  // Sinkronkan hash ketika tab/BranchedMenu dipilih secara manual,
+  // agar memilih submenu navbar yang sama tetap konsisten.
+  if (window.location.hash !== nextHash) {
+    window.history.replaceState(window.history.state, "", nextHash);
+  }
+};
+
 
   return (
     <div className="flex w-full flex-col gap-6 md:min-h-[500px] md:flex-row md:gap-2">
@@ -339,7 +416,9 @@ export default function AboutInteractive({
                 learning: 3,
                 "looking-for": 4,
               };
-              if (indexByValue[value] !== undefined) onSelect(indexByValue[value]);
+              if (indexByValue[value] !== undefined) if (indexByValue[value] !== undefined) {
+  selectAboutSection(indexByValue[value]);
+};
             }}
             color="hsl(var(--foreground))"
             accentColor="#A855F7"
@@ -362,7 +441,7 @@ export default function AboutInteractive({
         {aboutSections.map((s, i) => (
           <button
             key={s.label}
-            onClick={() => onSelect(i)}
+            onClick={() => selectAboutSection(i)}
             className={`shrink-0 rounded-full border px-4 py-2 text-xs transition-colors ${
   selected === i
     ? "border-primary bg-primary text-primary-foreground"
@@ -375,9 +454,13 @@ export default function AboutInteractive({
       </div>
 
       {/* Konten: SATU kali untuk semua ukuran layar */}
-      <div className="min-w-0 text-base md:flex md:w-3/4 md:pl-8 md:text-xl">
-        {aboutSections[selected].content}
-      </div>
+      <div
+  id={ABOUT_SECTION_IDS[selected]}
+  className="min-w-0 scroll-mt-28 text-base md:flex md:w-3/4 md:pl-8 md:text-xl"
+>
+  {aboutSections[selected].content}
+</div>
+
 
       {/* Visual mobile (di desktop prop ini null dari AboutSection) */}
       {visual && <div className="md:hidden">{visual}</div>}

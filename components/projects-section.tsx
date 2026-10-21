@@ -65,7 +65,7 @@ projects.length > 0
 
 return (
 <section    id="projects"    className="relative w-full overflow-hidden bg-background pb-16 md\:min-h-screen"  >
-<div className="mx-auto lg\:max-w-7xl">
+<div className="mx-auto lg:max-w-7xl">
 <div className="pointer-events-none absolute inset-0 z-[1]" />
 
     <div className="container relative z-10">

@@ -3,9 +3,12 @@ import { Hero } from '@/components/hero';
 import { AboutSection } from '@/components/about-section';
 import { ProjectsSection } from '@/components/projects-section';
 import { SkillsSection } from '@/components/SkillsSection';
-import { DataSection } from '@/components/DataSection';
+import DataJourney from '@/components/DataJourney';
 import ContactSection from '@/components/ContactSection';
+
 import { Footer } from '@/components/Footer';
+
+
 
 export default function Home() {
   return (
@@ -15,7 +18,7 @@ export default function Home() {
       <AboutSection />
       <ProjectsSection />
       <SkillsSection />
-      {/* <DataSection /> */}
+      <DataJourney />
       <ContactSection />
       <Footer />
     </main>
