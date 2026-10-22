@@ -11,6 +11,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  preload: false
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";

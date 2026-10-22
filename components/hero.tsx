@@ -1,78 +1,16 @@
-'use client';
-import { useEffect, useState } from 'react';
+// components/hero.tsx  (server component — tanpa 'use client')
+import Image from 'next/image';
 import { Mail, Code2, Sparkles } from 'lucide-react';
 import { FloatingLabel } from '@/components/floating-label';
-import { InView } from '@/components/in-view';
-import { useMediaQuery } from '@/hooks/use-media-query';
-import { Lanyard, DotField, WarpText } from '@/components/lazy';
-// import { HeroTitleFallback } from './hero-title-fallback';
-import Image from 'next/image';
+import { HeroLanyard } from '@/components/hero-lanyard';
+import { HeroTitle } from '@/components/hero-title';
+import { DotField } from '@/components/lazy';
 
-function useResponsiveHeroFontSize() {
-  const [fontSize, setFontSize] = useState(88);
-
-  useEffect(() => {
-    const MIN_VW = 320;
-    const MAX_VW = 640;
-    const MIN_SIZE = 24;
-    const MAX_SIZE = 48;
-
-    const update = () => {
-      const vw = window.innerWidth;
-      if (vw >= 1024) {
-        setFontSize(88);
-        return;
-      }
-      const clampedVw = Math.min(Math.max(vw, MIN_VW), MAX_VW);
-      const ratio = (clampedVw - MIN_VW) / (MAX_VW - MIN_VW);
-      setFontSize(Math.round(MIN_SIZE + ratio * (MAX_SIZE - MIN_SIZE)));
-    };
-
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-
-  return fontSize;
-}
-
-function useIsDesktopViewport() {
-  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)');
-    const update = () => setIsDesktop(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
-
-  return isDesktop;
-}
-
-const warpProps = {
-  text: 'MY PORTFOLIO',
-  color: 'hsl(var(--foreground))',
-  warpStrength: 0.08,
-  warpScale: 1.7,
-  speed: 0.55,
-  pointerInfluence: 0.42,
-  pointerStrength: 0.38,
-  refraction: 0.018,
-  ripple: true,
-  fontWeight: 800,
-  fontFamily: 'inherit',
-  letterSpacing: -0.06,
-  lineHeight: 0,
-} as const;
+// Isi dengan path poster mobile kalau sudah dibuat, mis. '/assets/lanyard/poster-mobile.webp'.
+// Jangan diisi sebelum file-nya ada (404 akan menurunkan skor Best Practices).
+const MOBILE_POSTER: string | undefined = undefined;
 
 export function Hero() {
-  const heroFontSize = useResponsiveHeroFontSize();
-  const isDesktop = useIsDesktopViewport();
-  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
-  const show3DDesktop = isDesktop === true && !reduceMotion;
-  const show3DMobile = isDesktop === false && !reduceMotion;
-
   return (
     <>
       <div className="absolute left-1/2 bottom-8 z-30 hidden w-120 -translate-x-1/2 items-center gap-3 rounded-2xl border border-white/20 bg-muted px-8 py-2 shadow-xl backdrop-blur-xl lg:flex">
@@ -101,48 +39,33 @@ export function Hero() {
         delay="1s"
       />
 
-      {/* Dot field background */}
+      {/* Dot field background — pause/tidur sendiri, tidak perlu <InView> */}
       <div className="pointer-events-none absolute inset-0 z-0 h-full overflow-hidden">
-  <InView>
-    <div className="h-full w-full">
-      <DotField
-        dotRadius={1}
-        dotSpacing={20}
-        bulgeStrength={67}
-        glowRadius={160}
-        sparkle={false}
-        waveAmplitude={0}
-        cursorRadius={500}
-        cursorForce={0.1}
-        bulgeOnly
-        gradientFrom="#A855F7"
-        gradientTo="#A855F7"
-        glowColor="#A855F7"
-      />
-    </div>
-  </InView>
-</div>
+        <DotField
+          dotRadius={1}
+          dotSpacing={20}
+          bulgeStrength={67}
+          glowRadius={160}
+          sparkle={false}
+          waveAmplitude={0}
+          cursorRadius={500}
+          cursorForce={0.1}
+          bulgeOnly
+          gradientFrom="#A855F7"
+          gradientTo="#A855F7"
+          glowColor="#A855F7"
+        />
+      </div>
 
       {/* Lanyard 3D — desktop */}
-      {show3DDesktop && (
-        <div className="pointer-events-none absolute -top-16 left-0 z-[998] h-full w-full">
-          <Lanyard position={[0, 0, 30]} gravity={[0, -40, 0]} fov={20} lanyardWidth={1} />
-        </div>
-      )}
+      <HeroLanyard variant="desktop" />
 
       <section className="relative px-4 pt-8 sm:px-8 lg:flex min-h-screen lg:items-center lg:justify-center lg:top-20 lg:pt-0 lg:pb-0">
         {/* ===== Below lg ===== */}
-        
-        <h1 className="sr-only">
-          Achmat Fajri — Fullstack Developer
-        </h1>
+        <h1 className="sr-only">Achmat Fajri — Fullstack Developer</h1>
 
-        <div className={`flex w-full flex-col lg:hidden ${reduceMotion ? 'pt-24' : ''}`}>
-          {show3DMobile && (
-            <div className="pointer-events-none relative left-1/2 right-1/2 -mx-[50vw] -mt-24 h-[calc(100vh+6rem)] h-[calc(100dvh+6rem)] w-screen overflow-hidden">
-              <Lanyard position={[0, 0, 30]} lookAt={[-8, 0, 0]} gravity={[0, -40, 0]} fov={20} lanyardWidth={1} />
-            </div>
-          )}
+        <div className="flex w-full flex-col lg:hidden motion-reduce:pt-24">
+          <HeroLanyard variant="mobile" posterSrc={MOBILE_POSTER} />
 
           <div className="flex w-full flex-col items-center gap-6 pb-8">
             <div className="relative min-h-24 w-full -rotate-1 border border-border bg-transparent shadow-2xl backdrop-blur-xl">
@@ -151,9 +74,9 @@ export function Hero() {
               <span className="absolute -bottom-1.5 -left-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
               <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
 
-            <div className="relative z-30 pointer-events-auto">
- <h1>MY PORTFOLIO</h1>
-</div>
+              <div className="relative z-30 pointer-events-auto">
+                <HeroTitle />
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-2 pt-8">
@@ -168,8 +91,6 @@ export function Hero() {
               </span>
             </div>
 
-        
-             
             {/* Carbon — Light mode, mobile */}
             <Image
               src="/assets/carbon-light.webp"
@@ -191,8 +112,6 @@ export function Hero() {
               sizes="(max-width: 640px) 100vw, 384px"
               className="hidden h-auto w-full max-w-lg -rotate-1 rounded-lg shadow-2xl sm:max-w-sm lg:hidden dark:block"
             />
-
-            
           </div>
         </div>
 
@@ -203,21 +122,17 @@ export function Hero() {
           <span className="absolute -bottom-1.5 -left-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
           <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
 
-          {/* <div className="relative z-30 pointer-events-auto">
-  {isDesktop === true && !reduceMotion
-    ? <WarpText {...warpProps} fontSize={heroFontSize} style={{ height: '100%' }} />
-    : <HeroTitleFallback fontSize={heroFontSize} />}
-</div> */}
+          <div className="relative z-30 pointer-events-auto">
+            <HeroTitle />
+          </div>
         </div>
 
-        
-        {/* Carbon — Light mode, desktop */}
+        {/* Carbon — Light mode, desktop (tanpa `priority`: tidak ikut di-preload di dark mode / mobile) */}
         <Image
           src="/assets/carbon-light.webp"
           alt="Achmat Fajri code profile"
           width={1840}
           height={1020}
-          priority
           sizes="44vw"
           className="pointer-events-none absolute top-[40vh] z-20 hidden h-auto max-w-none -translate-y-1/2 -rotate-2 lg:right-[-10vw] lg:block dark:lg:hidden lg:w-[44vw]"
         />
@@ -231,7 +146,6 @@ export function Hero() {
           sizes="44vw"
           className="pointer-events-none absolute top-[40vh] z-20 hidden h-auto max-w-none -translate-y-1/2 -rotate-2 lg:right-[-10vw] lg:w-[44vw] dark:lg:block"
         />
-
       </section>
     </>
   );

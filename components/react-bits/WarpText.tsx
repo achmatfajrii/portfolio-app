@@ -364,7 +364,7 @@ const WarpText = ({
         alpha: true,
         premultipliedAlpha: false,
         antialias: true,
-        dpr: Math.min(window.devicePixelRatio || 1, 2)
+        dpr: Math.min(window.devicePixelRatio || 1, 1.5)
       });
       gl = renderer.gl;
     } catch (error) {
@@ -432,7 +432,7 @@ const WarpText = ({
       const rect = container.getBoundingClientRect();
       if (rect.width <= 0 || rect.height <= 0) return;
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       const textCanvas = buildTextCanvas({
         container,
         width: rect.width,
@@ -450,7 +450,7 @@ const WarpText = ({
       const rect = container.getBoundingClientRect();
       if (rect.width <= 0 || rect.height <= 0) return;
 
-      renderer.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      renderer.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       renderer.setSize(rect.width, rect.height);
       program.uniforms.uResolution.value[0] = gl.drawingBufferWidth;
       program.uniforms.uResolution.value[1] = gl.drawingBufferHeight;
@@ -493,9 +493,11 @@ const WarpText = ({
       renderOnce();
     };
 
+    let last = 0;
     const loop = (now: number): void => {
       if (disposed || contextLost) return;
-
+      raf = requestAnimationFrame(loop); 
+      if (now - last < 33) return;
       const elapsed = (now - startTime) * 0.001;
       const idleX = 0.5 + Math.sin(elapsed * 0.33) * 0.12;
       const idleY = 0.5 + Math.cos(elapsed * 0.27) * 0.1;
@@ -513,7 +515,6 @@ const WarpText = ({
       program.uniforms.uTime.value = reduceMotion ? 0 : elapsed;
 
       renderOnce();
-      raf = requestAnimationFrame(loop);
     };
 
     resizeObserver = new ResizeObserver(resize);
