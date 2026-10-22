@@ -5,7 +5,7 @@ import { FloatingLabel } from '@/components/floating-label';
 import { InView } from '@/components/in-view';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Lanyard, DotField, WarpText } from '@/components/lazy';
-import { HeroTitleFallback } from './hero-title-fallback';
+// import { HeroTitleFallback } from './hero-title-fallback';
 import Image from 'next/image';
 
 function useResponsiveHeroFontSize() {
@@ -203,9 +203,11 @@ export function Hero() {
           <span className="absolute -bottom-1.5 -left-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
           <span className="absolute -bottom-1.5 -right-1.5 z-20 h-3 w-3 rounded-full border border-primary/40 bg-primary" />
 
-          <div className="relative z-30 pointer-events-auto">
- <h1>MY PORTFOLIO</h1>
-</div>
+          {/* <div className="relative z-30 pointer-events-auto">
+  {isDesktop === true && !reduceMotion
+    ? <WarpText {...warpProps} fontSize={heroFontSize} style={{ height: '100%' }} />
+    : <HeroTitleFallback fontSize={heroFontSize} />}
+</div> */}
         </div>
 
         
