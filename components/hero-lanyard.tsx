@@ -19,7 +19,7 @@ export function HeroLanyard({ variant, posterSrc }: HeroLanyardProps) {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
   // mobile: beri jeda lebih lama setelah load supaya main thread bebas untuk render & interaksi awal
-  const idle = useIdleReady({ delay: variant === 'desktop' ? 0 : 2500 });
+  const idle = useIdleReady({ delay: variant === 'desktop' ? 0 : 250 });
   const [ready, setReady] = useState(false);
 
   const viewportMatches = variant === 'desktop' ? isDesktop : !isDesktop;
