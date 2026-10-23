@@ -72,10 +72,10 @@ projects.length > 0
 
 return (
 <section    id="projects"    className="relative w-full overflow-hidden bg-background pb-16 md\:min-h-screen"  >
-<div className="mx-auto lg:max-w-7xl">
+<div className="max-w-7xl px-6 sm:px-8 lg:px-12">
 <div className="pointer-events-none absolute inset-0 z-[1]" />
 
-    <div className="container relative z-10">
+    <div className="relative z-10">
       <div className="grid items-center gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
         {/* Heading — mobile/tablet */}
         <div className="order-1 max-w-2xl lg:hidden">

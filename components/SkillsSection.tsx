@@ -481,7 +481,7 @@ const mobileCanvasOffsetY =
       className="relative min-h-screen w-full overflow-hidden bg-background"
     >
 
-      <div className="lg:max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
         <div
   className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-[0.10] dark:opacity-[0.45] [mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)]"
 >
@@ -509,7 +509,7 @@ const mobileCanvasOffsetY =
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,rgba(168,85,247,0.07),transparent_58%)]" />
 
-      <div className="container relative z-10 mx-auto flex min-h-screen w-full flex-col justify-center md:py-24">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full flex-col justify-center md:py-24">
         {/* ======================================== */}
         {/* HEADER */}
         {/* ======================================== */}
