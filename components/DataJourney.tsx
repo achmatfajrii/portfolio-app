@@ -1,7 +1,17 @@
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaArrowRight, FaChartLine, FaDatabase, FaPython } from "react-icons/fa";
+import {
+  FaArrowRight,
+  FaChartLine,
+  FaDatabase,
+  FaPython,
+} from "react-icons/fa";
 
+/**
+ * A concise index of data projects. Keep project descriptions short here;
+ * detailed methods, findings, and Power BI evidence live on each case-study page.
+ */
 export function DataJourney() {
   return (
     <section
@@ -26,69 +36,109 @@ export function DataJourney() {
             </h2>
           </div>
           <p className="max-w-md text-sm leading-6 text-muted-foreground md:text-base">
-            A growing collection of projects in data engineering, analysis, and visualization.
+            A growing collection of work in data engineering, analysis, and visualization.
           </p>
         </div>
 
-        <Link
-          href="/projects/msci-market-watch"
-          aria-label="View MSCI Market Watch case study"
-          className="group grid overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary md:grid-cols-[0.92fr_1.08fr]"
-        >
-          <div className="flex min-w-0 flex-col justify-between p-5 sm:p-7 lg:p-8">
-            <div>
-              <div className="mb-4 flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-primary">
-                  In progress
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                  Case study 01
-                </span>
-              </div>
-
-              <h3 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                MSCI Market Watch
-              </h3>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
-                Exploring IHSG movements around MSCI-related events and market transparency.
-              </p>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs text-foreground/90">
-                  <FaDatabase aria-hidden className="text-primary" /> PostgreSQL
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs text-foreground/90">
-                  <FaPython aria-hidden className="text-primary" /> Python
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs text-foreground/90">
-                  <FaChartLine aria-hidden className="text-primary" /> Power BI
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-7 inline-flex items-center gap-2 text-sm font-medium text-primary">
-              View case study
-              <FaArrowRight aria-hidden className="transition-transform group-hover:translate-x-1" />
-            </div>
-          </div>
-
-          <div className="relative min-h-[230px] overflow-hidden border-t border-border bg-muted/30 p-3 sm:min-h-[300px] sm:p-5 md:border-l md:border-t-0">
-            <div className="relative h-full min-h-[210px] overflow-hidden rounded-lg border border-border bg-background">
+        <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
+          {/* Project 01: MSCI Market Watch */}
+          <Link
+            href="/projects/msci-market-watch"
+            aria-label="View MSCI Market Watch project details"
+            className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          >
+            <div className="relative aspect-video overflow-hidden border-b border-border bg-muted/30">
               <Image
                 src="/projects/msci-market-watch/powerbi-overview.webp"
-                alt="Screenshot of the MSCI Market Watch report created in Power BI"
+                alt="Power BI Market Overview report preview for MSCI Market Watch"
                 fill
-                sizes="(max-width: 768px) 100vw, 55vw"
-                className="object-contain object-center"
+                sizes="(max-width: 1023px) 100vw, 50vw"
+                className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.01]"
               />
-              <div className="absolute bottom-3 right-3 rounded-full border border-border bg-background/95 px-3 py-1.5 text-[10px] font-medium text-foreground shadow-sm">
-                Power BI report preview
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-gradient-to-t from-black/80 via-black/45 to-transparent px-4 pb-4 pt-12 text-white sm:px-5">
+                <span className="text-xs font-medium">Power BI · Market Overview</span>
+                <span className="rounded-full border border-white/25 bg-black/30 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider">Preview</span>
               </div>
             </div>
-          </div>
-        </Link>
+
+            <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
+              <div>
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-primary">
+                    In progress
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Case study 01</span>
+                </div>
+                <h3 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">MSCI Market Watch</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  Exploring IHSG movements around MSCI-related events, with data quality and market transparency at the center.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <TechChip icon={<FaDatabase aria-hidden />} label="PostgreSQL" />
+                  <TechChip icon={<FaPython aria-hidden />} label="Python" />
+                  <TechChip icon={<FaChartLine aria-hidden />} label="Power BI" />
+                </div>
+              </div>
+              <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                View project <FaArrowRight aria-hidden className="transition-transform group-hover:translate-x-1" />
+              </div>
+            </div>
+          </Link>
+
+          {/* Project 02: Jakarta Air Quality Intelligence */}
+          <Link
+            href="/projects/jakarta-air-quality-intelligence"
+            aria-label="View Jakarta Air Quality Intelligence project details"
+            className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          >
+            <div className="relative aspect-video overflow-hidden border-b border-border bg-muted/30">
+              <Image
+                src="/projects/jakarta-air-quality-intelligence/powerbi-overview.webp"
+                alt="Power BI report preview for Jakarta Air Quality Intelligence"
+                fill
+                sizes="(max-width: 1023px) 100vw, 50vw"
+                className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.01]"
+              />
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-gradient-to-t from-black/80 via-black/45 to-transparent px-4 pb-4 pt-12 text-white sm:px-5">
+                <span className="text-xs font-medium">Power BI · Air Quality Overview</span>
+                <span className="rounded-full border border-white/25 bg-black/30 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider">Preview</span>
+              </div>
+            </div>
+
+            <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
+              <div>
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-primary">
+                    In progress
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Case study 02</span>
+                </div>
+                <h3 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">Jakarta Air Quality Intelligence</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  Exploring historical ISPU patterns across five Jakarta monitoring stations, with pollutant and data-quality analysis.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <TechChip icon={<FaDatabase aria-hidden />} label="PostgreSQL" />
+                  <TechChip icon={<FaPython aria-hidden />} label="Python" />
+                  <TechChip icon={<FaChartLine aria-hidden />} label="Power BI" />
+                </div>
+              </div>
+              <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                View project <FaArrowRight aria-hidden className="transition-transform group-hover:translate-x-1" />
+              </div>
+            </div>
+          </Link>
+        </div>
       </div>
     </section>
+  );
+}
+
+function TechChip({ icon, label }: { icon: ReactNode; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs text-foreground/90">
+      <span className="text-primary">{icon}</span> {label}
+    </span>
   );
 }
 
