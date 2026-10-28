@@ -144,6 +144,7 @@ export function Hero() {
           width={1840}
           height={1020}
           sizes="44vw"
+          loading="eager"
           className="pointer-events-none absolute top-[40vh] z-20 hidden h-auto max-w-none -translate-y-1/2 -rotate-2 lg:right-[-10vw] lg:w-[44vw] dark:lg:block"
         />
       </section>

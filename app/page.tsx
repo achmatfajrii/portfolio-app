@@ -5,8 +5,8 @@ import { ProjectsSection } from '@/components/projects-section';
 import { SkillsSection } from '@/components/SkillsSection';
 import DataJourney from '@/components/DataJourney';
 import ContactSection from '@/components/ContactSection';
-import PortfolioAssistant from "@/components/PortfolioAssistant";
 import { Footer } from '@/components/Footer';
+import { PortfolioAssistantLazy } from '@/components/portfolio-assistant-lazy';
 
 export default function Home() {
   return (
@@ -19,7 +19,7 @@ export default function Home() {
       <DataJourney />
       <ContactSection />
       <Footer />
-      <PortfolioAssistant />
+      <PortfolioAssistantLazy />
     </main>
   );
 }
