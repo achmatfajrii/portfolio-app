@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Lanyard } from '@/components/lazy';
-// import { useIdleReady } from '@/hooks/use-idle-ready';
-import { useInteractionReady } from '@/hooks/use-interaction-ready';
+import { useIdleReady } from '@/hooks/use-idle-ready';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 interface HeroLanyardProps {
@@ -20,12 +19,11 @@ export function HeroLanyard({ variant, posterSrc }: HeroLanyardProps) {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
   // mobile: beri jeda lebih lama setelah load supaya main thread bebas untuk render & interaksi awal
-  // const idle = useIdleReady({ delay: variant === 'desktop' ? 0 : 250 });
+  const idle = useIdleReady({ delay: variant === 'desktop' ? 0 : 250 });
   const [ready, setReady] = useState(false);
 
   const viewportMatches = variant === 'desktop' ? isDesktop : !isDesktop;
-  const ready3D = useInteractionReady(variant === 'desktop' ? 4000 : 6000);
-  const show3D = ready3D && !reduceMotion && viewportMatches;
+  const show3D = idle && !reduceMotion && viewportMatches;
 
   if (variant === 'desktop') {
     if (!show3D) return null;

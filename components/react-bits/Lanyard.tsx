@@ -11,7 +11,7 @@ import * as THREE from 'three';
 import { useInView } from '@/hooks/use-in-view';
 import './Lanyard.css';
 
-const CARD_GLB = '/assets/lanyard/cardb.glb';
+const CARD_GLB = '/assets/lanyard/card.glb';
 const LANYARD_TEXTURE = '/assets/lanyard/lanyard.webp';
 
 // Modul ini baru dievaluasi saat chunk Lanyard di-load (setelah idle),
